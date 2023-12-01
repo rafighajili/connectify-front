@@ -1,0 +1,25 @@
+@import "./colors.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply overflow-y-scroll selection:bg-primary-500/50;
+  }
+
+  body {
+    @apply bg-default-0 text-default-1000;
+  }
+}
+
+@layer components {
+}
+
+@layer utilities {
+}
+
+input::-webkit-search-cancel-button,
+input::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
