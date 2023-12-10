@@ -1,15 +1,9 @@
 "use client";
 
-import { Providers } from "./providers";
-import { Footer, Navbar } from "#/components";
 import { ChildrenProps } from "#/lib/types";
+import { useGetUserQuery } from "#/services";
 
 export default function RootLayout({ children }: ChildrenProps) {
-  return (
-    <Providers>
-      <Navbar />
-      <div className="container">{children}</div>
-      <Footer />
-    </Providers>
-  );
+  useGetUserQuery({ Authorization: localStorage.getItem("access_token") ?? "" });
+  return children;
 }

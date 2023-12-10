@@ -1,24 +1,46 @@
 import { apiSlice } from "#/store/slices";
-import { AuthResponse, authResponseSchema, LoginRequest, RegisterRequest } from "#/schemas";
+import { LoginRequest, RegisterRequest, VerifyRequest } from "#/schemas";
 import { User, UserEntity } from "#/entities";
 
 export const authService = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    login: builder.mutation<AuthResponse, LoginRequest>({
-      query: (body) => ({ url: `/auth/login`, method: "post", body }),
-      transformResponse: (res: { data: unknown }) => authResponseSchema.parse(res.data),
+    loginOrganizer: builder.mutation<{ access_token: string }, LoginRequest>({
+      query: (body) => ({ url: `/organizer/login`, method: "post", body }),
     }),
 
-    register: builder.mutation<AuthResponse, RegisterRequest>({
-      query: (body) => ({ url: `/auth/register`, method: "post", body }),
-      transformResponse: (res: { data: unknown }) => authResponseSchema.parse(res.data),
+    loginSponsor: builder.mutation<{ access_token: string }, LoginRequest>({
+      query: (body) => ({ url: `/sponsor/login`, method: "post", body }),
     }),
 
-    getLoggedInUser: builder.query<User, void>({
-      query: () => ({ url: `/auth/user`, method: "get" }),
-      transformResponse: (res: { data: unknown }) => UserEntity.parse(res.data),
+    loginAdmin: builder.mutation<{ access_token: string }, LoginRequest>({
+      query: (body) => ({ url: `/admin/login`, method: "post", body }),
+    }),
+
+    registerOrganizer: builder.mutation<void, RegisterRequest>({
+      query: (body) => ({ url: `/organizer/register`, method: "post", body }),
+    }),
+
+    registerSponsor: builder.mutation<void, RegisterRequest>({
+      query: (body) => ({ url: `/sponsor/register`, method: "post", body }),
+    }),
+
+    verify: builder.mutation<void, VerifyRequest>({
+      query: (params) => ({ url: `/verification/verify`, method: "post", params }),
+    }),
+
+    getUser: builder.query<User, { Authorization: string }>({
+      query: (params) => ({ url: `/user/current-user`, method: "get", params }),
+      transformResponse: (res: unknown) => UserEntity.parse(res),
     }),
   }),
 });
 
-export const { useLoginMutation, useRegisterMutation, useGetLoggedInUserQuery } = authService;
+export const {
+  useLoginOrganizerMutation,
+  useLoginSponsorMutation,
+  useLoginAdminMutation,
+  useRegisterOrganizerMutation,
+  useRegisterSponsorMutation,
+  useVerifyMutation,
+  useGetUserQuery,
+} = authService;

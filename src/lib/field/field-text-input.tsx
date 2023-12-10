@@ -16,7 +16,7 @@ function FieldTextInput(originalProps: ConnectifyFieldTextInputProps, ref: DOMRe
     radius,
     startContent,
     endContent,
-    isContrasted = false,
+    isContrasted = true,
     isInvalid,
     isDisabled,
     children,

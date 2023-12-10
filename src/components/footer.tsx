@@ -14,14 +14,18 @@ const elements = [
     heading: "Help Center",
     links: ["Community", "Knowledge Base", "Academy", "Support"],
   },
+  {
+    heading: "Contact",
+    links: ["Instagram", "Linkedin", "Facebook"],
+  },
 ];
 
 export function Footer() {
   return (
-    <footer>
+    <footer className="border-t border-t-default-1000/20 bg-default-50">
       <div className="container space-y-16 py-16">
-        <div className="flex justify-between gap-y-16 max-lg:flex-col">
-          <ConnectifyLogo className="mr-auto h-20 w-auto" />
+        <div className="flex gap-y-16 max-xl:flex-col">
+          <ConnectifyLogo className="mr-auto h-28 w-fit" />
 
           <div className="flex flex-wrap gap-x-32 gap-y-16">
             {elements.map((element) => (
@@ -41,7 +45,7 @@ export function Footer() {
 
         <Divider />
 
-        <div className="flex justify-between gap-4 text-sm text-default-500">
+        <div className="flex flex-wrap justify-between gap-x-32 gap-y-4 text-sm text-default-500">
           <p>Copyright @2023 Aspire. All Rights Reserved.</p>
           <p>Terms & Conditions ~ Privacy Policy</p>
         </div>

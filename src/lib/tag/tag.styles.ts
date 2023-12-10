@@ -28,7 +28,7 @@ export const tagsActionButtonStyles = tv({
 });
 
 export const tagStyles = tv({
-  base: "relative flex items-center bg-default-1000 text-default-1000 bg-opacity-10 rounded-md outline-none duration-200",
+  base: "relative flex items-center bg-default-1000 text-default-1000 bg-opacity-10 rounded-full outline-none duration-200",
   variants: {
     size: {
       sm: "h-6 px-2 text-xs",

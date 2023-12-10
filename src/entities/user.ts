@@ -1,14 +1,11 @@
 import { z } from "zod";
 
-export const UserEntity = z
-  .object({
-    id: z.number(),
-    username: z.string(),
-    avatar: z.string().nullable(),
-    is_subscribed: z.boolean().optional(),
-    credit: z.number().optional(),
-    viewed_products: z.number().array().optional(),
-  })
-  .transform((val) => ({ ...val, is_new: val.credit === 7 }));
+export const UserEntity = z.object({
+  userId: z.number(),
+  email: z.string().email(),
+  firstname: z.string(),
+  lastname: z.string(),
+  role: z.union([z.literal("ADMIN"), z.literal("SPONSOR"), z.literal("ORGANIZER")]),
+});
 
 export type User = z.infer<typeof UserEntity>;

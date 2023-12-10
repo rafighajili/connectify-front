@@ -60,10 +60,10 @@ export default function HomePage() {
         <div className="flex flex-col gap-y-16 max-lg:items-center sm:w-[480px] lg:gap-y-32">
           <h1 className="text-5xl font-medium italic max-lg:text-center">We Connect Event Organizers with Sponsors</h1>
           <div className="flex gap-4">
-            <Button color="secondary" radius="full">
+            <Button color="secondary" radius="full" size="lg">
               I am Event Organizer
             </Button>
-            <Button color="secondary" variant="bordered" radius="full">
+            <Button color="secondary" variant="bordered" radius="full" size="lg">
               I am Sponsor
             </Button>
           </div>
@@ -80,18 +80,18 @@ export default function HomePage() {
             <div key={event.title} className="grid grid-cols-1 gap-x-16 gap-y-8 lg:grid-cols-2 xl:gap-x-32">
               <Image src={event.img} alt={event.title} className="h-auto w-full rounded-3xl" />
 
-              <div className="space-y-2">
+              <div>
                 <Tags aria-label={`Tags of ${event.title}`}>
                   {event.tags.map((tag) => (
                     <Tag key={tag}>{tag}</Tag>
                   ))}
                 </Tags>
 
-                <h2 className="text-4xl font-medium">{event.title}</h2>
+                <h2 className="my-2 text-4xl font-medium">{event.title}</h2>
 
                 <p className="text-sm text-default-500">{event.description}</p>
 
-                <Divider />
+                <Divider className="my-4" />
 
                 <div className="grid grid-cols-1 gap-x-16 gap-y-8 sm:grid-cols-2">
                   {event.features.map((feature, key) => (
@@ -114,17 +114,16 @@ export default function HomePage() {
 
         <p className="mt-8 text-center text-default-500">We haveput together some commonly asked questions</p>
 
-        <div className="mt-8 w-full sm:mx-auto sm:w-[600px]">
+        <div className="mt-8 w-full divide-y divide-default-1000/20 border-y border-default-1000/20 sm:mx-auto sm:w-[600px]">
           {faqs.map((faq) => (
-            <div key={faq.question} className="">
-              <h3 className="py-8 text-xl font-medium">{faq.question}</h3>
-              <p className="text-default-500">
+            <div key={faq.question} className="py-8">
+              <h3 className="text-xl font-medium">{faq.question}</h3>
+              <p className="mt-8 text-default-500">
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, enim, quibusdam? Cumque dolore ipsa
                 molestias sint. Accusamus amet culpa deserunt dolore dolores hic itaque magni maxime minima nihil,
                 obcaecati optio perferendis porro possimus provident, quo similique soluta suscipit veniam, voluptatem.
                 Autem illum inventore ut voluptatem. Aperiam blanditiis fugiat pariatur tempore.
               </p>
-              <Divider className="mt-8" />
             </div>
           ))}
         </div>

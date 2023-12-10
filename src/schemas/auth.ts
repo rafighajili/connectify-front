@@ -1,22 +1,22 @@
 import { z } from "zod";
-import { UserEntity } from "#/entities";
 
 export const loginRequestSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(7, "Password must be at least 7 characters"),
+  email: z.string().email("Please enter valid email address"),
+  password: z.string().min(7, "Password must contain at least 7 characters"),
 });
 
-export const registerRequestSchema = z.object({
-  username: z.string().min(3, "Username must be at least 7 characters"),
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(7, "Password must be at least 7 characters"),
-});
+export const registerRequestSchema = z
+  .object({
+    firstname: z.string().min(3, "Name must be at least 3 characters"),
+    lastname: z.string().min(3, "Surname must be at least 3 characters"),
+  })
+  .merge(loginRequestSchema);
 
-export const authResponseSchema = z.object({
-  user: UserEntity,
-  access_token: z.string(),
+export const verifyRequestSchema = z.object({
+  email: z.string().email().optional(),
+  verificationCode: z.string().length(6, "Verification code must be 6 characters"),
 });
 
 export type LoginRequest = z.infer<typeof loginRequestSchema>;
 export type RegisterRequest = z.infer<typeof registerRequestSchema>;
-export type AuthResponse = z.infer<typeof authResponseSchema>;
+export type VerifyRequest = z.infer<typeof verifyRequestSchema>;
