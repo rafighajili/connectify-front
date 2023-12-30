@@ -2,8 +2,37 @@
 
 import { Button, Divider, Tag, Tags } from "#/lib";
 import Image from "next/image";
-import { office, people } from "#/assets/images";
+import { gdgBaku, gdscBeu, goup, office, people, speKhazar, wtmBaku } from "#/assets/images";
 import { ConnectifyCheckIcon } from "#/lib/icons";
+import NextLink from "next/link";
+
+const partners = [
+  {
+    imgSrc: gdscBeu,
+    name: "GDSC BEU",
+    link: "",
+  },
+  {
+    imgSrc: speKhazar,
+    name: "SPE Khazar",
+    link: "",
+  },
+  {
+    imgSrc: wtmBaku,
+    name: "Women Techmakers Baku",
+    link: "",
+  },
+  {
+    imgSrc: gdgBaku,
+    name: "GDG Baku",
+    link: "",
+  },
+  {
+    imgSrc: goup,
+    name: "GOUP",
+    link: "",
+  },
+];
 
 const events = [
   {
@@ -71,6 +100,18 @@ export default function HomePage() {
 
         <Image src={people} alt="people" className="[filter:drop-shadow(0_0_25px_rgb(255_255_255/0.25))]" />
       </main>
+
+      <section>
+        <h1 className="mb-16 text-center text-xl font-medium">Event Partners</h1>
+
+        <div className="flex flex-wrap items-center justify-center gap-16">
+          {partners.map((partner) => (
+            <NextLink key={partner.name} href={partner.link}>
+              <Image src={partner.imgSrc} alt={partner.name} className="h-24 w-auto" />
+            </NextLink>
+          ))}
+        </div>
+      </section>
 
       <section>
         <h1 className="text-center text-5xl font-medium">Events need Sponsor</h1>

@@ -31,7 +31,7 @@ export const popoverStyles = tv({
 });
 
 export const underlayStyles = tv({
-  base: "fixed inset-0 z-[999] bg-default-0",
+  base: "fixed inset-0 z-[999] bg-default-1000",
   variants: {
     backdrop: {
       opaque: "bg-opacity-50",

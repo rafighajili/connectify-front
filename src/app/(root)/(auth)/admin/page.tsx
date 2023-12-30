@@ -19,11 +19,8 @@ export default function AdminPage() {
     },
   });
 
-  const onLogin = async (values: LoginRequest) => {
-    await loginAdmin(values);
-    if (data) {
-      localStorage.setItem("access_token", data.access_token);
-    }
+  const onLogin = (values: LoginRequest) => {
+    loginAdmin(values);
   };
 
   return (

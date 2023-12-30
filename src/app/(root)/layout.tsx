@@ -1,9 +1,10 @@
 "use client";
 
 import { ChildrenProps } from "#/lib/types";
-import { useGetUserQuery } from "#/services";
+import { store } from "#/store";
+import { authService } from "#/services";
 
 export default function RootLayout({ children }: ChildrenProps) {
-  useGetUserQuery({ Authorization: localStorage.getItem("access_token") ?? "" });
+  store.dispatch(authService.endpoints.getUser.initiate());
   return children;
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Divider, Form, Tabs, Tab, TextInput } from "#/lib";
+import { Button, Divider, Form, Tab, Tabs, TextInput } from "#/lib";
 import NextLink from "next/link";
 import { useForm } from "react-hook-form";
 import { LoginRequest, loginRequestSchema } from "#/schemas";
@@ -9,7 +9,6 @@ import { useState } from "react";
 import { Key } from "react-stately";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useGetUserQuery } from "#/services";
 
 const roles = [
   {
@@ -50,12 +49,10 @@ export default function LoginPage() {
   };
 
   if (organizerData) {
-    localStorage.setItem("access_token", organizerData.access_token);
     router.push("/o");
   }
 
   if (sponsorData) {
-    localStorage.setItem("access_token", sponsorData.access_token);
     router.push("/s");
   }
 

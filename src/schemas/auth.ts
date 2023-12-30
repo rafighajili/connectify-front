@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const loginRequestSchema = z.object({
   email: z.string().email("Please enter valid email address"),
-  password: z.string().min(7, "Password must contain at least 7 characters"),
+  password: z.string().min(6, "Password must contain at least 6 characters"),
 });
 
 export const registerRequestSchema = z

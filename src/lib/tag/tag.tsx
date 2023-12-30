@@ -31,7 +31,6 @@ function Tag(props: ConnectifyTagProps, ref: DOMRef<HTMLDivElement>) {
     <div
       ref={domRef}
       {...mergeProps(rowProps, hoverProps, focusProps)}
-      tabIndex={-1}
       className={tagStyles({
         size,
         isDisabled,

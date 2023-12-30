@@ -4,7 +4,7 @@ export const EventEntity = z.object({
   id: z.number(),
   eventTitle: z.string(),
   eventStatus: z.union([z.literal("APPROVED"), z.literal("PENDING")]),
-  eventType: z.string(),
+  eventTypes: z.string().array(),
   eventStartDate: z.string(),
   eventEndDate: z.string(),
   eventVenueAddress: z.string(),
@@ -16,6 +16,7 @@ export const EventEntity = z.object({
   contactPersonEmail: z.string(),
   contactPersonPhoneNumber: z.string(),
   clubName: z.string(),
+  s3Key: z.string(),
 });
 
 export type Event = z.infer<typeof EventEntity>;

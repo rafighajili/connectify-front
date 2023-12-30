@@ -6,14 +6,17 @@ export const authService = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     loginOrganizer: builder.mutation<{ access_token: string }, LoginRequest>({
       query: (body) => ({ url: `/organizer/login`, method: "post", body }),
+      invalidatesTags: ["User"],
     }),
 
     loginSponsor: builder.mutation<{ access_token: string }, LoginRequest>({
       query: (body) => ({ url: `/sponsor/login`, method: "post", body }),
+      invalidatesTags: ["User"],
     }),
 
     loginAdmin: builder.mutation<{ access_token: string }, LoginRequest>({
       query: (body) => ({ url: `/admin/login`, method: "post", body }),
+      invalidatesTags: ["User"],
     }),
 
     registerOrganizer: builder.mutation<void, RegisterRequest>({
@@ -28,9 +31,10 @@ export const authService = apiSlice.injectEndpoints({
       query: (params) => ({ url: `/verification/verify`, method: "post", params }),
     }),
 
-    getUser: builder.query<User, { Authorization: string }>({
-      query: (params) => ({ url: `/user/current-user`, method: "get", params }),
+    getUser: builder.query<User, void>({
+      query: () => ({ url: `/user/current-user`, method: "get" }),
       transformResponse: (res: unknown) => UserEntity.parse(res),
+      providesTags: ["User"],
     }),
   }),
 });

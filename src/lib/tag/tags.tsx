@@ -4,32 +4,35 @@ import { DOMRef } from "../types";
 import { useDOMRef } from "../utils";
 import { forwardRef } from "react";
 import { useListState } from "react-stately";
-import { useTagGroup } from "react-aria";
+import { mergeProps, useTagGroup } from "react-aria";
 import { Tag } from "./tag";
 import { Button, Skeleton } from "#/lib";
+import { Field } from "#/lib/field";
 
 function Tags(props: ConnectifyTagsProps, ref: DOMRef<HTMLDivElement>) {
-  const { actionContent, onAction, size = "sm", align = "start", className, style } = props;
+  const { actionContent, onAction, size = "sm", align = "start", ...otherProps } = props;
 
   const domRef = useDOMRef(ref);
   const state = useListState(props);
   const { gridProps } = useTagGroup(props, state, domRef);
 
   return (
-    <div ref={domRef} {...gridProps} tabIndex={-1} className={tagsStyles({ size, align, className })} style={style}>
-      {
-        // @ts-ignore
-        [...state.collection].map((item) => (
-          <Tag key={item.key} item={item} state={state} size={size} />
-        ))
-      }
+    <Field {...mergeProps(props, otherProps)}>
+      <div ref={domRef} {...gridProps} className={tagsStyles({ size, align })}>
+        {
+          // @ts-ignore
+          [...state.collection].map((item) => (
+            <Tag key={item.key} item={item} state={state} size={size} />
+          ))
+        }
 
-      {!!onAction && !!actionContent && (
-        <Button variant="light" onPress={onAction} className={tagsActionButtonStyles({ size })}>
-          {actionContent}
-        </Button>
-      )}
-    </div>
+        {!!onAction && !!actionContent && (
+          <Button variant="light" onPress={onAction} className={tagsActionButtonStyles({ size })}>
+            {actionContent}
+          </Button>
+        )}
+      </div>
+    </Field>
   );
 }
 
