@@ -1,14 +1,19 @@
 "use client";
 
 import { Provider as ReduxProvider } from "react-redux";
+import { NextUIProvider } from "@nextui-org/react";
 import { ThemeProvider } from "next-themes";
-import { ChildrenProps } from "#/lib/types";
 import { store } from "#/store";
+import { Children } from "#/types";
 
-export function Providers({ children }: ChildrenProps) {
+export function Providers({ children }: Children) {
   return (
     <ReduxProvider store={store}>
-      <ThemeProvider attribute="class">{children}</ThemeProvider>
+      <NextUIProvider>
+        <ThemeProvider attribute="class" defaultTheme="light">
+          {children}
+        </ThemeProvider>
+      </NextUIProvider>
     </ReduxProvider>
   );
 }

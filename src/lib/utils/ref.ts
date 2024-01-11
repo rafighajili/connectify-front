@@ -1,8 +1,0 @@
-import { Ref, RefObject, useImperativeHandle, useRef } from "react";
-
-export function useDOMRef<T extends HTMLElement = HTMLElement>(ref: Ref<T | null> | RefObject<T | null>): RefObject<T> {
-  const domRef = useRef<T>(null);
-  useImperativeHandle(ref, () => domRef.current);
-
-  return domRef;
-}

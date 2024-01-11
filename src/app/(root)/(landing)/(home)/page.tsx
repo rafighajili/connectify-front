@@ -1,10 +1,11 @@
 "use client";
 
-import { Button, Divider, Tag, Tags } from "#/lib";
 import Image from "next/image";
-import { gdgBaku, gdscBeu, goup, office, people, speKhazar, wtmBaku } from "#/assets/images";
-import { ConnectifyCheckIcon } from "#/lib/icons";
+import { Accordion, AccordionItem, Button, Chip, Link } from "@nextui-org/react";
+import { gdgBaku, gdscBeu, goup, people, speKhazar, wtmBaku } from "#/assets/images";
 import NextLink from "next/link";
+import { useGetAllEventsQuery } from "#/services/organiser";
+import { Event } from "#/components";
 
 const partners = [
   {
@@ -34,77 +35,45 @@ const partners = [
   },
 ];
 
-const events = [
-  {
-    title: "AI Hackathon",
-    description: "19 January - AI based topics",
-    features: [
-      "Organise your data",
-      "Business analytics",
-      "Work with any team",
-      "Always in sync",
-      "Embedded analytics",
-    ],
-    tags: ["Technology", "AI"],
-    img: office,
-  },
-  {
-    title: "Event 2",
-    description: "19 January - AI based topics",
-    features: [
-      "Organise your data",
-      "Business analytics",
-      "Work with any team",
-      "Always in sync",
-      "Embedded analytics",
-    ],
-    tags: ["Technology", "AI"],
-    img: office,
-  },
-];
-
-const faqs = [
-  {
-    question: "Smod tempor incididunt ut labore et dolore",
-    answer: "",
-  },
-  {
-    question: "Quis nostrud exercitation ullamco laboris",
-    answer: "",
-  },
-  {
-    question: "Woluptate velit esse cillum dolore eu fugiat nulla",
-    answer: "",
-  },
-  {
-    question: "Excepteur sint occaecat cupidatat non proiden",
-    answer: "",
-  },
-];
-
 export default function HomePage() {
+  const { data: events } = useGetAllEventsQuery();
+
   return (
-    <div className="space-y-64 pb-32">
-      <main className="flex items-center pt-32 max-lg:flex-col max-lg:gap-y-32 lg:justify-between">
-        <div className="flex flex-col gap-y-16 max-lg:items-center sm:w-[480px] lg:gap-y-32">
-          <h1 className="text-5xl font-medium italic max-lg:text-center">We Connect Event Organizers with Sponsors</h1>
-          <div className="flex gap-4">
-            <Button color="secondary" radius="full" size="lg">
-              I am Event Organizer
+    <div className="overflow-x-clip overflow-y-visible">
+      <main className="container grid grid-cols-1 items-center gap-12 py-24 sm:grid-cols-2">
+        <div className="z-10 space-y-12">
+          <h1 className="text-5xl font-medium">We connect event organizers and sponsors</h1>
+          <div className="flex flex-wrap gap-3">
+            <Button as={NextLink} href="/organizers" radius="full" color="primary" variant="solid">
+              I am an Event Organizer
             </Button>
-            <Button color="secondary" variant="bordered" radius="full" size="lg">
-              I am Sponsor
+            <Button as={NextLink} href="/sponsors" radius="full" color="primary" variant="bordered">
+              I am a Sponsor
             </Button>
           </div>
         </div>
 
-        <Image src={people} alt="people" className="[filter:drop-shadow(0_0_25px_rgb(255_255_255/0.25))]" />
+        <div className="relative z-0">
+          <Image src={people} alt="Networking" />
+          <svg
+            viewBox="0 0 200 200"
+            xmlns="http://www.w3.org/2000/svg"
+            className="pointer-events-none absolute -bottom-48 -left-48 -z-10"
+            width={1200}
+            height={1200}
+          >
+            <path
+              d="M44.7,-36.8C55.1,-22.5,58.8,-4.1,56.9,16.4C54.9,36.8,47.2,59.4,29.8,71.5C12.4,83.5,-14.7,85.1,-37.2,75.1C-59.7,65.1,-77.7,43.5,-77.7,23.5C-77.6,3.5,-59.5,-14.8,-43.6,-30.3C-27.6,-45.8,-13.8,-58.5,1.6,-59.9C17.1,-61.2,34.2,-51.1,44.7,-36.8Z"
+              transform="translate(100 100)"
+              className="fill-primary-50"
+            />
+          </svg>
+        </div>
       </main>
 
-      <section>
-        <h1 className="mb-16 text-center text-xl font-medium">Event Partners</h1>
-
+      <section className="container py-24">
         <div className="flex flex-wrap items-center justify-center gap-16">
+          <h1 className="text-xl font-medium">Event Partners</h1>
           {partners.map((partner) => (
             <NextLink key={partner.name} href={partner.link}>
               <Image src={partner.imgSrc} alt={partner.name} className="h-24 w-auto" />
@@ -113,60 +82,51 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section>
-        <h1 className="text-center text-5xl font-medium">Events need Sponsor</h1>
+      <section className="container space-y-12 py-24 text-center">
+        <h1 className="text-5xl font-medium">Latest Events</h1>
 
-        <div className="mt-16 space-y-16">
-          {events.map((event) => (
-            <div key={event.title} className="grid grid-cols-1 gap-x-16 gap-y-8 lg:grid-cols-2 xl:gap-x-32">
-              <Image src={event.img} alt={event.title} className="h-auto w-full rounded-3xl" />
-
-              <div>
-                <Tags aria-label={`Tags of ${event.title}`}>
-                  {event.tags.map((tag) => (
-                    <Tag key={tag}>{tag}</Tag>
-                  ))}
-                </Tags>
-
-                <h2 className="my-2 text-4xl font-medium">{event.title}</h2>
-
-                <p className="text-sm text-default-500">{event.description}</p>
-
-                <Divider className="my-4" />
-
-                <div className="grid grid-cols-1 gap-x-16 gap-y-8 sm:grid-cols-2">
-                  {event.features.map((feature, key) => (
-                    <div key={key} className="flex items-center gap-x-4">
-                      <div className="h-5 w-5 rounded-full bg-success-500 p-0.5 text-default-0">
-                        <ConnectifyCheckIcon />
-                      </div>
-                      <p className="font-medium">{feature}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ))}
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          {events?.map((event) => <Event key={event.id} {...event} />)}
         </div>
+
+        <Button variant="solid" radius="full" color="primary" className="mx-auto" as={NextLink} href="/events">
+          Load more...
+        </Button>
       </section>
 
-      <section>
-        <h1 className="text-center text-5xl font-medium">Frequently Asked Questions</h1>
+      <section className="container flex flex-col items-center gap-y-6 py-24 text-center">
+        <Chip color="danger" variant="flat">
+          FAQs
+        </Chip>
 
-        <p className="mt-8 text-center text-default-500">We haveput together some commonly asked questions</p>
+        <h1 className="text-5xl font-medium">Frequently Asked Questions</h1>
 
-        <div className="mt-8 w-full divide-y divide-default-1000/20 border-y border-default-1000/20 sm:mx-auto sm:w-[600px]">
-          {faqs.map((faq) => (
-            <div key={faq.question} className="py-8">
-              <h3 className="text-xl font-medium">{faq.question}</h3>
-              <p className="mt-8 text-default-500">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, enim, quibusdam? Cumque dolore ipsa
-                molestias sint. Accusamus amet culpa deserunt dolore dolores hic itaque magni maxime minima nihil,
-                obcaecati optio perferendis porro possimus provident, quo similique soluta suscipit veniam, voluptatem.
-                Autem illum inventore ut voluptatem. Aperiam blanditiis fugiat pariatur tempore.
-              </p>
-            </div>
-          ))}
+        <p className="text-default-500">We have put together some commonly asked questions</p>
+
+        <Accordion variant="shadow" className="sm:mx-auto sm:w-3/4">
+          <AccordionItem key="1" aria-label="Accordion 1" title="Accordion 1">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus accusantium aperiam deserunt id ipsum,
+            nam odit quam quos tempore ullam?
+          </AccordionItem>
+          <AccordionItem key="2" aria-label="Accordion 2" title="Accordion 2">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda dolorum, ex incidunt perferendis quidem
+            repudiandae rerum! Alias animi fuga quaerat.
+          </AccordionItem>
+          <AccordionItem key="3" aria-label="Accordion 3" title="Accordion 3">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. At atque consequuntur dignissimos eligendi
+            expedita fugiat mollitia neque nulla, placeat vel.
+          </AccordionItem>
+          <AccordionItem key="4" aria-label="Accordion 4" title="Accordion 4">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. At atque consequuntur dignissimos eligendi
+            expedita fugiat mollitia neque nulla, placeat vel.
+          </AccordionItem>
+        </Accordion>
+
+        <div className="bg-default-100 rounded-full px-6 py-1.5">
+          <span>Didn’t find what you’re looking for? </span>
+          <Link as={NextLink} href="/contact" color="danger" underline="always">
+            Contact us
+          </Link>
         </div>
       </section>
     </div>

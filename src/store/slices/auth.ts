@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { User } from "#/entities";
 import { RootState } from "#/store";
 import { authService } from "#/services";
-import { merge } from "lodash";
+import { mergeProps } from "@react-aria/utils";
 
 const initialState: {
   user: User | null;
@@ -19,7 +19,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, { payload }: PayloadAction<Partial<User>>) => {
-      state.user = merge(state.user, payload);
+      state.user = mergeProps(state.user, payload);
     },
     resetAuth: () => initialState,
   },
