@@ -8,32 +8,37 @@ import NextLink from "next/link";
 export default function LandingLayout({ children }: Children) {
   const centerElements = [
     {
+      key: 1,
       title: "Home",
       link: "/",
     },
     {
+      key: 2,
       title: "Events",
       link: "/events",
     },
     {
+      key: 3,
       title: "Sponsors",
       link: "/sponsors",
     },
     {
+      key: 4,
       title: "Organizers",
       link: "/organizers",
     },
     {
+      key: 5,
       title: "Contact",
       link: "/contact",
     },
   ];
 
   const endElements = [
-    <Link as={NextLink} href="/login">
+    <Link key={1} as={NextLink} href="/login">
       Login
     </Link>,
-    <Button as={NextLink} href="/register" color="primary" radius="full">
+    <Button key={2} as={NextLink} href="/register" color="primary" radius="full">
       Get started
     </Button>,
   ];

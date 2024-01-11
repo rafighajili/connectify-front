@@ -36,7 +36,7 @@ const partners = [
 ];
 
 export default function HomePage() {
-  const { data: events } = useGetAllEventsQuery();
+  const { data: events, isLoading: isEventsLoading } = useGetAllEventsQuery();
 
   return (
     <div className="overflow-x-clip overflow-y-visible">
@@ -86,7 +86,16 @@ export default function HomePage() {
         <h1 className="text-5xl font-medium">Latest Events</h1>
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-          {events?.slice(0, 4).map((event) => <Event key={event.id} {...event} />)}
+          {isEventsLoading ? (
+            <>
+              <Event isLoading />
+              <Event isLoading />
+              <Event isLoading />
+              <Event isLoading />
+            </>
+          ) : (
+            events?.slice(0, 4).map((event) => <Event key={event.id} {...event} />)
+          )}
         </div>
 
         <Button
