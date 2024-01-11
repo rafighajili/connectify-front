@@ -38,6 +38,21 @@ const partners = [
 export default function HomePage() {
   const { data: events, isLoading: isEventsLoading } = useGetAllEventsQuery();
 
+  const partnersComponent = (
+    <div className="animate-dvijeniya flex gap-x-12">
+      {partners.map((partner) => (
+        <NextLink
+          key={partner.name}
+          href={partner.link}
+          target="_blank"
+          className="h-36 w-36 overflow-hidden rounded-full"
+        >
+          <Image src={partner.imgSrc} alt={partner.name} className="h-full w-full object-cover" />
+        </NextLink>
+      ))}
+    </div>
+  );
+
   return (
     <div className="overflow-x-clip overflow-y-visible">
       <main className="container grid grid-cols-1 items-center gap-12 py-24 sm:grid-cols-2">
@@ -71,14 +86,15 @@ export default function HomePage() {
         </div>
       </main>
 
-      <section className="container py-24">
-        <div className="flex flex-wrap items-center justify-center gap-16">
-          <h1 className="text-xl font-medium">Event Partners</h1>
-          {partners.map((partner) => (
-            <NextLink key={partner.name} href={partner.link} target="_blank">
-              <Image src={partner.imgSrc} alt={partner.name} className="h-24 w-auto" />
-            </NextLink>
-          ))}
+      <section className="space-y-12 py-24">
+        <div className="container">
+          <h1 className="text-3xl font-medium">Event Partners</h1>
+        </div>
+
+        <div className="flex gap-x-12 overflow-x-hidden [&>div]:hover:[animation-play-state:paused]">
+          {partnersComponent}
+          {partnersComponent}
+          {partnersComponent}
         </div>
       </section>
 
@@ -139,7 +155,7 @@ export default function HomePage() {
           </AccordionItem>
         </Accordion>
 
-        <div className="bg-default-100 rounded-full px-6 py-1.5">
+        <div className="bg-default-100 rounded-full px-6 py-1.5 text-center">
           <span>Didn’t find what you’re looking for? </span>
           <Link as={NextLink} href="/contact" color="danger" underline="always">
             Contact us

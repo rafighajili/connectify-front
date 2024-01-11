@@ -12,7 +12,16 @@ const config: Config = {
       center: true,
     },
 
-    extend: {},
+    extend: {
+      keyframes: {
+        dvijeniya: {
+          "100%": { transform: "translateX(calc(-1 * (100% + 48px)))" },
+        },
+      },
+      animation: {
+        dvijeniya: "dvijeniya 10s linear infinite",
+      },
+    },
   },
   plugins: [nextui()],
 };
