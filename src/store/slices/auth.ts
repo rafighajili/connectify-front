@@ -25,12 +25,18 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addMatcher(authService.endpoints.loginAdmin.matchFulfilled, (state, { payload }) => {
+      state.user = payload;
+      state.token = payload.access_token;
       localStorage.setItem("token", payload.access_token);
     });
     builder.addMatcher(authService.endpoints.loginSponsor.matchFulfilled, (state, { payload }) => {
+      state.user = payload;
+      state.token = payload.access_token;
       localStorage.setItem("token", payload.access_token);
     });
     builder.addMatcher(authService.endpoints.loginOrganizer.matchFulfilled, (state, { payload }) => {
+      state.user = payload;
+      state.token = payload.access_token;
       localStorage.setItem("token", payload.access_token);
     });
 

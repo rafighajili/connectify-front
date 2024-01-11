@@ -44,7 +44,7 @@ export default function HomePage() {
         <div className="z-10 space-y-12">
           <h1 className="text-5xl font-medium">We connect event organizers and sponsors</h1>
           <div className="flex flex-wrap gap-3">
-            <Button as={NextLink} href="/organizers" radius="full" color="primary" variant="solid">
+            <Button as={NextLink} href="/organizers" radius="full" color="primary">
               I am an Event Organizer
             </Button>
             <Button as={NextLink} href="/sponsors" radius="full" color="primary" variant="bordered">
@@ -75,7 +75,7 @@ export default function HomePage() {
         <div className="flex flex-wrap items-center justify-center gap-16">
           <h1 className="text-xl font-medium">Event Partners</h1>
           {partners.map((partner) => (
-            <NextLink key={partner.name} href={partner.link}>
+            <NextLink key={partner.name} href={partner.link} target="_blank">
               <Image src={partner.imgSrc} alt={partner.name} className="h-24 w-auto" />
             </NextLink>
           ))}
@@ -86,39 +86,47 @@ export default function HomePage() {
         <h1 className="text-5xl font-medium">Latest Events</h1>
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-          {events?.map((event) => <Event key={event.id} {...event} />)}
+          {events?.slice(0, 4).map((event) => <Event key={event.id} {...event} />)}
         </div>
 
-        <Button variant="solid" radius="full" color="primary" className="mx-auto" as={NextLink} href="/events">
+        <Button
+          variant="faded"
+          radius="full"
+          color="primary"
+          size="lg"
+          className="mx-auto"
+          as={NextLink}
+          href="/events"
+        >
           Load more...
         </Button>
       </section>
 
-      <section className="container flex flex-col items-center gap-y-6 py-24 text-center">
+      <section className="container flex flex-col items-center gap-y-6 py-24">
         <Chip color="danger" variant="flat">
           FAQs
         </Chip>
 
-        <h1 className="text-5xl font-medium">Frequently Asked Questions</h1>
+        <h1 className="text-center text-5xl font-medium">Frequently Asked Questions</h1>
 
-        <p className="text-default-500">We have put together some commonly asked questions</p>
+        <p className="text-default-500 text-center">We have put together some commonly asked questions</p>
 
-        <Accordion variant="shadow" className="sm:mx-auto sm:w-3/4">
-          <AccordionItem key="1" aria-label="Accordion 1" title="Accordion 1">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus accusantium aperiam deserunt id ipsum,
-            nam odit quam quos tempore ullam?
+        <Accordion variant="shadow" className="sm:mx-auto sm:w-2/3">
+          <AccordionItem key="1" title="What is Connectify?">
+            Connectify provides a platform for both event organizers and sponsors. Event organizers can input all the
+            details about their event, and sponsor companies can easily assess whether the event aligns with their
+            sponsorship criteria.
           </AccordionItem>
-          <AccordionItem key="2" aria-label="Accordion 2" title="Accordion 2">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda dolorum, ex incidunt perferendis quidem
-            repudiandae rerum! Alias animi fuga quaerat.
+          <AccordionItem key="2" title="How it works for sponsors?">
+            Sponsors can browse through listed events, review the available sponsorship packages and submit sponsorship
+            requests for the desired event.
           </AccordionItem>
-          <AccordionItem key="3" aria-label="Accordion 3" title="Accordion 3">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. At atque consequuntur dignissimos eligendi
-            expedita fugiat mollitia neque nulla, placeat vel.
+          <AccordionItem key="3" title="How it works for organizers?">
+            Event organizers can input comprehensive event details and create sponsorship packages (such as gold,
+            silver, and bronze) that they offer to potential sponsors.
           </AccordionItem>
-          <AccordionItem key="4" aria-label="Accordion 4" title="Accordion 4">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. At atque consequuntur dignissimos eligendi
-            expedita fugiat mollitia neque nulla, placeat vel.
+          <AccordionItem key="4" title="How the process is going?">
+            Whenever sponsor apply for specific event, organizer check and decide whether it is suitable or not.
           </AccordionItem>
         </Accordion>
 

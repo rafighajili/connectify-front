@@ -1,19 +1,22 @@
 import { apiSlice } from "#/store/slices";
-import { LoginRequest, RegisterRequest, VerifyRequest } from "#/schemas";
+import { LoginRequest, LoginResponse, loginResponseSchema, RegisterRequest, VerifyRequest } from "#/schemas";
 import { User, UserEntity } from "#/entities";
 
 export const authService = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    loginOrganizer: builder.mutation<{ access_token: string }, LoginRequest>({
+    loginOrganizer: builder.mutation<LoginResponse, LoginRequest>({
       query: (body) => ({ url: `/organizer/login`, method: "post", body }),
+      transformResponse: (res: unknown) => loginResponseSchema.parse(res),
     }),
 
-    loginSponsor: builder.mutation<{ access_token: string }, LoginRequest>({
+    loginSponsor: builder.mutation<LoginResponse, LoginRequest>({
       query: (body) => ({ url: `/sponsor/login`, method: "post", body }),
+      transformResponse: (res: unknown) => loginResponseSchema.parse(res),
     }),
 
-    loginAdmin: builder.mutation<{ access_token: string }, LoginRequest>({
+    loginAdmin: builder.mutation<LoginResponse, LoginRequest>({
       query: (body) => ({ url: `/admin/login`, method: "post", body }),
+      transformResponse: (res: unknown) => loginResponseSchema.parse(res),
     }),
 
     registerOrganizer: builder.mutation<void, RegisterRequest>({

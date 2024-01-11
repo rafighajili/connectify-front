@@ -14,7 +14,7 @@ export default function AuthLayout({ children }: Children) {
 
   useEffect(() => {
     if (!isLoading && !!user) {
-      router.push(`/${user.role.charAt(0).toLowerCase()}`);
+      router.push(`/${user.userRole.charAt(0).toLowerCase()}`);
     }
   }, [isLoading, user]);
 

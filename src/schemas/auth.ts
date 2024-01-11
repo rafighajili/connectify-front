@@ -1,9 +1,17 @@
 import { z } from "zod";
+import { UserEntity } from "#/entities";
 
 export const loginRequestSchema = z.object({
   email: z.string().email("Please enter valid email address"),
   password: z.string().min(6, "Password must contain at least 6 characters"),
 });
+
+export const loginResponseSchema = z
+  .object({
+    access_token: z.string(),
+    refresh_token: z.string(),
+  })
+  .merge(UserEntity);
 
 export const registerRequestSchema = z
   .object({
@@ -18,5 +26,6 @@ export const verifyRequestSchema = z.object({
 });
 
 export type LoginRequest = z.infer<typeof loginRequestSchema>;
+export type LoginResponse = z.infer<typeof loginResponseSchema>;
 export type RegisterRequest = z.infer<typeof registerRequestSchema>;
 export type VerifyRequest = z.infer<typeof verifyRequestSchema>;

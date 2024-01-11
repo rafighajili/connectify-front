@@ -4,7 +4,7 @@ export const EventEntity = z.object({
   id: z.number(),
   eventTitle: z.string(),
   eventStatus: z.union([z.literal("APPROVED"), z.literal("PENDING")]),
-  eventTypes: z.string().array().nullable(),
+  eventType: z.string(),
   eventStartDate: z.string(),
   eventEndDate: z.string(),
   eventVenueAddress: z.string(),
