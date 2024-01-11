@@ -44,25 +44,6 @@ const navbarItems = [
   },
 ];
 
-const footerItems = [
-  {
-    heading: "Company",
-    links: ["About", "Pricing", "Jobs", "Blog", "Careers"],
-  },
-  {
-    heading: "Product",
-    links: ["Sales Software", "Features", "Privacy and Security", "Marketplace", "API"],
-  },
-  {
-    heading: "Help Center",
-    links: ["Community", "Knowledge Base", "Academy", "Support"],
-  },
-  {
-    heading: "Contact",
-    links: ["Instagram", "Linkedin", "Facebook"],
-  },
-];
-
 export default function LandingLayout({ children }: Children) {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
@@ -120,7 +101,7 @@ export default function LandingLayout({ children }: Children) {
           </NavbarBrand>
         </NavbarContent>
 
-        <NavbarContent className="hidden gap-4 lg:flex" justify="center">
+        <NavbarContent className="hidden gap-6 lg:flex" justify="center">
           {navbarItemsComponent}
         </NavbarContent>
 
@@ -137,7 +118,7 @@ export default function LandingLayout({ children }: Children) {
           </NavbarItem>
         </NavbarContent>
 
-        <NavbarMenu className="gap-4">{navbarItemsComponent}</NavbarMenu>
+        <NavbarMenu className="gap-6">{navbarItemsComponent}</NavbarMenu>
       </Navbar>
 
       <div className="py-12">{children}</div>
@@ -145,7 +126,7 @@ export default function LandingLayout({ children }: Children) {
       <footer className="container space-y-6 py-12">
         <Divider />
 
-        <div className="text-default-500 flex flex-wrap justify-between gap-x-32 gap-y-4 [&_*]:text-sm">
+        <div className="text-default-500 flex flex-wrap justify-between gap-x-36 gap-y-3 [&_*]:text-sm">
           <p>Copyright @2024 Connectify. All Rights Reserved.</p>
           <p>
             <Link href="#">Terms & Conditions</Link> and <Link href="#">Privacy Policy</Link>.

@@ -11,27 +11,27 @@ const partners = [
   {
     imgSrc: gdscBeu,
     name: "GDSC BEU",
-    link: "",
+    link: "https://www.instagram.com/gdsc.beu?igsh=eWdqejQzOTlpOXE=",
   },
   {
     imgSrc: speKhazar,
     name: "SPE Khazar",
-    link: "",
+    link: "https://www.instagram.com/spe.khazar?igsh=YWlncWV2eHdiY21z",
   },
   {
     imgSrc: wtmBaku,
     name: "Women Techmakers Baku",
-    link: "",
+    link: "https://www.instagram.com/wtm.baku?igsh=aGZudG1iaDVnamgx",
   },
   {
     imgSrc: gdgBaku,
     name: "GDG Baku",
-    link: "",
+    link: "https://www.instagram.com/gdg.baku?igsh=cXlvdWZjbHlqMWR6",
   },
   {
     imgSrc: goup,
     name: "GOUP",
-    link: "",
+    link: "https://www.linkedin.com/company/goupaz/",
   },
 ];
 
