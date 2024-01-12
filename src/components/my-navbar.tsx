@@ -1,22 +1,10 @@
 "use client";
 
-import {
-  Link,
-  Navbar,
-  NavbarBrand,
-  NavbarContent,
-  NavbarItem,
-  NavbarMenu,
-  NavbarMenuToggle,
-  Switch,
-} from "@nextui-org/react";
-import { ReactNode, useEffect, useState } from "react";
+import { Link, Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenu, NavbarMenuToggle } from "@nextui-org/react";
+import { ReactNode, useState } from "react";
 import { ConnectifyLogo } from "#/components";
-import { useTheme } from "next-themes";
 import NextLink from "next/link";
 import { usePathname } from "next/navigation";
-import useMounted from "#/utils";
-import { MoonIcon, SunIcon } from "@heroicons/react/24/outline";
 
 export function MyNavbar({
   logoHref,
@@ -29,20 +17,7 @@ export function MyNavbar({
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
-  const { resolvedTheme, setTheme } = useTheme();
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(resolvedTheme === "dark");
-
-  useEffect(() => {
-    if (isDarkMode) {
-      setTheme("dark");
-    } else {
-      setTheme("light");
-    }
-  }, [isDarkMode]);
-
   const pathname = usePathname();
-
-  const mounted = useMounted();
 
   const navbarItemsComponent = (
     <>
@@ -50,29 +25,22 @@ export function MyNavbar({
         const isActive = pathname === navbarItem.link;
         return (
           <NavbarItem key={navbarItem.title} isActive={isActive}>
-            <Link href={navbarItem.link} as={NextLink} color={isActive ? "primary" : "foreground"}>
+            <Link
+              href={navbarItem.link}
+              as={NextLink}
+              color={isActive ? "primary" : "foreground"}
+              onPress={() => setIsMenuOpen(false)}
+            >
               {navbarItem.title}
             </Link>
           </NavbarItem>
         );
       })}
-
-      {mounted && (
-        <NavbarItem>
-          <Switch
-            aria-label="Dark mode switch"
-            isSelected={isDarkMode}
-            onValueChange={setIsDarkMode}
-            startContent={<SunIcon />}
-            endContent={<MoonIcon />}
-          />
-        </NavbarItem>
-      )}
     </>
   );
 
   return (
-    <Navbar onMenuOpenChange={setIsMenuOpen}>
+    <Navbar isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen}>
       <NavbarContent>
         <NavbarMenuToggle aria-label={isMenuOpen ? "Close menu" : "Open menu"} className="lg:hidden" />
         <NavbarBrand>
@@ -92,7 +60,7 @@ export function MyNavbar({
         ))}
       </NavbarContent>
 
-      <NavbarMenu className="gap-6 py-6">{navbarItemsComponent}</NavbarMenu>
+      <NavbarMenu className="gap-6 overflow-y-auto py-6">{navbarItemsComponent}</NavbarMenu>
     </Navbar>
   );
 }

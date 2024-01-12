@@ -2,18 +2,20 @@
 
 import { Accordion, AccordionItem, Button, Chip, Link } from "@nextui-org/react";
 import NextLink from "next/link";
-import { useGetAllEventsQuery } from "#/services/organiser";
+import { useGetAllEventsQuery } from "#/services";
 import { EventsSwiper } from "#/components";
 import { MainSection, PartnersSection } from "../_components";
 
 export default function HomePage() {
-  const { data: events, isLoading: isEventsLoading } = useGetAllEventsQuery();
+  const { data: events, isLoading: isEventsLoading } = useGetAllEventsQuery({});
 
   return (
     <>
       <MainSection>
         <div className="space-y-12">
-          <h1 className="text-5xl font-medium">We connect event organizers and sponsors</h1>
+          <h1 className="text-4xl font-medium">
+            Simplifying the process of finding events and sponsors to reach the target audience.
+          </h1>
           <div className="flex flex-wrap gap-3">
             <Button as={NextLink} href="/organizers" radius="full" color="primary">
               I am an Event Organizer

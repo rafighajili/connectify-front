@@ -9,7 +9,7 @@ export default function OrganizersPage() {
     <>
       <MainSection>
         <div className="space-y-12">
-          <h1 className="text-5xl font-medium">Create an account and find sponsors easily now!</h1>
+          <h1 className="text-4xl font-medium">Create an account and find sponsors easily now!</h1>
           <Button as={NextLink} href="/register" radius="full" color="primary" variant="ghost">
             Create your first organizer account
           </Button>

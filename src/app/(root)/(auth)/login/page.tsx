@@ -68,7 +68,7 @@ export default function LoginPage() {
         <Button color="primary" type="submit" isLoading={isOrganizerLoading || isSponsorLoading}>
           Login
         </Button>
-        <Button as={NextLink} href="/register" type="button" variant="light" color="secondary">
+        <Button as={NextLink} href="/register" type="button" variant="light" color="primary">
           Create a new account
         </Button>
       </form>

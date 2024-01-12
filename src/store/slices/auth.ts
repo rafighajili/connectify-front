@@ -1,8 +1,7 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { User } from "#/entities";
 import { RootState } from "#/store";
 import { authService } from "#/services";
-import { mergeProps } from "@react-aria/utils";
 
 const initialState: {
   user: User | null;
@@ -18,10 +17,10 @@ const authSlice = createSlice({
   name: "authSlice",
   initialState,
   reducers: {
-    setUser: (state, { payload }: PayloadAction<Partial<User>>) => {
-      state.user = mergeProps(state.user, payload);
+    resetAuth: () => {
+      localStorage.removeItem("token");
+      return initialState;
     },
-    resetAuth: () => initialState,
   },
   extraReducers: (builder) => {
     builder.addMatcher(authService.endpoints.loginAdmin.matchFulfilled, (state, { payload }) => {
@@ -54,6 +53,6 @@ const authSlice = createSlice({
 });
 
 export const authReducer = authSlice.reducer;
-export const { setUser, resetAuth } = authSlice.actions;
+export const { resetAuth } = authSlice.actions;
 
 export const selectAuth = (state: RootState) => state.auth;

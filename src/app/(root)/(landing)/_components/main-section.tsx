@@ -6,15 +6,15 @@ export function MainSection({ children }: Children) {
   return (
     <div className="overflow-x-clip overflow-y-visible">
       <div className="mx-auto sm:w-3/4 md:w-3/5 lg:w-auto">
-        <main className="container grid grid-cols-1 items-center gap-12 py-24 lg:grid-cols-2">
+        <main className="container grid grid-cols-1 gap-12 py-24 lg:grid-cols-2">
           <div className="z-10">{children}</div>
 
-          <div className="relative z-0">
+          <div className="relative z-0 h-fit">
             <Image src={people} alt="Networking" className="h-auto w-full" />
             <svg
               viewBox="0 0 200 200"
               xmlns="http://www.w3.org/2000/svg"
-              className="pointer-events-none absolute -bottom-48 -left-48 -z-10"
+              className="pointer-events-none absolute -bottom-72 -left-48 -z-10"
               width={1200}
               height={1200}
             >

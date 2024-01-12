@@ -83,7 +83,7 @@ function RegisterForm() {
       <Button color="primary" type="submit" isLoading={isLoading}>
         Register
       </Button>
-      <Button as={NextLink} href="/login" type="button" variant="light" color="secondary">
+      <Button as={NextLink} href="/login" type="button" variant="light" color="primary">
         Login to your account
       </Button>
     </form>
@@ -93,7 +93,7 @@ function RegisterForm() {
 function VerificationForm() {
   const { email } = useContext(RegisterContext);
 
-  const [verify, { isLoading, isSuccess }] = useVerifyMutation();
+  const [verify, { isLoading, error }] = useVerifyMutation();
 
   const router = useRouter();
 
@@ -106,10 +106,11 @@ function VerificationForm() {
   });
 
   useEffect(() => {
-    if (isSuccess) {
+    // @ts-ignore
+    if (error?.data === "User verified successfully") {
       router.push("/login");
     }
-  }, [isSuccess]);
+  }, [error]);
 
   return (
     <form onSubmit={handleSubmit(verify)} className="flex flex-col gap-1.5">

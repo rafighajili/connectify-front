@@ -1,12 +1,12 @@
 "use client";
 
 import { EventsSwiper } from "#/components";
-import { useGetAllEventsQuery } from "#/services/organiser";
+import { useGetAllEventsQuery } from "#/services";
 import { Chip } from "@nextui-org/react";
 import { PartnersSection } from "../_components";
 
 export default function EventsPage() {
-  const { data: events, isLoading: isEventsLoading } = useGetAllEventsQuery();
+  const { data: events, isLoading: isEventsLoading } = useGetAllEventsQuery({});
 
   return (
     <div className="space-y-24 [&>*]:space-y-6">

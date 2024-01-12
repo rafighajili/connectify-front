@@ -3,8 +3,12 @@
 import { Button } from "@nextui-org/react";
 import { MyFooter, MyNavbar } from "#/components";
 import { Children } from "#/types";
+import { resetAuth } from "#/store/slices";
+import { useAppDispatch } from "#/store";
 
 export default function LandingLayout({ children }: Children) {
+  const dispatch = useAppDispatch();
+
   const centerElements = [
     {
       key: 1,
@@ -19,7 +23,7 @@ export default function LandingLayout({ children }: Children) {
   ];
 
   const endElements = [
-    <Button key={1} variant="light">
+    <Button key={1} variant="light" onPress={() => dispatch(resetAuth())}>
       Log out
     </Button>,
   ];
@@ -27,7 +31,7 @@ export default function LandingLayout({ children }: Children) {
   return (
     <>
       <MyNavbar logoHref="/s" centerElements={centerElements} endElements={endElements} />
-      <div className="py-12">{children}</div>
+      <div className="container py-12">{children}</div>
       <MyFooter />
     </>
   );
