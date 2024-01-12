@@ -1,62 +1,18 @@
 "use client";
 
-import Image from "next/image";
 import { Accordion, AccordionItem, Button, Chip, Link } from "@nextui-org/react";
-import { gdgBaku, gdscBeu, goup, people, speKhazar, wtmBaku } from "#/assets/images";
 import NextLink from "next/link";
 import { useGetAllEventsQuery } from "#/services/organiser";
-import { Event } from "#/components";
-
-const partners = [
-  {
-    imgSrc: gdscBeu,
-    name: "GDSC BEU",
-    link: "https://www.instagram.com/gdsc.beu?igsh=eWdqejQzOTlpOXE=",
-  },
-  {
-    imgSrc: speKhazar,
-    name: "SPE Khazar",
-    link: "https://www.instagram.com/spe.khazar?igsh=YWlncWV2eHdiY21z",
-  },
-  {
-    imgSrc: wtmBaku,
-    name: "Women Techmakers Baku",
-    link: "https://www.instagram.com/wtm.baku?igsh=aGZudG1iaDVnamgx",
-  },
-  {
-    imgSrc: gdgBaku,
-    name: "GDG Baku",
-    link: "https://www.instagram.com/gdg.baku?igsh=cXlvdWZjbHlqMWR6",
-  },
-  {
-    imgSrc: goup,
-    name: "GOUP",
-    link: "https://www.linkedin.com/company/goupaz/",
-  },
-];
+import { EventsSwiper } from "#/components";
+import { MainSection, PartnersSection } from "../_components";
 
 export default function HomePage() {
   const { data: events, isLoading: isEventsLoading } = useGetAllEventsQuery();
 
-  const partnersComponent = (
-    <div className="animate-dvijeniya flex gap-x-12">
-      {partners.map((partner) => (
-        <NextLink
-          key={partner.name}
-          href={partner.link}
-          target="_blank"
-          className="h-36 w-36 overflow-hidden rounded-full"
-        >
-          <Image src={partner.imgSrc} alt={partner.name} className="h-full w-full object-cover" />
-        </NextLink>
-      ))}
-    </div>
-  );
-
   return (
-    <div className="overflow-x-clip overflow-y-visible">
-      <main className="container grid grid-cols-1 items-center gap-12 py-24 sm:grid-cols-2">
-        <div className="z-10 space-y-12">
+    <>
+      <MainSection>
+        <div className="space-y-12">
           <h1 className="text-5xl font-medium">We connect event organizers and sponsors</h1>
           <div className="flex flex-wrap gap-3">
             <Button as={NextLink} href="/organizers" radius="full" color="primary">
@@ -67,52 +23,14 @@ export default function HomePage() {
             </Button>
           </div>
         </div>
+      </MainSection>
 
-        <div className="relative z-0">
-          <Image src={people} alt="Networking" />
-          <svg
-            viewBox="0 0 200 200"
-            xmlns="http://www.w3.org/2000/svg"
-            className="pointer-events-none absolute -bottom-48 -left-48 -z-10"
-            width={1200}
-            height={1200}
-          >
-            <path
-              d="M44.7,-36.8C55.1,-22.5,58.8,-4.1,56.9,16.4C54.9,36.8,47.2,59.4,29.8,71.5C12.4,83.5,-14.7,85.1,-37.2,75.1C-59.7,65.1,-77.7,43.5,-77.7,23.5C-77.6,3.5,-59.5,-14.8,-43.6,-30.3C-27.6,-45.8,-13.8,-58.5,1.6,-59.9C17.1,-61.2,34.2,-51.1,44.7,-36.8Z"
-              transform="translate(100 100)"
-              className="fill-primary-50"
-            />
-          </svg>
-        </div>
-      </main>
+      <PartnersSection />
 
-      <section className="space-y-12 py-24">
-        <div className="container">
-          <h1 className="text-3xl font-medium">Event Partners</h1>
-        </div>
-
-        <div className="flex gap-x-12 overflow-x-hidden [&>div]:hover:[animation-play-state:paused]">
-          {partnersComponent}
-          {partnersComponent}
-          {partnersComponent}
-        </div>
-      </section>
-
-      <section className="container space-y-12 py-24 text-center">
+      <section className="space-y-12 py-24 text-center">
         <h1 className="text-5xl font-medium">Latest Events</h1>
 
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-          {isEventsLoading ? (
-            <>
-              <Event isLoading />
-              <Event isLoading />
-              <Event isLoading />
-              <Event isLoading />
-            </>
-          ) : (
-            events?.slice(0, 4).map((event) => <Event key={event.id} {...event} />)
-          )}
-        </div>
+        {isEventsLoading ? <EventsSwiper isLoading /> : events && <EventsSwiper events={events} />}
 
         <Button
           variant="faded"
@@ -162,6 +80,6 @@ export default function HomePage() {
           </Link>
         </div>
       </section>
-    </div>
+    </>
   );
 }
