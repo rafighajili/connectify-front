@@ -113,7 +113,7 @@ export function MyFooter() {
             radius="full"
             variant="bordered"
             color="primary"
-            classNames={{ tab: "aspect-square" }}
+            classNames={{ tab: "w-7" }}
             selectedKey={theme}
             // @ts-ignore
             onSelectionChange={setTheme}
