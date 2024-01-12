@@ -31,7 +31,7 @@ export function EventsSwiper({ isLoading, events }: ConditionalLoading<{ events:
             className="!overflow-x-clip !overflow-y-visible"
           >
             {events.map((event) => (
-              <SwiperSlide>
+              <SwiperSlide key={event.id}>
                 <Event {...event} />
               </SwiperSlide>
             ))}
