@@ -92,7 +92,7 @@ export default function EventPage({ params: { eventId } }: { params: { eventId: 
         <div>
           <h3 className="text-xl">Sponsorship packets:</h3>
 
-          <div className="mt-6 grid grid-cols-3 gap-6">
+          <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             <PackageCard
               type="silver"
               features={[
