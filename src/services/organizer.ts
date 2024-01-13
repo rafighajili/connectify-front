@@ -1,7 +1,7 @@
 import { apiSlice } from "#/store/slices";
 import { Event, EventEntity } from "#/entities";
 import { Key } from "react";
-import { CreateEventRequest } from "#/schemas";
+import { CreateEventRequest, UpdateEventRequest } from "#/schemas";
 
 export const organizerService = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -22,8 +22,8 @@ export const organizerService = apiSlice.injectEndpoints({
       },
       transformResponse: (res: unknown) => EventEntity.parse(res),
     }),
-    updateEvent: builder.mutation<Event, Event>({
-      query: (body) => ({ url: `/organizer/update-event`, method: "put", body }),
+    updateEvent: builder.mutation<Event, Partial<UpdateEventRequest> & { eventId: Key }>({
+      query: ({ eventId, ...body }) => ({ url: `/organizer/update-event`, method: "put", body, params: { eventId } }),
       transformResponse: (res: unknown) => EventEntity.parse(res),
     }),
     deleteEvent: builder.mutation<void, Key>({

@@ -1,6 +1,6 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import useMounted from "#/utils";
-import { Button, Card, CardBody, CardFooter, CardHeader, Skeleton } from "@nextui-org/react";
+import { Button, Card, CardBody, CardFooter, CardHeader, Skeleton, Tooltip } from "@nextui-org/react";
 import { useRef } from "react";
 import { ConditionalLoading } from "#/types";
 import Image from "next/image";
@@ -12,6 +12,8 @@ import {
   MapPinIcon,
 } from "@heroicons/react/24/outline";
 import { Event } from "#/entities";
+import { useRouter } from "next/navigation";
+import NextLink from "next/link";
 
 export function EventsSwiper({ isLoading, events }: ConditionalLoading<{ events: Event[] }>) {
   const mounted = useMounted();
@@ -78,6 +80,8 @@ export function EventsSwiper({ isLoading, events }: ConditionalLoading<{ events:
 
 function Event(props: ConditionalLoading<Event>) {
   const { isLoading } = props;
+
+  const router = useRouter();
 
   return (
     <Card
@@ -156,9 +160,11 @@ function Event(props: ConditionalLoading<Event>) {
         {isLoading ? (
           <Skeleton className="ml-auto h-10 w-40 rounded-lg" />
         ) : (
-          <Button color="danger" variant="light" className="ml-auto">
-            Read more
-          </Button>
+          <Tooltip content="Login as a sponsor to see this event" delay={0} closeDelay={200}>
+            <Button as={NextLink} href="/login" color="danger" variant="light" className="ml-auto">
+              Read more
+            </Button>
+          </Tooltip>
         )}
       </CardFooter>
     </Card>

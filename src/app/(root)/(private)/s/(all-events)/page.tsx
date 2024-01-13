@@ -8,7 +8,7 @@ export default function AllEventsPage() {
 
   return (
     <div className="space-y-12">
-      <h1 className="text-4xl font-medium">Events</h1>
+      <h1 className="text-4xl font-medium">All Events</h1>
 
       <div className="space-y-6">
         {isEventsLoading ? (
@@ -18,7 +18,10 @@ export default function AllEventsPage() {
             <EventCard isLoading />
           </>
         ) : (
-          events && events.map((event) => <EventCard key={event.id} {...event} />)
+          events &&
+          events.map((event) => (
+            <EventCard key={event.id} eventData={event} actionTitle="Read mode" href={`/s/${event.id}`} />
+          ))
         )}
       </div>
     </div>

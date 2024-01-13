@@ -14,4 +14,7 @@ export const createEventRequestSchema = EventEntity.omit({
   }),
 );
 
+export const updateEventRequestSchema = createEventRequestSchema.omit({ eventImage: true });
+
 export type CreateEventRequest = z.infer<typeof createEventRequestSchema>;
+export type UpdateEventRequest = z.infer<typeof updateEventRequestSchema>;

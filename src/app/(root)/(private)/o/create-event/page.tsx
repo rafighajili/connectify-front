@@ -23,8 +23,6 @@ export default function Page() {
     }
   };
 
-  console.log("watch()", watch());
-
   return (
     <Card classNames={{ base: "p-6" }}>
       <CardHeader>
@@ -177,13 +175,7 @@ export default function Page() {
             control={control}
             name="cashSponsorshipNeeded"
             render={({ field, fieldState: { invalid, error } }) => (
-              <Input
-                label="Needed sponrship cash"
-                type="number"
-                {...field}
-                isInvalid={invalid}
-                errorMessage={error?.message}
-              />
+              <Input label="Needed sponrship cash" {...field} isInvalid={invalid} errorMessage={error?.message} />
             )}
           />
 
