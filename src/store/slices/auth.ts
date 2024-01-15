@@ -5,11 +5,9 @@ import { authService } from "#/services";
 
 const initialState: {
   user: User | null;
-  token: string | null;
   isLoading: boolean;
 } = {
   user: null,
-  token: typeof window !== "undefined" ? localStorage.getItem("token") : null,
   isLoading: false,
 };
 
@@ -17,26 +15,17 @@ const authSlice = createSlice({
   name: "authSlice",
   initialState,
   reducers: {
-    resetAuth: () => {
-      localStorage.removeItem("token");
-      return initialState;
-    },
+    resetAuth: () => initialState,
   },
   extraReducers: (builder) => {
-    builder.addMatcher(authService.endpoints.loginAdmin.matchFulfilled, (state, { payload }) => {
+    builder.addMatcher(authService.endpoints.registerOrganizer.matchFulfilled, (state, { payload }) => {
       state.user = payload;
-      state.token = payload.access_token;
-      localStorage.setItem("token", payload.access_token);
     });
-    builder.addMatcher(authService.endpoints.loginSponsor.matchFulfilled, (state, { payload }) => {
+    builder.addMatcher(authService.endpoints.login.matchFulfilled, (state, { payload }) => {
       state.user = payload;
-      state.token = payload.access_token;
-      localStorage.setItem("token", payload.access_token);
     });
-    builder.addMatcher(authService.endpoints.loginOrganizer.matchFulfilled, (state, { payload }) => {
-      state.user = payload;
-      state.token = payload.access_token;
-      localStorage.setItem("token", payload.access_token);
+    builder.addMatcher(authService.endpoints.logout.matchFulfilled, (state) => {
+      state.user = null;
     });
 
     builder.addMatcher(authService.endpoints.getUser.matchPending, (state, { payload }) => {

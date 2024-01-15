@@ -1,2 +1,2 @@
 export * from "./auth";
-export * from "./organizer";
+export * from "./event";

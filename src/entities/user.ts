@@ -1,11 +1,12 @@
 import { z } from "zod";
 
 export const UserEntity = z.object({
-  id: z.number(),
-  userRole: z.union([z.literal("SPONSOR"), z.literal("ORGANIZER")]),
+  id: z.string(),
+  role: z.union([z.literal("ADMIN"), z.literal("SPONSOR"), z.literal("ORGANIZER")]),
+  firstName: z.string(),
+  lastName: z.string(),
   email: z.string().email(),
-  firstname: z.string(),
-  lastname: z.string(),
+  phoneNumber: z.string(),
 });
 
 export type User = z.infer<typeof UserEntity>;
