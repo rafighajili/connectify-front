@@ -1,12 +1,10 @@
 "use client";
 
-import { Button, Link } from "@nextui-org/react";
 import { MyFooter, MyNavbar } from "#/components";
 import { Children } from "#/types";
-import NextLink from "next/link";
 
 export default function LandingLayout({ children }: Children) {
-  const centerElements = [
+  const items = [
     {
       key: 1,
       title: "Home",
@@ -34,18 +32,9 @@ export default function LandingLayout({ children }: Children) {
     },
   ];
 
-  const endElements = [
-    <Link key={1} as={NextLink} href="/login">
-      Login
-    </Link>,
-    <Button key={2} as={NextLink} href="/register" color="primary" radius="full">
-      Get started
-    </Button>,
-  ];
-
   return (
     <>
-      <MyNavbar logoHref="/" centerElements={centerElements} endElements={endElements} />
+      <MyNavbar items={items} />
       <div className="py-12">{children}</div>
       <MyFooter />
     </>

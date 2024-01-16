@@ -10,7 +10,7 @@ export function Providers({ children }: Children) {
   return (
     <ReduxProvider store={store}>
       <NextUIProvider>
-        <ThemeProvider attribute="class" defaultTheme="light">
+        <ThemeProvider attribute="class" defaultTheme="system">
           {children}
         </ThemeProvider>
       </NextUIProvider>

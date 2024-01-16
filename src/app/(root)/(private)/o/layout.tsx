@@ -1,15 +1,13 @@
 "use client";
 
-import { Button } from "@nextui-org/react";
 import { MyFooter, MyNavbar } from "#/components";
 import { Children } from "#/types";
 import { useAppDispatch } from "#/store";
-import { resetAuth } from "#/store/slices";
 
 export default function LandingLayout({ children }: Children) {
   const dispatch = useAppDispatch();
 
-  const centerElements = [
+  const items = [
     {
       key: 1,
       title: "My events",
@@ -22,15 +20,9 @@ export default function LandingLayout({ children }: Children) {
     },
   ];
 
-  const endElements = [
-    <Button key={1} variant="light" onPress={() => dispatch(resetAuth())}>
-      Log out
-    </Button>,
-  ];
-
   return (
     <>
-      <MyNavbar logoHref="/o" centerElements={centerElements} endElements={endElements} />
+      <MyNavbar items={items} />
       <div className="container py-12">{children}</div>
       <MyFooter />
     </>
