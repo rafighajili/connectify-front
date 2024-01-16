@@ -27,7 +27,7 @@ export default function RegisterPage() {
         control={control}
         name="firstName"
         render={({ field, fieldState: { invalid, error } }) => (
-          <Input label="Your name" autoFocus {...field} isInvalid={invalid} errorMessage={error?.message} />
+          <Input label="Your name" {...field} isInvalid={invalid} errorMessage={error?.message} />
         )}
       />
       <Controller

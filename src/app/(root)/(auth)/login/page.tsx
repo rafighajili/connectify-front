@@ -24,7 +24,7 @@ export default function LoginPage() {
         control={control}
         name="email"
         render={({ field, fieldState: { invalid, error } }) => (
-          <Input label="Your email" autoFocus {...field} isInvalid={invalid} errorMessage={error?.message} />
+          <Input label="Your email" {...field} isInvalid={invalid} errorMessage={error?.message} />
         )}
       />
       <Controller
