@@ -1,53 +1,46 @@
 "use client";
 
-import { Key } from "react";
 import { useGetEventQuery } from "#/services";
 import { Chip, Skeleton, Tooltip } from "@nextui-org/react";
 import { CalendarDaysIcon, ClockIcon, MapPinIcon, UsersIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { PackageCard } from "#/components";
 
-export default function EventPage({ params: { eventId } }: { params: { eventId: Key } }) {
-  const { data: eventData } = useGetEventQuery(eventId);
+export default function EventPage({ params: { eventId } }: { params: { eventId: string } }) {
+  const { data: event } = useGetEventQuery(eventId);
 
   return (
     <div className="space-y-12">
-      {eventData ? (
-        <h1 className="text-4xl font-medium">{eventData.eventTitle}</h1>
-      ) : (
-        <Skeleton className="h-10 rounded-lg" />
-      )}
+      {event ? <h1 className="text-4xl font-medium">{event.name}</h1> : <Skeleton className="h-10 rounded-lg" />}
 
       <div className="flex gap-6 max-lg:flex-col lg:justify-between">
-        {eventData ? (
+        {event ? (
           <Chip size="lg" color="primary" variant="flat">
-            {eventData.eventType}
+            {event.type.name}
           </Chip>
         ) : (
           <Skeleton className="h-8 w-36 rounded-full" />
         )}
 
         <div className="flex gap-3 max-sm:flex-col">
-          {eventData ? (
+          {event ? (
             <>
               <Chip size="lg" variant="bordered" startContent={<UsersIcon className="h-6 w-6" />}>
-                {eventData.committeeSize}
+                {event.size}
               </Chip>
 
-              <Tooltip content={eventData.eventVenueAddress} delay={0} closeDelay={200}>
+              <Tooltip content={event.venue} delay={0} closeDelay={200}>
                 <Chip size="lg" variant="bordered" startContent={<MapPinIcon className="h-6 w-6" />}>
-                  <p className="w-36 cursor-default overflow-hidden text-ellipsis whitespace-nowrap">
-                    {eventData.eventVenueAddress}
-                  </p>
+                  <p className="w-36 cursor-default overflow-hidden text-ellipsis whitespace-nowrap">{event.venue}</p>
                 </Chip>
               </Tooltip>
 
               <Chip size="lg" variant="bordered" startContent={<CalendarDaysIcon className="h-6 w-6" />}>
-                {new Date(eventData.eventStartDate).toLocaleDateString("en-UK")}
+                {new Date(event.date).toLocaleDateString("en-UK")}
               </Chip>
 
               <Chip size="lg" variant="bordered" startContent={<ClockIcon className="h-6 w-6" />}>
-                {new Date(eventData.eventStartDate).toLocaleTimeString("en-UK", {
+                {new Date(event.date).toLocaleTimeString("en-UK", {
                   hour: "2-digit",
                   minute: "2-digit",
                 })}
@@ -64,11 +57,11 @@ export default function EventPage({ params: { eventId } }: { params: { eventId: 
         </div>
       </div>
 
-      {eventData ? (
+      {event ? (
         <Image
-          alt={eventData.eventTitle}
+          alt={event.name}
           className="h-72 w-full rounded-xl object-cover "
-          src={eventData.s3Key}
+          src={event.imageUrl}
           height={1600}
           width={900}
         />
@@ -76,8 +69,8 @@ export default function EventPage({ params: { eventId } }: { params: { eventId: 
         <Skeleton className="h-72 w-full rounded-xl" />
       )}
 
-      {eventData ? (
-        <p>{eventData.eventDescription}</p>
+      {event ? (
+        <p>{event.description}</p>
       ) : (
         <div className="space-y-2 py-1">
           <Skeleton className="h-4 w-full" />
@@ -88,7 +81,7 @@ export default function EventPage({ params: { eventId } }: { params: { eventId: 
         </div>
       )}
 
-      {eventData && (
+      {event && (
         <div>
           <h3 className="text-xl">Sponsorship packets:</h3>
 
@@ -103,7 +96,7 @@ export default function EventPage({ params: { eventId } }: { params: { eventId: 
                 "Lorem ipsum dolor sit amet.",
               ]}
               price={500}
-              eventData={eventData}
+              event={event}
             />
 
             <PackageCard
@@ -116,7 +109,7 @@ export default function EventPage({ params: { eventId } }: { params: { eventId: 
                 "Lorem ipsum dolor sit amet.",
               ]}
               price={2500}
-              eventData={eventData}
+              event={event}
             />
 
             <PackageCard
@@ -129,7 +122,7 @@ export default function EventPage({ params: { eventId } }: { params: { eventId: 
                 "Lorem ipsum dolor sit amet.",
               ]}
               price={1500}
-              eventData={eventData}
+              event={event}
             />
           </div>
         </div>

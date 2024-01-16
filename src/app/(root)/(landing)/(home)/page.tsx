@@ -2,12 +2,12 @@
 
 import { Accordion, AccordionItem, Button, Chip, Link } from "@nextui-org/react";
 import NextLink from "next/link";
-import { useGetAllEventsQuery } from "#/services";
 import { EventsSwiper } from "#/components";
 import { MainSection, PartnersSection } from "../_components";
+import { useGetEventsQuery } from "#/services";
 
 export default function HomePage() {
-  const { data: events, isLoading: isEventsLoading } = useGetAllEventsQuery({});
+  const { data: events, isLoading: isEventsLoading } = useGetEventsQuery({});
 
   return (
     <>
@@ -54,7 +54,7 @@ export default function HomePage() {
 
         <h1 className="text-center text-5xl font-medium">Frequently Asked Questions</h1>
 
-        <p className="text-default-500 text-center">We have put together some commonly asked questions</p>
+        <p className="text-center text-default-500">We have put together some commonly asked questions</p>
 
         <Accordion variant="shadow" className="sm:mx-auto sm:w-2/3">
           <AccordionItem key="1" title="What is Connectify?">
@@ -75,7 +75,7 @@ export default function HomePage() {
           </AccordionItem>
         </Accordion>
 
-        <div className="bg-default-100 rounded-full px-6 py-1.5 text-center">
+        <div className="rounded-full bg-default-100 px-6 py-1.5 text-center">
           <span>Didn’t find what you’re looking for? </span>
           <Link as={NextLink} href="/contact" color="danger" underline="always">
             Contact us

@@ -14,19 +14,15 @@ import {
 } from "@nextui-org/react";
 import { twMerge } from "tailwind-merge";
 import { capitalize } from "@nextui-org/shared-utils";
-import { Event } from "#/entities";
-import { useForm } from "react-hook-form";
-import { useUpdateEventMutation } from "#/services";
-import { UpdateEventRequest, updateEventRequestSchema } from "#/schemas";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { EventType } from "#/entities";
 
 export function PackageCard(props: {
   type: "bronze" | "silver" | "gold" | "diamond";
   features: string[];
   price: number;
-  eventData: Event;
+  event: EventType;
 }) {
-  const { type, features, price, eventData } = props;
+  const { type, features, price, event } = props;
 
   const typeHelper = {
     bronze: {
@@ -48,17 +44,6 @@ export function PackageCard(props: {
   };
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-
-  const [updateEvent, {}] = useUpdateEventMutation();
-
-  const { control, handleSubmit } = useForm<UpdateEventRequest>({
-    defaultValues: eventData,
-    resolver: zodResolver(updateEventRequestSchema),
-  });
-
-  const onSubmit = async (values: UpdateEventRequest) => {
-    await updateEvent({ eventId: eventData.id });
-  };
 
   return (
     <>
@@ -92,7 +77,7 @@ export function PackageCard(props: {
           {(onClose) => (
             <>
               <ModalHeader className="flex-col gap-3">
-                <p className="text-xl">Requested Event: {eventData.eventTitle}</p>
+                <p className="text-xl">Requested Event: {event.name}</p>
                 <p className="text-xl">
                   Requested Package:{" "}
                   <span className={twMerge("whitespace-nowrap", typeHelper[type].text)}>

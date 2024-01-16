@@ -9,4 +9,4 @@ export const UserEntity = z.object({
   phoneNumber: z.string(),
 });
 
-export type User = z.infer<typeof UserEntity>;
+export type UserType = z.infer<typeof UserEntity>;

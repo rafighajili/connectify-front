@@ -1,11 +1,12 @@
 import { z } from "zod";
-import { ItemEntity } from "#/entities/common";
+import { ItemEntity } from "./common";
 
-export const PackageEntity = z.object({
-  id: z.string(),
-  name: z.union([z.literal("BRONZE"), z.literal("SILVER"), z.literal("GOLD"), z.literal("DIAMOND")]),
-  price: z.number(),
-  features: ItemEntity.array(),
-});
+export const PackageEntity = ItemEntity.pick({ id: true }).merge(
+  z.object({
+    name: z.union([z.literal("BRONZE"), z.literal("SILVER"), z.literal("GOLD"), z.literal("DIAMOND")]),
+    price: z.number(),
+    features: ItemEntity.array(),
+  }),
+);
 
-export type Package = z.infer<typeof PackageEntity>;
+export type PackageType = z.infer<typeof PackageEntity>;

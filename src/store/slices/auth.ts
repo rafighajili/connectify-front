@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { User } from "#/entities";
+import { UserType } from "#/entities";
 import { RootState } from "#/store";
 import { authService } from "#/services";
 
 const initialState: {
-  user: User | null;
+  user: UserType | null;
   isLoading: boolean;
 } = {
   user: null,
@@ -28,14 +28,14 @@ const authSlice = createSlice({
       state.user = null;
     });
 
-    builder.addMatcher(authService.endpoints.getUser.matchPending, (state, { payload }) => {
+    builder.addMatcher(authService.endpoints.getUser.matchPending, (state) => {
       state.isLoading = true;
     });
     builder.addMatcher(authService.endpoints.getUser.matchFulfilled, (state, { payload }) => {
       state.isLoading = false;
       state.user = payload;
     });
-    builder.addMatcher(authService.endpoints.getUser.matchRejected, (state, { payload }) => {
+    builder.addMatcher(authService.endpoints.getUser.matchRejected, (state) => {
       state.isLoading = false;
     });
   },

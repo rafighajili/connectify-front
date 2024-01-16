@@ -14,16 +14,20 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import NextLink from "next/link";
-import { useGetAllEventsQuery, useGetEventTypesQuery, useUpdateEventMutation } from "#/services";
+import {
+  useGetEventCategoriesQuery,
+  useGetEventsQuery,
+  useGetEventTypesQuery,
+  useUpdateEventMutation,
+} from "#/services";
 import { EventCard } from "#/components";
-import { Event } from "#/entities";
+import { EventType } from "#/entities";
 import { Controller, useForm } from "react-hook-form";
 import { UpdateEventRequest, updateEventRequestSchema } from "#/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function Page() {
-  const { data: events, isLoading: isEventsLoading } = useGetAllEventsQuery({});
-  const { data: eventTypes, isLoading: isEventTypesLoading } = useGetEventTypesQuery();
+  const { data: events, isLoading: isEventsLoading } = useGetEventsQuery({});
 
   return (
     <div className="space-y-12">
@@ -35,39 +39,35 @@ export default function Page() {
       </div>
 
       <div className="space-y-6">
-        {isEventsLoading || isEventTypesLoading ? (
+        {isEventsLoading ? (
           <>
             <EventCard isLoading />
             <EventCard isLoading />
             <EventCard isLoading />
           </>
         ) : (
-          events &&
-          eventTypes &&
-          events.map((event) => <MyEvent key={event.id} eventData={event} eventTypes={eventTypes} />)
+          events && events.map((event) => <MyEvent key={event.id} event={event} />)
         )}
       </div>
     </div>
   );
 }
 
-function MyEvent({ eventData, eventTypes }: { eventData: Event; eventTypes: string[] }) {
+function MyEvent({ event }: { event: EventType }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
+  const { data: eventTypes, isLoading: isEventTypesLoading } = useGetEventTypesQuery();
+  const { data: eventCategories, isLoading: isEventCategoriesLoading } = useGetEventCategoriesQuery();
   const [updateEvent, {}] = useUpdateEventMutation();
 
   const { control, handleSubmit } = useForm<UpdateEventRequest>({
-    defaultValues: eventData,
+    defaultValues: event,
     resolver: zodResolver(updateEventRequestSchema),
   });
 
-  const onSubmit = async (values: UpdateEventRequest) => {
-    await updateEvent({ eventId: eventData.id });
-  };
-
   return (
     <>
-      <EventCard eventData={eventData} actionTitle="Edit" onAction={onOpen} />
+      <EventCard event={event} actionTitle="Edit" onAction={onOpen} />
 
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="3xl" scrollBehavior="outside">
         <ModalContent>
@@ -75,26 +75,32 @@ function MyEvent({ eventData, eventTypes }: { eventData: Event; eventTypes: stri
             <>
               <ModalHeader>Edit your event</ModalHeader>
 
-              <form onSubmit={handleSubmit(onSubmit)}>
+              <form onSubmit={handleSubmit(updateEvent)}>
                 <ModalBody className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                   <Controller
                     control={control}
-                    name="eventTitle"
+                    name="name"
                     render={({ field, fieldState: { invalid, error } }) => (
-                      <Input label="Event title" {...field} isInvalid={invalid} errorMessage={error?.message} />
+                      <Input label="Event name" {...field} isInvalid={invalid} errorMessage={error?.message} />
                     )}
                   />
 
                   <Controller
                     control={control}
-                    name="eventType"
+                    name="type"
                     render={({ field, fieldState: { invalid, error } }) => (
-                      <Select label="Event type" {...field} isInvalid={invalid} errorMessage={error?.message}>
+                      <Select
+                        label="Event type"
+                        isLoading={isEventTypesLoading}
+                        {...field}
+                        isInvalid={invalid}
+                        errorMessage={error?.message}
+                      >
                         {/* @ts-ignore */}
                         {eventTypes &&
-                          eventTypes.map((title) => (
-                            <SelectItem key={title} value={title}>
-                              {title}
+                          eventTypes.map(({ id, name }) => (
+                            <SelectItem key={id} value={id}>
+                              {name}
                             </SelectItem>
                           ))}
                       </Select>
@@ -103,7 +109,30 @@ function MyEvent({ eventData, eventTypes }: { eventData: Event; eventTypes: stri
 
                   <Controller
                     control={control}
-                    name="eventDescription"
+                    name="categories"
+                    render={({ field, fieldState: { invalid, error } }) => (
+                      <Select
+                        label="Event categories"
+                        selectionMode="multiple"
+                        isLoading={isEventCategoriesLoading}
+                        {...field}
+                        isInvalid={invalid}
+                        errorMessage={error?.message}
+                      >
+                        {/* @ts-ignore */}
+                        {eventCategories &&
+                          eventCategories.map(({ id, name }) => (
+                            <SelectItem key={id} value={id}>
+                              {name}
+                            </SelectItem>
+                          ))}
+                      </Select>
+                    )}
+                  />
+
+                  <Controller
+                    control={control}
+                    name="description"
                     render={({ field, fieldState: { invalid, error } }) => (
                       <Textarea
                         label="Event description"
@@ -117,7 +146,7 @@ function MyEvent({ eventData, eventTypes }: { eventData: Event; eventTypes: stri
 
                   <Controller
                     control={control}
-                    name="eventVenueAddress"
+                    name="venue"
                     render={({ field, fieldState: { invalid, error } }) => (
                       <Input label="Event venue address" {...field} isInvalid={invalid} errorMessage={error?.message} />
                     )}
@@ -125,12 +154,12 @@ function MyEvent({ eventData, eventTypes }: { eventData: Event; eventTypes: stri
 
                   <Controller
                     control={control}
-                    name="eventStartDate"
+                    name="date"
                     render={({ field, fieldState: { invalid, error } }) => (
                       <Input
-                        label="Event start date"
+                        label="Event date"
                         type="datetime-local"
-                        placeholder="start date"
+                        placeholder="date"
                         {...field}
                         isInvalid={invalid}
                         errorMessage={error?.message}
@@ -140,22 +169,7 @@ function MyEvent({ eventData, eventTypes }: { eventData: Event; eventTypes: stri
 
                   <Controller
                     control={control}
-                    name="eventEndDate"
-                    render={({ field, fieldState: { invalid, error } }) => (
-                      <Input
-                        label="Event end date"
-                        type="datetime-local"
-                        placeholder="end date"
-                        {...field}
-                        isInvalid={invalid}
-                        errorMessage={error?.message}
-                      />
-                    )}
-                  />
-
-                  <Controller
-                    control={control}
-                    name="estimatedCrowdSize"
+                    name="size"
                     render={({ field, fieldState: { invalid, error } }) => (
                       <Input
                         label="Estimated crowd size"
@@ -169,33 +183,12 @@ function MyEvent({ eventData, eventTypes }: { eventData: Event; eventTypes: stri
 
                   <Controller
                     control={control}
-                    name="committeeSize"
+                    name="size"
                     render={({ field, fieldState: { invalid, error } }) => (
                       // @ts-ignore
                       <Input
                         label="Committee size"
                         type="number"
-                        {...field}
-                        isInvalid={invalid}
-                        errorMessage={error?.message}
-                      />
-                    )}
-                  />
-
-                  <Controller
-                    control={control}
-                    name="clubName"
-                    render={({ field, fieldState: { invalid, error } }) => (
-                      <Input label="Club name" {...field} isInvalid={invalid} errorMessage={error?.message} />
-                    )}
-                  />
-
-                  <Controller
-                    control={control}
-                    name="cashSponsorshipNeeded"
-                    render={({ field, fieldState: { invalid, error } }) => (
-                      <Input
-                        label="Needed sponrship cash"
                         {...field}
                         isInvalid={invalid}
                         errorMessage={error?.message}

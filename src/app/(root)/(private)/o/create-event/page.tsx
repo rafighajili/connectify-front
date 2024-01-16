@@ -1,27 +1,19 @@
 "use client";
 
 import { Button, Card, CardBody, CardHeader, Input, Select, SelectItem, Textarea } from "@nextui-org/react";
-import { useCreateEventMutation, useGetEventTypesQuery } from "#/services";
+import { useCreateEventMutation, useGetEventCategoriesQuery, useGetEventTypesQuery } from "#/services";
 import { Controller, useForm } from "react-hook-form";
 import { CreateEventRequest, createEventRequestSchema } from "#/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useAppSelector } from "#/store";
-import { selectAuth } from "#/store/slices";
 
 export default function Page() {
-  const { user } = useAppSelector(selectAuth);
   const { data: eventTypes, isLoading: isEventTypesLoading } = useGetEventTypesQuery();
+  const { data: eventCategories, isLoading: isEventCategoriesLoading } = useGetEventCategoriesQuery();
   const [createEvent, {}] = useCreateEventMutation();
 
-  const { watch, control, handleSubmit } = useForm<CreateEventRequest>({
+  const { control, handleSubmit } = useForm<CreateEventRequest>({
     resolver: zodResolver(createEventRequestSchema),
   });
-
-  const onSubmit = async (values: CreateEventRequest) => {
-    if (user) {
-      await createEvent({ ...values, userId: user.id });
-    }
-  };
 
   return (
     <Card classNames={{ base: "p-6" }}>
@@ -29,10 +21,10 @@ export default function Page() {
         <h1 className="text-xl font-medium">Enter details of your event</h1>
       </CardHeader>
       <CardBody>
-        <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <form onSubmit={handleSubmit(createEvent)} className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <Controller
             control={control}
-            name="eventTitle"
+            name="name"
             render={({ field, fieldState: { invalid, error } }) => (
               <Input label="Event title" {...field} isInvalid={invalid} errorMessage={error?.message} />
             )}
@@ -40,7 +32,7 @@ export default function Page() {
 
           <Controller
             control={control}
-            name="eventType"
+            name="type"
             render={({ field, fieldState: { invalid, error } }) => (
               <Select
                 label="Event type"
@@ -51,9 +43,9 @@ export default function Page() {
               >
                 {/* @ts-ignore */}
                 {eventTypes &&
-                  eventTypes.map((title) => (
-                    <SelectItem key={title} value={title}>
-                      {title}
+                  eventTypes.map(({ id, name }) => (
+                    <SelectItem key={id} value={id}>
+                      {name}
                     </SelectItem>
                   ))}
               </Select>
@@ -62,7 +54,30 @@ export default function Page() {
 
           <Controller
             control={control}
-            name="eventDescription"
+            name="categories"
+            render={({ field, fieldState: { invalid, error } }) => (
+              <Select
+                label="Event categories"
+                selectionMode="multiple"
+                isLoading={isEventCategoriesLoading}
+                {...field}
+                isInvalid={invalid}
+                errorMessage={error?.message}
+              >
+                {/* @ts-ignore */}
+                {eventCategories &&
+                  eventCategories.map(({ id, name }) => (
+                    <SelectItem key={id} value={id}>
+                      {name}
+                    </SelectItem>
+                  ))}
+              </Select>
+            )}
+          />
+
+          <Controller
+            control={control}
+            name="description"
             render={({ field, fieldState: { invalid, error } }) => (
               <Textarea
                 label="Event description"
@@ -76,7 +91,7 @@ export default function Page() {
 
           <Controller
             control={control}
-            name="eventVenueAddress"
+            name="venue"
             render={({ field, fieldState: { invalid, error } }) => (
               <Input label="Event venue address" {...field} isInvalid={invalid} errorMessage={error?.message} />
             )}
@@ -84,7 +99,7 @@ export default function Page() {
 
           <Controller
             control={control}
-            name="eventImage"
+            name="file"
             render={({ field, fieldState: { invalid, error } }) => (
               <Input
                 label="Event image"
@@ -106,7 +121,7 @@ export default function Page() {
 
           <Controller
             control={control}
-            name="eventStartDate"
+            name="date"
             render={({ field, fieldState: { invalid, error } }) => (
               <Input
                 label="Event start date"
@@ -121,22 +136,7 @@ export default function Page() {
 
           <Controller
             control={control}
-            name="eventEndDate"
-            render={({ field, fieldState: { invalid, error } }) => (
-              <Input
-                label="Event end date"
-                type="datetime-local"
-                placeholder="end date"
-                {...field}
-                isInvalid={invalid}
-                errorMessage={error?.message}
-              />
-            )}
-          />
-
-          <Controller
-            control={control}
-            name="estimatedCrowdSize"
+            name="size"
             render={({ field, fieldState: { invalid, error } }) => (
               <Input
                 label="Estimated crowd size"
@@ -150,7 +150,7 @@ export default function Page() {
 
           <Controller
             control={control}
-            name="committeeSize"
+            name="size"
             render={({ field, fieldState: { invalid, error } }) => (
               // @ts-ignore
               <Input
@@ -160,22 +160,6 @@ export default function Page() {
                 isInvalid={invalid}
                 errorMessage={error?.message}
               />
-            )}
-          />
-
-          <Controller
-            control={control}
-            name="clubName"
-            render={({ field, fieldState: { invalid, error } }) => (
-              <Input label="Club name" {...field} isInvalid={invalid} errorMessage={error?.message} />
-            )}
-          />
-
-          <Controller
-            control={control}
-            name="cashSponsorshipNeeded"
-            render={({ field, fieldState: { invalid, error } }) => (
-              <Input label="Needed sponrship cash" {...field} isInvalid={invalid} errorMessage={error?.message} />
             )}
           />
 

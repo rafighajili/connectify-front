@@ -11,11 +11,10 @@ import {
   ClockIcon,
   MapPinIcon,
 } from "@heroicons/react/24/outline";
-import { Event } from "#/entities";
-import { useRouter } from "next/navigation";
+import { EventType } from "#/entities";
 import NextLink from "next/link";
 
-export function EventsSwiper({ isLoading, events }: ConditionalLoading<{ events: Event[] }>) {
+export function EventsSwiper({ isLoading, events }: ConditionalLoading<{ events: EventType[] }>) {
   const mounted = useMounted();
   const swiperRef: any = useRef();
 
@@ -78,10 +77,8 @@ export function EventsSwiper({ isLoading, events }: ConditionalLoading<{ events:
   );
 }
 
-function Event(props: ConditionalLoading<Event>) {
+function Event(props: ConditionalLoading<EventType>) {
   const { isLoading } = props;
-
-  const router = useRouter();
 
   return (
     <Card
@@ -94,13 +91,13 @@ function Event(props: ConditionalLoading<Event>) {
         {isLoading ? (
           <Skeleton className="h-5 w-11/12 rounded-lg" />
         ) : (
-          <p className="text-default-500 line-clamp-1 text-sm">{props.eventDescription}</p>
+          <p className="line-clamp-1 text-sm text-default-500">{props.description}</p>
         )}
 
         {isLoading ? (
           <Skeleton className="h-7 w-10/12 rounded-lg" />
         ) : (
-          <h4 className="line-clamp-1 text-lg font-medium">{props.eventTitle}</h4>
+          <h4 className="line-clamp-1 text-lg font-medium">{props.name}</h4>
         )}
       </CardHeader>
       <CardBody>
@@ -108,23 +105,23 @@ function Event(props: ConditionalLoading<Event>) {
           <Skeleton className="aspect-video w-full rounded-xl" />
         ) : (
           <Image
-            alt={props.eventTitle}
+            alt={props.name}
             className="aspect-video h-auto w-full rounded-xl object-cover"
-            src={props.s3Key}
+            src={props.imageUrl}
             height={800}
             width={450}
           />
         )}
       </CardBody>
       <CardFooter>
-        <div className="text-default-700 mr-auto flex flex-col justify-start gap-3 py-6 text-sm [&>div]:flex [&>div]:items-center [&>div]:gap-x-1.5 [&_svg]:h-6 [&_svg]:w-6">
+        <div className="mr-auto flex flex-col justify-start gap-3 py-6 text-sm text-default-700 [&>div]:flex [&>div]:items-center [&>div]:gap-x-1.5 [&_svg]:h-6 [&_svg]:w-6">
           {isLoading ? (
             <Skeleton className="h-6 w-48 rounded-lg" />
           ) : (
             <div>
               <CalendarDaysIcon />
               <p>
-                {new Date(props.eventStartDate).toLocaleDateString("en-UK", {
+                {new Date(props.date).toLocaleDateString("en-UK", {
                   day: "numeric",
                   weekday: "long",
                   month: "long",
@@ -139,7 +136,7 @@ function Event(props: ConditionalLoading<Event>) {
             <div>
               <ClockIcon />
               <p>
-                {new Date(props.eventStartDate).toLocaleTimeString("en-UK", {
+                {new Date(props.date).toLocaleTimeString("en-UK", {
                   hour: "2-digit",
                   minute: "2-digit",
                 })}
@@ -152,7 +149,7 @@ function Event(props: ConditionalLoading<Event>) {
           ) : (
             <div>
               <MapPinIcon />
-              <p>{props.eventVenueAddress}</p>
+              <p>{props.venue}</p>
             </div>
           )}
         </div>
