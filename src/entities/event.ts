@@ -9,7 +9,7 @@ export const EventEntity = ItemEntity.merge(
       description: z.string(),
       date: z.string(),
       venue: z.string(),
-      size: z.string(),
+      size: z.coerce.number(),
       imageUrl: z.string(),
       categories: ItemEntity.array(),
       type: ItemEntity,

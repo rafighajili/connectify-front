@@ -6,15 +6,20 @@ export const createEventRequestSchema = EventEntity.omit({
   organizer: true,
   status: true,
   imageUrl: true,
+  type: true,
+  categories: true,
   createdAt: true,
   updatedAt: true,
 }).merge(
   z.object({
+    typeId: z.string(),
+    categories: z.string(),
     file: z.custom<File>((v) => v instanceof File, {
       message: "Required",
     }),
   }),
 );
+// .transform((values) => ({ ...values, categories: values.categories.split(",") }));
 
 export const updateEventRequestSchema = createEventRequestSchema.merge(EventEntity.pick({ id: true }));
 

@@ -32,7 +32,7 @@ export default function HomePage() {
       <section className="space-y-12 py-24 text-center">
         <h1 className="text-5xl font-medium">Latest Events</h1>
 
-        {isEventsLoading ? <EventsSwiper isLoading /> : events && <EventsSwiper events={events} />}
+        {isEventsLoading || !events ? <EventsSwiper isLoading /> : <EventsSwiper events={events} />}
 
         <Button
           variant="faded"

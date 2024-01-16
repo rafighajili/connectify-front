@@ -74,29 +74,25 @@ export function PackageCard(props: {
 
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="xl" placement="center">
         <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex-col gap-3">
-                <p className="text-xl">Requested Event: {event.name}</p>
-                <p className="text-xl">
-                  Requested Package:{" "}
-                  <span className={twMerge("whitespace-nowrap", typeHelper[type].text)}>
-                    {capitalize(type)} Sponsorship Package
-                  </span>
-                </p>
-              </ModalHeader>
+          <ModalHeader className="flex-col gap-3">
+            <p className="text-xl">Requested Event: {event.name}</p>
+            <p className="text-xl">
+              Requested Package:{" "}
+              <span className={twMerge("whitespace-nowrap", typeHelper[type].text)}>
+                {capitalize(type)} Sponsorship Package
+              </span>
+            </p>
+          </ModalHeader>
 
-              <ModalBody>
-                <Textarea label="Write down your special request" />
-              </ModalBody>
+          <ModalBody>
+            <Textarea label="Write down your special request" />
+          </ModalBody>
 
-              <ModalFooter>
-                <Button size="lg" type="submit" className={typeHelper[type].bg}>
-                  Send your request
-                </Button>
-              </ModalFooter>
-            </>
-          )}
+          <ModalFooter>
+            <Button size="lg" type="submit" className={typeHelper[type].bg}>
+              Send your request
+            </Button>
+          </ModalFooter>
         </ModalContent>
       </Modal>
     </>

@@ -11,14 +11,13 @@ export default function AllEventsPage() {
       <h1 className="text-4xl font-medium">All Events</h1>
 
       <div className="space-y-6">
-        {isEventsLoading ? (
+        {isEventsLoading || !events ? (
           <>
             <EventCard isLoading />
             <EventCard isLoading />
             <EventCard isLoading />
           </>
         ) : (
-          events &&
           events.map((event) => (
             <EventCard key={event.id} event={event} actionTitle="Read mode" href={`/s/${event.id}`} />
           ))
