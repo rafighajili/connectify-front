@@ -21,7 +21,7 @@ export function EventsSwiper({ isLoading, events }: ConditionalLoading<{ events:
   return (
     <div className="overflow-x-clip overflow-y-visible">
       {mounted && !isLoading ? (
-        <div className="relative">
+        <div className="relative max-sm:px-6">
           <Swiper
             onSwiper={(swiper) => (swiperRef.current = swiper)}
             slidesPerView={1}
@@ -61,7 +61,7 @@ export function EventsSwiper({ isLoading, events }: ConditionalLoading<{ events:
           </div>
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-6 sm:translate-x-[calc(25%+6px)] sm:grid-cols-2 xl:translate-x-[calc(12.5%+3px)] xl:grid-cols-4 [&>div:nth-child(2)]:max-sm:hidden [&>div:nth-child(3)]:max-xl:hidden [&>div:nth-child(4)]:max-xl:hidden">
+        <div className="grid grid-cols-1 gap-6 max-sm:px-6 sm:translate-x-[calc(25%+6px)] sm:grid-cols-2 xl:translate-x-[calc(12.5%+3px)] xl:grid-cols-4 [&>div:nth-child(2)]:max-sm:hidden [&>div:nth-child(3)]:max-xl:hidden [&>div:nth-child(4)]:max-xl:hidden">
           <div className="relative">
             <Event isLoading />
             <div className="absolute inset-0 z-10 -translate-x-[calc(100%+24px)] max-sm:hidden">
