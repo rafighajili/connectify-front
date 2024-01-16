@@ -8,7 +8,7 @@ import {
   ContactSponsorResponseType,
 } from "#/schemas";
 
-export const eventService = apiSlice.injectEndpoints({
+export const contactService = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     createContact: builder.mutation<void, ContactRequestType>({
       query: (body) => ({ url: `/contact`, method: "post", body }),
@@ -33,4 +33,4 @@ export const {
   useGetContactQuery,
   useCreateContactSponsorMutation,
   useGetContactSponsorQuery,
-} = eventService;
+} = contactService;
