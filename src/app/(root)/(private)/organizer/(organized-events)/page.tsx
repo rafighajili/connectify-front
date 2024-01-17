@@ -9,6 +9,7 @@ import { updateEventRequestSchema, UpdateEventRequestType } from "#/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { EventFields } from "../_components";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
+import { useEffect } from "react";
 
 export default function OrganizedEventsPage() {
   const { data: events, isLoading: isEventsLoading } = useGetEventsOrganizedQuery({});
@@ -33,12 +34,14 @@ function MyEvent({ eventData }: { eventData: EventType }) {
 
   const [updateEvent, { isLoading }] = useUpdateEventMutation();
 
-  const { control, handleSubmit, watch } = useForm<UpdateEventRequestType>({
+  const { control, handleSubmit, reset } = useForm<UpdateEventRequestType>({
     defaultValues: eventData,
     resolver: zodResolver(updateEventRequestSchema),
   });
 
-  console.log("watch()", watch());
+  useEffect(() => {
+    reset();
+  }, [isOpen]);
 
   return (
     <>

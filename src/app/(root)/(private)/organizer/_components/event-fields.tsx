@@ -62,6 +62,7 @@ export function EventFields({ control }: ControlProp) {
               label="Event type"
               isLoading={isEventTypesLoading}
               {...field}
+              defaultSelectedKeys={field.value ? [field.value] : undefined}
               isInvalid={invalid}
               errorMessage={error?.message}
             >
@@ -79,11 +80,12 @@ export function EventFields({ control }: ControlProp) {
         <Controller
           control={control}
           name="categories"
-          render={({ fieldState: { invalid, error } }) => (
+          render={({ field, fieldState: { invalid, error } }) => (
             <Select
               label="Event categories"
               selectionMode="multiple"
               isLoading={isEventCategoriesLoading}
+              defaultSelectedKeys={field.value?.length > 0 ? field.value.map(({ id }) => id) : undefined}
               // @ts-ignore
               onSelectionChange={(keys) => replaceCategories(Array.from(keys).map((id) => ({ id })))}
               isInvalid={invalid}
