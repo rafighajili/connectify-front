@@ -46,7 +46,7 @@ export function EventsSwiper({ isLoading, events }: ConditionalLoading<{ events:
               className="w-24 -rotate-45 border-black bg-white dark:border-white dark:bg-black"
               onPress={() => swiperRef.current.slidePrev()}
             >
-              <ArrowLongLeftIcon />
+              <ArrowLongLeftIcon className="h-9 w-9" />
             </Button>
             <Button
               variant="bordered"
@@ -56,7 +56,7 @@ export function EventsSwiper({ isLoading, events }: ConditionalLoading<{ events:
               className="w-24 rotate-45 bg-white dark:bg-black"
               onPress={() => swiperRef.current.slideNext()}
             >
-              <ArrowLongRightIcon />
+              <ArrowLongRightIcon className="h-9 w-9" />
             </Button>
           </div>
         </div>
@@ -89,15 +89,15 @@ function Event(props: ConditionalLoading<EventCompactType>) {
     >
       <CardHeader>
         {isLoading ? (
-          <Skeleton className="h-5 w-11/12 rounded-lg" />
+          <Skeleton className="h-7 w-10/12 rounded-lg" />
         ) : (
-          <p className="line-clamp-1 text-sm text-default-500">{props.description}</p>
+          <h3 className="line-clamp-1 text-lg font-medium">{props.name}</h3>
         )}
 
         {isLoading ? (
-          <Skeleton className="h-7 w-10/12 rounded-lg" />
+          <Skeleton className="h-5 w-11/12 rounded-lg" />
         ) : (
-          <h4 className="line-clamp-1 text-lg font-medium">{props.name}</h4>
+          <p className="line-clamp-1 text-sm text-default-500">{props.description}</p>
         )}
       </CardHeader>
       <CardBody>
@@ -158,7 +158,14 @@ function Event(props: ConditionalLoading<EventCompactType>) {
           <Skeleton className="ml-auto h-10 w-40 rounded-lg" />
         ) : (
           <Tooltip content="Login as a sponsor to see this event" delay={0} closeDelay={200}>
-            <Button as={NextLink} href="/login" color="danger" variant="light" className="ml-auto">
+            <Button
+              as={NextLink}
+              href="/login"
+              color="danger"
+              variant="light"
+              className="ml-auto"
+              endContent={<ArrowLongRightIcon className="h-5 w-5" />}
+            >
               Read more
             </Button>
           </Tooltip>
