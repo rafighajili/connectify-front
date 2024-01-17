@@ -11,7 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { EventFields } from "../_components";
 
 export default function OrganizedEventsPage() {
-  const { data: events, isLoading: isEventsLoading } = useGetEventsOrganizedQuery();
+  const { data: events, isLoading: isEventsLoading } = useGetEventsOrganizedQuery({});
 
   return (
     <div className="space-y-12">
@@ -30,26 +30,26 @@ export default function OrganizedEventsPage() {
             <EventCard isLoading />
           </>
         ) : (
-          events.map((event) => <MyEvent key={event.id} event={event} />)
+          events.map((eventData) => <MyEvent key={eventData.id} eventData={eventData} />)
         )}
       </div>
     </div>
   );
 }
 
-function MyEvent({ event }: { event: EventType }) {
+function MyEvent({ eventData }: { eventData: EventType }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const [updateEvent, { isLoading }] = useUpdateEventMutation();
 
   const { control, handleSubmit } = useForm<UpdateEventRequestType>({
-    // defaultValues: event,
+    defaultValues: eventData,
     resolver: zodResolver(updateEventRequestSchema),
   });
 
   return (
     <>
-      <EventCard event={event} actionTitle="Edit" onAction={onOpen} />
+      <EventCard eventData={eventData} actionTitle="Edit" onAction={onOpen} />
 
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="3xl" scrollBehavior="outside">
         <ModalContent>
@@ -57,6 +57,7 @@ function MyEvent({ event }: { event: EventType }) {
 
           <form onSubmit={handleSubmit(updateEvent)}>
             <ModalBody>
+              {/* @ts-ignore */}
               <EventFields control={control} />
             </ModalBody>
 

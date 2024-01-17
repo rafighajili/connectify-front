@@ -7,7 +7,9 @@ import { twMerge } from "tailwind-merge";
 import { packageClassNameHelper } from "#/components";
 import { capitalize } from "@nextui-org/shared-utils";
 
-export function EventFields({ control }: { control: Control<CreateEventRequestType> }) {
+type ControlProp = { control: Control<CreateEventRequestType> };
+
+export function EventFields({ control }: ControlProp) {
   const { data: eventTypes, isLoading: isEventTypesLoading } = useGetEventTypesQuery();
   const { data: eventCategories, isLoading: isEventCategoriesLoading } = useGetEventCategoriesQuery();
 
@@ -171,10 +173,10 @@ export function EventFields({ control }: { control: Control<CreateEventRequestTy
 }
 
 function PackageCard({
-  control,
   index,
+  control,
   ...packageData
-}: { control: Control<CreateEventRequestType>; index: number } & CreateEventRequestType["packages"][0]) {
+}: { index: number } & ControlProp & CreateEventRequestType["packages"][0]) {
   const { fields } = useFieldArray({
     name: `packages.${index}.features`,
     control,
@@ -224,14 +226,13 @@ function PackageCard({
 }
 
 function PackageCardFeature({
-  control,
   packageIndex,
   index,
+  control,
 }: {
-  control: Control<CreateEventRequestType>;
   packageIndex: number;
   index: number;
-}) {
+} & ControlProp) {
   return (
     <Controller
       control={control}

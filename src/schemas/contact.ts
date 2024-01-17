@@ -11,17 +11,13 @@ const baseContactResponseSchema = z.object({
     .transform((val) => "+994" + val),
 });
 
-export const contactRequestSchema = baseContactResponseSchema.merge(
-  z.object({
-    message: z.string().min(1, "Required"),
-  }),
-);
+export const contactRequestSchema = baseContactResponseSchema.extend({
+  message: z.string().min(1, "Required"),
+});
 
-export const contactSponsorRequestSchema = baseContactResponseSchema.merge(
-  z.object({
-    companyName: z.string().min(1, "Required"),
-  }),
-);
+export const contactSponsorRequestSchema = baseContactResponseSchema.extend({
+  companyName: z.string().min(1, "Required"),
+});
 
 export const contactResponseSchema = ItemEntity.pick({ id: true }).merge(contactRequestSchema);
 

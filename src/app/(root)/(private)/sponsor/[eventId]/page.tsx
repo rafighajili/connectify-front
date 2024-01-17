@@ -4,43 +4,48 @@ import { useGetEventQuery } from "#/services";
 import { Chip, Skeleton, Tooltip } from "@nextui-org/react";
 import { CalendarDaysIcon, ClockIcon, MapPinIcon, UsersIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
-import { PackageCard } from "#/components";
 
 export default function EventPage({ params: { eventId } }: { params: { eventId: string } }) {
-  const { data: event } = useGetEventQuery(eventId);
+  const { data: eventData } = useGetEventQuery(eventId);
 
   return (
     <div className="space-y-12">
-      {event ? <h1 className="text-4xl font-medium">{event.name}</h1> : <Skeleton className="h-10 rounded-lg" />}
+      {eventData ? (
+        <h1 className="text-4xl font-medium">{eventData.name}</h1>
+      ) : (
+        <Skeleton className="h-10 rounded-lg" />
+      )}
 
       <div className="flex gap-6 max-lg:flex-col lg:justify-between">
-        {event ? (
+        {eventData ? (
           <Chip size="lg" color="primary" variant="flat">
-            {event.type.name}
+            {eventData.type.name}
           </Chip>
         ) : (
           <Skeleton className="h-8 w-36 rounded-full" />
         )}
 
         <div className="flex gap-3 max-sm:flex-col">
-          {event ? (
+          {eventData ? (
             <>
               <Chip size="lg" variant="bordered" startContent={<UsersIcon className="h-6 w-6" />}>
-                {event.size}
+                {eventData.size}
               </Chip>
 
-              <Tooltip content={event.venue} delay={0} closeDelay={200}>
+              <Tooltip content={eventData.venue} delay={0} closeDelay={200}>
                 <Chip size="lg" variant="bordered" startContent={<MapPinIcon className="h-6 w-6" />}>
-                  <p className="w-36 cursor-default overflow-hidden text-ellipsis whitespace-nowrap">{event.venue}</p>
+                  <p className="w-36 cursor-default overflow-hidden text-ellipsis whitespace-nowrap">
+                    {eventData.venue}
+                  </p>
                 </Chip>
               </Tooltip>
 
               <Chip size="lg" variant="bordered" startContent={<CalendarDaysIcon className="h-6 w-6" />}>
-                {new Date(event.date).toLocaleDateString("en-UK")}
+                {new Date(eventData.date).toLocaleDateString("en-UK")}
               </Chip>
 
               <Chip size="lg" variant="bordered" startContent={<ClockIcon className="h-6 w-6" />}>
-                {new Date(event.date).toLocaleTimeString("en-UK", {
+                {new Date(eventData.date).toLocaleTimeString("en-UK", {
                   hour: "2-digit",
                   minute: "2-digit",
                 })}
@@ -57,11 +62,11 @@ export default function EventPage({ params: { eventId } }: { params: { eventId: 
         </div>
       </div>
 
-      {event ? (
+      {eventData ? (
         <Image
-          alt={event.name}
+          alt={eventData.name}
           className="h-72 w-full rounded-xl object-cover "
-          src={event.imageUrl}
+          src={eventData.imageUrl}
           height={1600}
           width={900}
         />
@@ -69,8 +74,8 @@ export default function EventPage({ params: { eventId } }: { params: { eventId: 
         <Skeleton className="h-72 w-full rounded-xl" />
       )}
 
-      {event ? (
-        <p>{event.description}</p>
+      {eventData ? (
+        <p>{eventData.description}</p>
       ) : (
         <div className="space-y-2 py-1">
           <Skeleton className="h-4 w-full" />
@@ -81,50 +86,9 @@ export default function EventPage({ params: { eventId } }: { params: { eventId: 
         </div>
       )}
 
-      {event && (
+      {eventData && (
         <div>
           <h3 className="text-xl">Sponsorship packets:</h3>
-
-          <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            <PackageCard
-              type="silver"
-              features={[
-                "Lorem ipsum dolor sit amet.",
-                "Lorem ipsum dolor sit amet.",
-                "Lorem ipsum dolor sit amet.",
-                "Lorem ipsum dolor sit amet.",
-                "Lorem ipsum dolor sit amet.",
-              ]}
-              price={500}
-              event={event}
-            />
-
-            <PackageCard
-              type="diamond"
-              features={[
-                "Lorem ipsum dolor sit amet.",
-                "Lorem ipsum dolor sit amet.",
-                "Lorem ipsum dolor sit amet.",
-                "Lorem ipsum dolor sit amet.",
-                "Lorem ipsum dolor sit amet.",
-              ]}
-              price={2500}
-              event={event}
-            />
-
-            <PackageCard
-              type="gold"
-              features={[
-                "Lorem ipsum dolor sit amet.",
-                "Lorem ipsum dolor sit amet.",
-                "Lorem ipsum dolor sit amet.",
-                "Lorem ipsum dolor sit amet.",
-                "Lorem ipsum dolor sit amet.",
-              ]}
-              price={1500}
-              event={event}
-            />
-          </div>
         </div>
       )}
     </div>

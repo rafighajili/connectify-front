@@ -18,8 +18,13 @@ export default function AllEventsPage() {
             <EventCard isLoading />
           </>
         ) : (
-          events.map((event) => (
-            <EventCard key={event.id} event={event} actionTitle="Read mode" href={`/s/${event.id}`} />
+          events.map((eventData) => (
+            <EventCard
+              key={eventData.id}
+              eventData={eventData}
+              actionTitle="Read mode"
+              href={`/sponsor/${eventData.id}`}
+            />
           ))
         )}
       </div>

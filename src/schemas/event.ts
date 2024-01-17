@@ -11,19 +11,17 @@ export const createEventRequestSchema = EventEntity.omit({
   type: true,
   categories: true,
   packages: true,
-}).merge(
-  z.object({
-    type: ItemEntity.pick({ id: true }),
-    categories: ItemEntity.pick({ id: true }).array().nonempty({ message: "Required" }),
-    packages: PackageEntity.omit({ id: true, features: true })
-      .merge(z.object({ features: ItemEntity.pick({ name: true }).array().nonempty({ message: "Required" }) }))
-      .array()
-      .nonempty({ message: "Required" }),
-    file: z.custom<File>((v) => v instanceof File, {
-      message: "Required",
-    }),
+}).extend({
+  type: ItemEntity.pick({ id: true }),
+  categories: ItemEntity.pick({ id: true }).array().nonempty({ message: "Required" }),
+  packages: PackageEntity.omit({ id: true, features: true })
+    .extend({ features: ItemEntity.pick({ name: true }).array().nonempty({ message: "Required" }) })
+    .array()
+    .nonempty({ message: "Required" }),
+  file: z.custom<File>((v) => v instanceof File, {
+    message: "Required",
   }),
-);
+});
 
 export const updateEventRequestSchema = createEventRequestSchema
   .partial({ file: true })

@@ -4,7 +4,7 @@ import { useGetEventsSponsoredQuery } from "#/services";
 import { EventCard } from "#/components";
 
 export default function SponsoredEventsPage() {
-  const { data: events, isLoading: isEventsLoading } = useGetEventsSponsoredQuery();
+  const { data: events, isLoading: isEventsLoading } = useGetEventsSponsoredQuery({});
 
   return (
     <div className="space-y-12">
@@ -18,8 +18,13 @@ export default function SponsoredEventsPage() {
             <EventCard isLoading />
           </>
         ) : (
-          events.map((event) => (
-            <EventCard key={event.id} event={event} actionTitle="Read mode" href={`/s/${event.id}`} />
+          events.map((eventData) => (
+            <EventCard
+              key={eventData.id}
+              eventData={eventData}
+              actionTitle="Read mode"
+              href={`/sponsor/${eventData.id}`}
+            />
           ))
         )}
       </div>

@@ -6,9 +6,9 @@ import { CalendarDaysIcon, ClockIcon, MapPinIcon, UsersIcon } from "@heroicons/r
 import NextLink from "next/link";
 
 export function EventCard(
-  props: ConditionalLoading<{ event: EventType; actionTitle: string; onAction?: () => void; href?: string }>,
+  props: ConditionalLoading<{ eventData: EventType; actionTitle: string; onAction?: () => void; href?: string }>,
 ) {
-  const { isLoading, event, actionTitle, onAction, href } = props;
+  const { isLoading, eventData, actionTitle, onAction, href } = props;
 
   return (
     <Card className="p-1.5">
@@ -17,9 +17,9 @@ export function EventCard(
           <Skeleton className="aspect-video h-auto w-full rounded-xl md:aspect-square md:h-[356px] md:w-auto lg:h-[248px]" />
         ) : (
           <Image
-            alt={event.name}
+            alt={eventData.name}
             className="aspect-video h-auto w-full rounded-xl object-cover md:aspect-square md:h-[356px] md:w-auto lg:h-[248px]"
-            src={event.imageUrl}
+            src={eventData.imageUrl}
             height={800}
             width={450}
           />
@@ -31,7 +31,7 @@ export function EventCard(
               <Skeleton className="h-8 w-36 rounded-full" />
             ) : (
               <Chip size="lg" color="primary" variant="flat">
-                {event.type.name}
+                {eventData.type.name}
               </Chip>
             )}
 
@@ -41,17 +41,19 @@ export function EventCard(
               ) : (
                 <div>
                   <UsersIcon />
-                  <p>{event.size}</p>
+                  <p>{eventData.size}</p>
                 </div>
               )}
 
               {isLoading ? (
                 <Skeleton className="h-6 w-24 rounded-lg" />
               ) : (
-                <Tooltip content={event.venue} delay={0} closeDelay={200}>
+                <Tooltip content={eventData.venue} delay={0} closeDelay={200}>
                   <div>
                     <MapPinIcon />
-                    <p className="w-36 cursor-default overflow-hidden text-ellipsis whitespace-nowrap">{event.venue}</p>
+                    <p className="w-36 cursor-default overflow-hidden text-ellipsis whitespace-nowrap">
+                      {eventData.venue}
+                    </p>
                   </div>
                 </Tooltip>
               )}
@@ -64,7 +66,7 @@ export function EventCard(
                     <div className="flex items-center gap-x-1.5 [&>svg]:h-6 [&>svg]:w-6">
                       <ClockIcon />
                       <p>
-                        {new Date(event.date).toLocaleTimeString("en-UK", {
+                        {new Date(eventData.date).toLocaleTimeString("en-UK", {
                           hour: "2-digit",
                           minute: "2-digit",
                         })}
@@ -76,7 +78,7 @@ export function EventCard(
                 >
                   <div>
                     <CalendarDaysIcon />
-                    <p className="w-24 cursor-default">{new Date(event.date).toLocaleDateString("en-UK")}</p>
+                    <p className="w-24 cursor-default">{new Date(eventData.date).toLocaleDateString("en-UK")}</p>
                   </div>
                 </Tooltip>
               )}
@@ -86,7 +88,7 @@ export function EventCard(
           {isLoading ? (
             <Skeleton className="h-8 w-3/4 rounded-lg" />
           ) : (
-            <h3 className="line-clamp-1 text-2xl font-medium">{event.name}</h3>
+            <h3 className="line-clamp-1 text-2xl font-medium">{eventData.name}</h3>
           )}
 
           {isLoading ? (
@@ -96,7 +98,7 @@ export function EventCard(
               <Skeleton className="h-4 w-full" />
             </div>
           ) : (
-            <p className="line-clamp-3 h-[72px] text-default-500">{event.description}</p>
+            <p className="line-clamp-3 h-[72px] text-default-500">{eventData.description}</p>
           )}
 
           <div className="flex items-center justify-between">

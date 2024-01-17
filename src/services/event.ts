@@ -1,6 +1,6 @@
 import { apiSlice } from "#/store/slices";
 import { EventEntity, EventType, ItemEntity, ItemType } from "#/entities";
-import { UpdateEventRequest } from "#/schemas";
+import { CreateEventRequestType, UpdateEventRequestType } from "#/schemas";
 import { objectToFormData } from "#/utils";
 
 export const eventService = apiSlice.injectEndpoints({
@@ -28,11 +28,17 @@ export const eventService = apiSlice.injectEndpoints({
       query: (params) => ({ url: `/event`, method: "get", params }),
       transformResponse: (res: unknown) => EventEntity.array().parse(res),
     }),
-    getEventsOrganized: builder.query<EventType[], void>({
+    getEventsOrganized: builder.query<
+      EventType[],
+      Partial<{ skip: number; take: number; typeId: ItemType["id"]; categories: ItemType["id"][] }>
+    >({
       query: () => ({ url: `/event/organized`, method: "get" }),
       transformResponse: (res: unknown) => EventEntity.array().parse(res),
     }),
-    getEventsSponsored: builder.query<EventType[], void>({
+    getEventsSponsored: builder.query<
+      EventType[],
+      Partial<{ skip: number; take: number; typeId: ItemType["id"]; categories: ItemType["id"][] }>
+    >({
       query: () => ({ url: `/event/sponsored`, method: "get" }),
       transformResponse: (res: unknown) => EventEntity.array().parse(res),
     }),
