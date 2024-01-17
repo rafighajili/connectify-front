@@ -18,15 +18,11 @@ export default function OrganizedEventsPage() {
       <h1 className="text-4xl font-medium">My events</h1>
 
       <div className="space-y-6">
-        {isEventsLoading || !events ? (
-          <>
-            <EventCard isLoading />
-            <EventCard isLoading />
-            <EventCard isLoading />
-          </>
-        ) : (
-          events.map((eventData) => <MyEvent key={eventData.id} eventData={eventData} />)
-        )}
+        {isEventsLoading || !events
+          ? Array(3)
+              .fill(0)
+              .map((_, key) => <EventCard key={key} isLoading />)
+          : events.map((eventData) => <MyEvent key={eventData.id} eventData={eventData} />)}
       </div>
     </div>
   );

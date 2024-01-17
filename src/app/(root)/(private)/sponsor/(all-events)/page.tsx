@@ -14,31 +14,27 @@ export default function AllEventsPage() {
       <h1 className="text-4xl font-medium">All Events</h1>
 
       <div className="space-y-6">
-        {isEventsLoading || !events ? (
-          <>
-            <EventCard isLoading />
-            <EventCard isLoading />
-            <EventCard isLoading />
-          </>
-        ) : (
-          events.map((eventData) => (
-            <EventCard
-              key={eventData.id}
-              eventData={eventData}
-              endContent={
-                <Button
-                  as={NextLink}
-                  variant="light"
-                  color="primary"
-                  href={`/sponsor/${eventData.id}`}
-                  endContent={<ArrowLongRightIcon className="h-6 w-6" />}
-                >
-                  Read more
-                </Button>
-              }
-            />
-          ))
-        )}
+        {isEventsLoading || !events
+          ? Array(3)
+              .fill(0)
+              .map((_, key) => <EventCard key={key} isLoading />)
+          : events.map((eventData) => (
+              <EventCard
+                key={eventData.id}
+                eventData={eventData}
+                endContent={
+                  <Button
+                    as={NextLink}
+                    variant="light"
+                    color="primary"
+                    href={`/sponsor/${eventData.id}`}
+                    endContent={<ArrowLongRightIcon className="h-6 w-6" />}
+                  >
+                    Read more
+                  </Button>
+                }
+              />
+            ))}
       </div>
     </div>
   );

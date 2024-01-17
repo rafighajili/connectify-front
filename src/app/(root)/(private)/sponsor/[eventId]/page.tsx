@@ -167,7 +167,13 @@ function PackageCard(props: { packageData: PackageType }) {
 
   return (
     <>
-      <Card>
+      <Card
+        className={twMerge(
+          "border-2 !bg-opacity-20",
+          packageClassNameHelper[packageData.name].border,
+          packageClassNameHelper[packageData.name].bg,
+        )}
+      >
         <CardHeader className="py-12">
           <h4
             className={twMerge(

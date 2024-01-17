@@ -8,9 +8,10 @@ import { twMerge } from "tailwind-merge";
 import { formatDistanceToNow } from "date-fns";
 
 export function EventCard(
-  props: ConditionalLoading<
-    { eventData: EventCompactType; endContent?: ReactNode; footerContent?: ReactNode } & Pick<StyleProps, "className">
-  >,
+  props: ConditionalLoading<{ eventData: EventCompactType }> & {
+    endContent?: ReactNode;
+    footerContent?: ReactNode;
+  } & Pick<StyleProps, "className">,
 ) {
   const { isLoading, eventData, endContent, footerContent, className } = props;
 
