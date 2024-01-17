@@ -1,21 +1,17 @@
 "use client";
 
-import { Button, Card, CardBody, CardHeader } from "@nextui-org/react";
+import { Button, Card, CardBody, CardFooter, CardHeader } from "@nextui-org/react";
 import { useCreateEventMutation } from "#/services";
 import { useForm } from "react-hook-form";
 import { createEventRequestSchema, CreateEventRequestType } from "#/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { EventFields } from "../_components";
+import { useEffect } from "react";
 
 export default function CreateEventPage() {
-  const [createEvent, { isLoading }] = useCreateEventMutation();
+  const [createEvent, { isLoading, isSuccess }] = useCreateEventMutation();
 
-  const {
-    control,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<CreateEventRequestType>({
+  const { control, handleSubmit, reset } = useForm<CreateEventRequestType>({
     defaultValues: {
       name: "",
       venue: "",
@@ -35,25 +31,28 @@ export default function CreateEventPage() {
     resolver: zodResolver(createEventRequestSchema),
   });
 
+  useEffect(() => {
+    if (isSuccess) {
+      reset();
+    }
+  }, [isSuccess]);
+
   return (
     <Card classNames={{ base: "p-6" }}>
       <CardHeader>
-        <h1 className="text-xl font-medium">Enter details of your event</h1>
+        <h3 className="text-xl font-medium">Enter details of your event</h3>
+        {isSuccess && <p className="text-success-500">Your event was created successfully!</p>}
       </CardHeader>
-      <CardBody>
-        <form
-          onSubmit={handleSubmit((values) => {
-            console.log("values", values);
-            createEvent(values);
-          })}
-        >
+      <form onSubmit={handleSubmit(createEvent)}>
+        <CardBody>
           <EventFields control={control} />
-
+        </CardBody>
+        <CardFooter>
           <Button color="primary" size="lg" className="w-full" type="submit" isLoading={isLoading}>
             Create a new event
           </Button>
-        </form>
-      </CardBody>
+        </CardFooter>
+      </form>
     </Card>
   );
 }

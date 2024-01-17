@@ -6,11 +6,12 @@ import { useCreateContactMutation } from "#/services";
 import { Controller, useForm } from "react-hook-form";
 import { contactRequestSchema, ContactRequestType } from "#/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 
 export default function ContactPage() {
   const [createContact, { isLoading, isSuccess }] = useCreateContactMutation();
 
-  const { control, handleSubmit } = useForm<ContactRequestType>({
+  const { control, handleSubmit, reset } = useForm<ContactRequestType>({
     defaultValues: {
       firstName: "",
       lastName: "",
@@ -20,6 +21,12 @@ export default function ContactPage() {
     },
     resolver: zodResolver(contactRequestSchema),
   });
+
+  useEffect(() => {
+    if (isSuccess) {
+      reset();
+    }
+  }, [isSuccess]);
 
   return (
     <>

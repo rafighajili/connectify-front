@@ -2,6 +2,9 @@
 
 import { useGetEventsQuery } from "#/services";
 import { EventCard } from "#/components";
+import { Button } from "@nextui-org/react";
+import NextLink from "next/link";
+import { ArrowLongRightIcon } from "@heroicons/react/24/outline";
 
 export default function AllEventsPage() {
   const { data: events, isLoading: isEventsLoading } = useGetEventsQuery({});
@@ -22,8 +25,17 @@ export default function AllEventsPage() {
             <EventCard
               key={eventData.id}
               eventData={eventData}
-              actionTitle="Read mode"
-              href={`/sponsor/${eventData.id}`}
+              endContent={
+                <Button
+                  as={NextLink}
+                  variant="light"
+                  color="primary"
+                  href={`/sponsor/${eventData.id}`}
+                  endContent={<ArrowLongRightIcon className="h-6 w-6" />}
+                >
+                  Read more
+                </Button>
+              }
             />
           ))
         )}

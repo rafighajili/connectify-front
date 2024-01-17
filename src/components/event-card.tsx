@@ -1,17 +1,21 @@
-import { Button, Card, CardBody, Chip, Skeleton, Tooltip } from "@nextui-org/react";
-import { ConditionalLoading } from "#/types";
+import { Card, CardBody, CardFooter, Chip, Skeleton, Tooltip } from "@nextui-org/react";
+import { ConditionalLoading, StyleProps } from "#/types";
 import Image from "next/image";
-import { EventType } from "#/entities";
 import { CalendarDaysIcon, ClockIcon, MapPinIcon, UsersIcon } from "@heroicons/react/24/outline";
-import NextLink from "next/link";
+import { ReactNode } from "react";
+import { EventCompactType } from "#/schemas";
+import { twMerge } from "tailwind-merge";
+import { formatDistanceToNow } from "date-fns";
 
 export function EventCard(
-  props: ConditionalLoading<{ eventData: EventType; actionTitle: string; onAction?: () => void; href?: string }>,
+  props: ConditionalLoading<
+    { eventData: EventCompactType; endContent?: ReactNode; footerContent?: ReactNode } & Pick<StyleProps, "className">
+  >,
 ) {
-  const { isLoading, eventData, actionTitle, onAction, href } = props;
+  const { isLoading, eventData, endContent, footerContent, className } = props;
 
   return (
-    <Card className="p-1.5">
+    <Card className={twMerge("p-1.5", className)}>
       <CardBody className="flex flex-col gap-x-12 gap-y-6 md:flex-row">
         {isLoading ? (
           <Skeleton className="aspect-video h-auto w-full rounded-xl md:aspect-square md:h-[356px] md:w-auto lg:h-[248px]" />
@@ -30,14 +34,14 @@ export function EventCard(
             {isLoading ? (
               <Skeleton className="h-8 w-36 rounded-full" />
             ) : (
-              <Chip size="lg" color="primary" variant="flat">
+              <Chip size="lg" color="primary" variant="faded">
                 {eventData.type.name}
               </Chip>
             )}
 
             <div className="flex gap-3 text-sm text-default-500 max-lg:flex-col max-lg:items-start [&>div]:flex [&>div]:items-center [&>div]:gap-x-1.5 [&_svg]:h-6 [&_svg]:w-6">
               {isLoading ? (
-                <Skeleton className="h-6 w-24 rounded-lg" />
+                <Skeleton className="h-6 w-12 rounded-lg" />
               ) : (
                 <div>
                   <UsersIcon />
@@ -46,12 +50,12 @@ export function EventCard(
               )}
 
               {isLoading ? (
-                <Skeleton className="h-6 w-24 rounded-lg" />
+                <Skeleton className="h-6 w-36 rounded-lg" />
               ) : (
                 <Tooltip content={eventData.venue} delay={0} closeDelay={200}>
                   <div>
                     <MapPinIcon />
-                    <p className="w-36 cursor-default overflow-hidden text-ellipsis whitespace-nowrap">
+                    <p className="max-w-[144px] cursor-default overflow-hidden text-ellipsis whitespace-nowrap">
                       {eventData.venue}
                     </p>
                   </div>
@@ -78,7 +82,7 @@ export function EventCard(
                 >
                   <div>
                     <CalendarDaysIcon />
-                    <p className="w-24 cursor-default">{new Date(eventData.date).toLocaleDateString("en-UK")}</p>
+                    <p className="cursor-default">{new Date(eventData.date).toLocaleDateString("en-UK")}</p>
                   </div>
                 </Tooltip>
               )}
@@ -105,19 +109,17 @@ export function EventCard(
             {isLoading ? (
               <Skeleton className="h-5 w-24 rounded-lg" />
             ) : (
-              <p className="text-sm text-default-500">4 days ago</p>
+              <p className="text-sm text-default-500">
+                {formatDistanceToNow(new Date(eventData.createdAt), { addSuffix: true })}
+              </p>
             )}
 
-            {isLoading ? (
-              <Skeleton className="h-10 w-36 rounded-lg" />
-            ) : (
-              <Button color="danger" variant="light" onPress={onAction} href={href} as={href ? NextLink : "button"}>
-                {actionTitle}
-              </Button>
-            )}
+            {endContent}
           </div>
         </div>
       </CardBody>
+
+      {footerContent && <CardFooter>{footerContent}</CardFooter>}
     </Card>
   );
 }

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ItemEntity, StatusEntity } from "./common";
+import { ItemEntity, StatusEntity, TimeStampEntity } from "./common";
 import { PackageEntity } from "./package";
 import { UserEntity } from "./user";
 
@@ -13,6 +13,6 @@ export const EventEntity = ItemEntity.extend({
   categories: ItemEntity.array().nonempty({ message: "Required" }),
   packages: PackageEntity.array().nonempty({ message: "Required" }),
   organizer: UserEntity,
-}).merge(StatusEntity);
+}).merge(StatusEntity.merge(TimeStampEntity));
 
 export type EventType = z.infer<typeof EventEntity>;

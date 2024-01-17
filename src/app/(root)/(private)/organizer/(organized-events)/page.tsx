@@ -1,7 +1,6 @@
 "use client";
 
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react";
-import NextLink from "next/link";
 import { useGetEventsOrganizedQuery, useUpdateEventMutation } from "#/services";
 import { EventCard } from "#/components";
 import { EventType } from "#/entities";
@@ -9,18 +8,14 @@ import { useForm } from "react-hook-form";
 import { updateEventRequestSchema, UpdateEventRequestType } from "#/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { EventFields } from "../_components";
+import { PencilSquareIcon } from "@heroicons/react/24/outline";
 
 export default function OrganizedEventsPage() {
   const { data: events, isLoading: isEventsLoading } = useGetEventsOrganizedQuery({});
 
   return (
     <div className="space-y-12">
-      <div className="flex flex-wrap items-center justify-between gap-x-36 gap-y-6">
-        <h1 className="text-4xl font-medium">My events</h1>
-        <Button variant="flat" radius="full" color="primary" as={NextLink} href="/organizer/create-event">
-          Create a new event
-        </Button>
-      </div>
+      <h1 className="text-4xl font-medium">My events</h1>
 
       <div className="space-y-6">
         {isEventsLoading || !events ? (
@@ -49,9 +44,21 @@ function MyEvent({ eventData }: { eventData: EventType }) {
 
   return (
     <>
-      <EventCard eventData={eventData} actionTitle="Edit" onAction={onOpen} />
+      <EventCard
+        eventData={eventData}
+        endContent={
+          <Button
+            color="primary"
+            variant="light"
+            onPress={onOpen}
+            endContent={<PencilSquareIcon className="h-4 w-4" />}
+          >
+            Edit
+          </Button>
+        }
+      />
 
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="3xl" scrollBehavior="outside">
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="4xl" scrollBehavior="outside">
         <ModalContent>
           <ModalHeader>Edit your event</ModalHeader>
 
@@ -62,8 +69,11 @@ function MyEvent({ eventData }: { eventData: EventType }) {
             </ModalBody>
 
             <ModalFooter>
+              <Button variant="light" color="danger" size="lg" type="submit" isLoading={isLoading}>
+                Delete this event
+              </Button>
               <Button color="primary" size="lg" type="submit" isLoading={isLoading}>
-                Create new event
+                Edit this event
               </Button>
             </ModalFooter>
           </form>

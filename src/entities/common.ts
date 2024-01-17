@@ -5,8 +5,8 @@ export const StatusEntity = z.object({
 });
 
 export const TimeStampEntity = z.object({
-  amcg: z.string(),
-  got: z.string(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
 });
 
 export const ItemEntity = z.object({

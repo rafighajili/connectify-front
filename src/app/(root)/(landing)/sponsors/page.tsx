@@ -6,11 +6,12 @@ import { useCreateContactSponsorMutation } from "#/services";
 import { Controller, useForm } from "react-hook-form";
 import { contactSponsorRequestSchema, ContactSponsorRequestType } from "#/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 
 export default function SponsorsPage() {
   const [createContactSponsor, { isLoading, isSuccess }] = useCreateContactSponsorMutation();
 
-  const { control, handleSubmit } = useForm<ContactSponsorRequestType>({
+  const { control, handleSubmit, reset } = useForm<ContactSponsorRequestType>({
     defaultValues: {
       firstName: "",
       lastName: "",
@@ -20,6 +21,12 @@ export default function SponsorsPage() {
     },
     resolver: zodResolver(contactSponsorRequestSchema),
   });
+
+  useEffect(() => {
+    if (isSuccess) {
+      reset();
+    }
+  }, [isSuccess]);
 
   return (
     <>

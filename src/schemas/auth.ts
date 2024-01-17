@@ -5,6 +5,8 @@ export const loginRequestSchema = z.object({
   password: z.string().min(6, "Password must contain at least 6 characters"),
 });
 
+export type LoginRequestType = z.infer<typeof loginRequestSchema>;
+
 export const registerRequestSchema = z
   .object({
     firstName: z.string().min(3, "Name must be at least 3 characters"),
@@ -16,5 +18,4 @@ export const registerRequestSchema = z
   })
   .merge(loginRequestSchema);
 
-export type LoginRequestType = z.infer<typeof loginRequestSchema>;
 export type RegisterRequestType = z.infer<typeof registerRequestSchema>;

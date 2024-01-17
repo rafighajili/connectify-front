@@ -52,10 +52,10 @@ export default function PrivateLayout({ children }: Children) {
   };
 
   return (
-    <>
+    <div className="flex min-h-screen flex-col">
       <MyNavbar items={items[user.role]} />
-      <div className="container py-12">{children}</div>
+      <div className="container flex-1 py-12">{children}</div>
       <MyFooter />
-    </>
+    </div>
   );
 }

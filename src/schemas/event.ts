@@ -1,5 +1,18 @@
 import { z } from "zod";
-import { EventEntity, ItemEntity, PackageEntity } from "#/entities";
+import { EventEntity, ItemEntity, PackageEntity, StatusEntity } from "#/entities";
+
+export const eventCompactSchema = EventEntity.omit({ packages: true });
+
+export type EventCompactType = z.infer<typeof eventCompactSchema>;
+
+export const eventSponsoredSchema = ItemEntity.pick({ id: true })
+  .extend({
+    eventPackage: PackageEntity.extend({ event: eventCompactSchema }),
+    comments: z.string(),
+  })
+  .merge(StatusEntity);
+
+export type EventSponsoredType = z.infer<typeof eventSponsoredSchema>;
 
 export const createEventRequestSchema = EventEntity.omit({
   id: true,
@@ -23,9 +36,10 @@ export const createEventRequestSchema = EventEntity.omit({
   }),
 });
 
-export const updateEventRequestSchema = createEventRequestSchema
-  .partial({ file: true })
-  .merge(EventEntity.pick({ id: true }));
-
 export type CreateEventRequestType = z.infer<typeof createEventRequestSchema>;
+
+export const updateEventRequestSchema = ItemEntity.pick({ id: true }).merge(
+  createEventRequestSchema.partial({ file: true }),
+);
+
 export type UpdateEventRequestType = z.infer<typeof updateEventRequestSchema>;

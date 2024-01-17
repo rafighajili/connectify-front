@@ -4,7 +4,7 @@ import { useGetEventCategoriesQuery, useGetEventTypesQuery } from "#/services";
 import { CreateEventRequestType } from "#/schemas";
 import { BanknotesIcon, UserGroupIcon } from "@heroicons/react/24/outline";
 import { twMerge } from "tailwind-merge";
-import { packageClassNameHelper } from "#/components";
+import { packageClassNameHelper } from "#/utils";
 import { capitalize } from "@nextui-org/shared-utils";
 
 type ControlProp = { control: Control<CreateEventRequestType> };
@@ -24,7 +24,7 @@ export function EventFields({ control }: ControlProp) {
   });
 
   return (
-    <div className="mb-6 space-y-6">
+    <div className="space-y-6">
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <Controller
           control={control}

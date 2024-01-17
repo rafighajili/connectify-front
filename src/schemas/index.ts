@@ -6,3 +6,6 @@ export type * from "./contact";
 
 export * from "./event";
 export type * from "./event";
+
+export * from "./sponsor";
+export type * from "./sponsor";
