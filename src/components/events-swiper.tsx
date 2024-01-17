@@ -11,10 +11,10 @@ import {
   ClockIcon,
   MapPinIcon,
 } from "@heroicons/react/24/outline";
-import { EventType } from "#/entities";
 import NextLink from "next/link";
+import { EventCompactType } from "#/schemas";
 
-export function EventsSwiper({ isLoading, events }: ConditionalLoading<{ events: EventType[] }>) {
+export function EventsSwiper({ isLoading, events }: ConditionalLoading<{ events: EventCompactType[] }>) {
   const mounted = useMounted();
   const swiperRef: any = useRef();
 
@@ -77,7 +77,7 @@ export function EventsSwiper({ isLoading, events }: ConditionalLoading<{ events:
   );
 }
 
-function Event(props: ConditionalLoading<EventType>) {
+function Event(props: ConditionalLoading<EventCompactType>) {
   const { isLoading } = props;
 
   return (

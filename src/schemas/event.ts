@@ -3,7 +3,7 @@ import { EventEntity, ItemEntity, PackageEntity, StatusEntity } from "#/entities
 
 export const eventCompactSchema = EventEntity.omit({ packages: true });
 
-export type EventCompactType = z.infer<typeof eventCompactSchema>;
+export interface EventCompactType extends z.infer<typeof eventCompactSchema> {}
 
 export const eventSponsoredSchema = ItemEntity.pick({ id: true })
   .extend({
