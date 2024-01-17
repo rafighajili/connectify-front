@@ -1,7 +1,7 @@
 "use client";
 
 import { useLoginMutation } from "#/services";
-import { LoginRequest, loginRequestSchema } from "#/schemas";
+import { loginRequestSchema, LoginRequestType } from "#/schemas";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Input } from "@nextui-org/react";
@@ -10,7 +10,7 @@ import NextLink from "next/link";
 export default function LoginPage() {
   const [login, { isLoading }] = useLoginMutation();
 
-  const { control, handleSubmit } = useForm<LoginRequest>({
+  const { control, handleSubmit } = useForm<LoginRequestType>({
     defaultValues: {
       email: "",
       password: "",

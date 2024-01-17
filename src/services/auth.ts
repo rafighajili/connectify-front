@@ -1,20 +1,20 @@
 import { apiSlice } from "#/store/slices";
-import { LoginRequest, RegisterRequest } from "#/schemas";
+import { LoginRequestType, RegisterRequestType } from "#/schemas";
 import { UserEntity, UserType } from "#/entities";
 
 export const authService = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    registerOrganizer: builder.mutation<UserType, RegisterRequest>({
+    registerOrganizer: builder.mutation<UserType, RegisterRequestType>({
       query: (body) => ({ url: `/auth/register`, method: "post", body }),
       transformResponse: (res: unknown) => UserEntity.parse(res),
     }),
 
-    registerSponsor: builder.mutation<UserType, RegisterRequest>({
+    registerSponsor: builder.mutation<UserType, RegisterRequestType>({
       query: (body) => ({ url: `/auth/register-as`, method: "post", body }),
       transformResponse: (res: unknown) => UserEntity.parse(res),
     }),
 
-    login: builder.mutation<UserType, LoginRequest>({
+    login: builder.mutation<UserType, LoginRequestType>({
       query: (body) => ({ url: `/auth/login`, method: "post", body }),
       transformResponse: (res: unknown) => UserEntity.parse(res),
     }),

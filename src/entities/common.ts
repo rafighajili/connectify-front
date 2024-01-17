@@ -14,8 +14,8 @@ export const TimeEntity = z.object({
 export type TimeType = z.infer<typeof TimeEntity>;
 
 export const ItemEntity = z.object({
-  id: z.string(),
-  name: z.string(),
+  id: z.string().uuid({ message: "Required" }),
+  name: z.string().min(1, { message: "Required" }),
 });
 
 export type ItemType = z.infer<typeof ItemEntity>;

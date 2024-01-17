@@ -1,19 +1,20 @@
 import { apiSlice } from "#/store/slices";
 import { EventEntity, EventType, ItemEntity, ItemType } from "#/entities";
-import { CreateEventRequest, UpdateEventRequest } from "#/schemas";
+import { UpdateEventRequest } from "#/schemas";
+import { objectToFormData } from "#/utils";
 
 export const eventService = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    createEvent: builder.mutation<EventType, CreateEventRequest>({
-      query: (body) => ({ url: `/event`, method: "post", body }),
+    createEvent: builder.mutation<EventType, CreateEventRequestType>({
+      query: (body) => ({ url: `/event`, method: "post", body: objectToFormData(body) }),
       transformResponse: (res: unknown) => EventEntity.parse(res),
     }),
     getEvent: builder.query<EventType, EventType["id"]>({
       query: (id) => ({ url: `/event/${id}`, method: "get" }),
       transformResponse: (res: unknown) => EventEntity.parse(res),
     }),
-    updateEvent: builder.mutation<EventType, UpdateEventRequest>({
-      query: ({ id, ...body }) => ({ url: `/event/${id}`, method: "put", body }),
+    updateEvent: builder.mutation<EventType, UpdateEventRequestType>({
+      query: ({ id, ...body }) => ({ url: `/event/${id}`, method: "put", body: objectToFormData(body) }),
       transformResponse: (res: unknown) => EventEntity.parse(res),
     }),
     deleteEvent: builder.mutation<void, EventType["id"]>({

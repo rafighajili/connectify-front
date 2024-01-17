@@ -1,5 +1,5 @@
 import { Swiper, SwiperSlide } from "swiper/react";
-import useMounted from "#/utils";
+import { useMounted } from "#/utils";
 import { Button, Card, CardBody, CardFooter, CardHeader, Skeleton, Tooltip } from "@nextui-org/react";
 import { useRef } from "react";
 import { ConditionalLoading } from "#/types";

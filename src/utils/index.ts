@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export default function useMounted() {
+export function useMounted() {
   const [mounted, setMounted] = useState<boolean>(false);
 
   useEffect(() => {
@@ -8,4 +8,27 @@ export default function useMounted() {
   }, []);
 
   return mounted;
+}
+
+export function objectToFormData(obj: any, formData?: FormData, namespace?: string): FormData {
+  const fd = formData || new FormData();
+  let formKey: string;
+
+  for (const property in obj) {
+    if (obj.hasOwnProperty(property)) {
+      if (namespace) {
+        formKey = `${namespace}[${property}]`;
+      } else {
+        formKey = property;
+      }
+
+      if (typeof obj[property] === "object" && !(obj[property] instanceof File)) {
+        objectToFormData(obj[property], fd, formKey);
+      } else {
+        fd.append(formKey, obj[property]);
+      }
+    }
+  }
+
+  return fd;
 }

@@ -2,7 +2,7 @@
 
 import { Button, Input } from "@nextui-org/react";
 import NextLink from "next/link";
-import { RegisterRequest, registerRequestSchema } from "#/schemas";
+import { registerRequestSchema, RegisterRequestType } from "#/schemas";
 import { useRegisterOrganizerMutation } from "#/services";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,7 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 export default function RegisterPage() {
   const [registerOrganizer, { isLoading }] = useRegisterOrganizerMutation();
 
-  const { control, handleSubmit } = useForm<RegisterRequest>({
+  const { control, handleSubmit } = useForm<RegisterRequestType>({
     defaultValues: {
       firstName: "",
       lastName: "",

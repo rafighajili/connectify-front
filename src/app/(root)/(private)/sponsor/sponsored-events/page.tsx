@@ -3,7 +3,7 @@
 import { useGetEventsSponsoredQuery } from "#/services";
 import { EventCard } from "#/components";
 
-export default function MyEventsPage() {
+export default function SponsoredEventsPage() {
   const { data: events, isLoading: isEventsLoading } = useGetEventsSponsoredQuery();
 
   return (

@@ -16,5 +16,5 @@ export const registerRequestSchema = z
   })
   .merge(loginRequestSchema);
 
-export type LoginRequest = z.infer<typeof loginRequestSchema>;
-export type RegisterRequest = z.infer<typeof registerRequestSchema>;
+export type LoginRequestType = z.infer<typeof loginRequestSchema>;
+export type RegisterRequestType = z.infer<typeof registerRequestSchema>;

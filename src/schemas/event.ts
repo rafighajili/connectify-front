@@ -1,27 +1,33 @@
 import { z } from "zod";
-import { EventEntity } from "#/entities";
+import { EventEntity, ItemEntity, PackageEntity } from "#/entities";
 
 export const createEventRequestSchema = EventEntity.omit({
   id: true,
+  imageUrl: true,
   organizer: true,
   status: true,
-  imageUrl: true,
-  type: true,
-  categories: true,
   createdAt: true,
   updatedAt: true,
+  type: true,
+  categories: true,
+  packages: true,
 }).merge(
   z.object({
-    typeId: z.string(),
-    categories: z.string(),
+    type: ItemEntity.pick({ id: true }),
+    categories: ItemEntity.pick({ id: true }).array().nonempty({ message: "Required" }),
+    packages: PackageEntity.omit({ id: true, features: true })
+      .merge(z.object({ features: ItemEntity.pick({ name: true }).array().nonempty({ message: "Required" }) }))
+      .array()
+      .nonempty({ message: "Required" }),
     file: z.custom<File>((v) => v instanceof File, {
       message: "Required",
     }),
   }),
 );
-// .transform((values) => ({ ...values, categories: values.categories.split(",") }));
 
-export const updateEventRequestSchema = createEventRequestSchema.merge(EventEntity.pick({ id: true }));
+export const updateEventRequestSchema = createEventRequestSchema
+  .partial({ file: true })
+  .merge(EventEntity.pick({ id: true }));
 
-export type CreateEventRequest = z.infer<typeof createEventRequestSchema>;
-export type UpdateEventRequest = z.infer<typeof updateEventRequestSchema>;
+export type CreateEventRequestType = z.infer<typeof createEventRequestSchema>;
+export type UpdateEventRequestType = z.infer<typeof updateEventRequestSchema>;

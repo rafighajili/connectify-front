@@ -99,10 +99,15 @@ export function MyNavbar({ items }: { items: Record<"title" | "link", string>[] 
                     />
                   </PopoverTrigger>
                   <PopoverContent>
-                    <Listbox variant="shadow" topContent={<p className="p-2 text-default-500">{user.email}</p>}>
+                    <Listbox
+                      aria-label="Account menu"
+                      variant="shadow"
+                      topContent={<p className="p-2 text-default-500">{user.email}</p>}
+                    >
                       <ListboxItem
                         key="dashboard"
-                        href={`/${user.role.charAt(0).toLowerCase()}`}
+                        as={NextLink}
+                        href={`/${user.role.toLowerCase()}`}
                         endContent={<ArrowTopRightOnSquareIcon className="h-4 w-4" />}
                       >
                         Go to dashboard

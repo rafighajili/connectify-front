@@ -6,18 +6,18 @@ import { useGetEventsOrganizedQuery, useUpdateEventMutation } from "#/services";
 import { EventCard } from "#/components";
 import { EventType } from "#/entities";
 import { useForm } from "react-hook-form";
-import { UpdateEventRequest, updateEventRequestSchema } from "#/schemas";
+import { updateEventRequestSchema, UpdateEventRequestType } from "#/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { EventFields } from "../_components";
 
-export default function Page() {
+export default function OrganizedEventsPage() {
   const { data: events, isLoading: isEventsLoading } = useGetEventsOrganizedQuery();
 
   return (
     <div className="space-y-12">
       <div className="flex flex-wrap items-center justify-between gap-x-36 gap-y-6">
         <h1 className="text-4xl font-medium">My events</h1>
-        <Button variant="flat" radius="full" color="primary" as={NextLink} href="/o/create-event">
+        <Button variant="flat" radius="full" color="primary" as={NextLink} href="/organizer/create-event">
           Create a new event
         </Button>
       </div>
@@ -42,7 +42,7 @@ function MyEvent({ event }: { event: EventType }) {
 
   const [updateEvent, { isLoading }] = useUpdateEventMutation();
 
-  const { control, handleSubmit } = useForm<UpdateEventRequest>({
+  const { control, handleSubmit } = useForm<UpdateEventRequestType>({
     // defaultValues: event,
     resolver: zodResolver(updateEventRequestSchema),
   });
@@ -56,7 +56,7 @@ function MyEvent({ event }: { event: EventType }) {
           <ModalHeader>Edit your event</ModalHeader>
 
           <form onSubmit={handleSubmit(updateEvent)}>
-            <ModalBody className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <ModalBody>
               <EventFields control={control} />
             </ModalBody>
 

@@ -2,7 +2,7 @@ import { Divider, Tab, Tabs } from "@nextui-org/react";
 import { ConnectifyLogo } from "#/components/connectify-logo";
 import { ComputerDesktopIcon, MoonIcon, SunIcon } from "@heroicons/react/24/outline";
 import { useTheme } from "next-themes";
-import useMounted from "#/utils";
+import { useMounted } from "#/utils";
 
 const footerElements = [
   {
@@ -105,7 +105,7 @@ export function MyFooter() {
       {/*  ))}*/}
       {/*</ul>*/}
 
-      <div className="text-default-500 flex flex-wrap items-end justify-between gap-x-36 gap-y-6 [&_*]:text-sm">
+      <div className="flex flex-wrap items-end justify-between gap-x-36 gap-y-6 text-default-500 [&_*]:text-sm">
         <p>Copyright @ 2024 Connectify. All Rights Reserved.</p>
         {mounted && (
           <Tabs

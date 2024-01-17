@@ -11,15 +11,11 @@ const baseContactResponseSchema = z.object({
     .transform((val) => "+994" + val),
 });
 
-// request
-
 export const contactRequestSchema = baseContactResponseSchema.merge(
   z.object({
     message: z.string().min(1, "Required"),
   }),
 );
-
-export type ContactRequestType = z.infer<typeof contactRequestSchema>;
 
 export const contactSponsorRequestSchema = baseContactResponseSchema.merge(
   z.object({
@@ -27,14 +23,11 @@ export const contactSponsorRequestSchema = baseContactResponseSchema.merge(
   }),
 );
 
-export type ContactSponsorRequestType = z.infer<typeof contactSponsorRequestSchema>;
-
-// response
-
 export const contactResponseSchema = ItemEntity.pick({ id: true }).merge(contactRequestSchema);
-
-export type ContactResponseType = z.infer<typeof contactResponseSchema>;
 
 export const contactSponsorResponseSchema = ItemEntity.pick({ id: true }).merge(contactSponsorRequestSchema);
 
+export type ContactRequestType = z.infer<typeof contactRequestSchema>;
+export type ContactSponsorRequestType = z.infer<typeof contactSponsorRequestSchema>;
+export type ContactResponseType = z.infer<typeof contactResponseSchema>;
 export type ContactSponsorResponseType = z.infer<typeof contactSponsorResponseSchema>;
