@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 
 export default function ContactPage() {
-  const [createContact, { isLoading, isSuccess }] = useCreateContactMutation();
+  const [createContact, { isLoading, isSuccess, isError }] = useCreateContactMutation();
 
   const { control, handleSubmit, reset } = useForm<ContactRequestType>({
     defaultValues: {
@@ -35,9 +35,11 @@ export default function ContactPage() {
           <CardHeader>
             <h3 className="text-2xl font-medium">Contact us</h3>
             <p className="text-sm text-default-500">Our friendly team would love to hear from you.</p>
+
             {isSuccess && (
               <p className="text-success-500">We received your message successfully, thank you for contacting us!</p>
             )}
+            {isError && <p className="text-danger-500">Occurred some error.</p>}
           </CardHeader>
           <CardBody>
             <form onSubmit={handleSubmit(createContact)} className="grid grid-cols-1 gap-3 sm:grid-cols-2">

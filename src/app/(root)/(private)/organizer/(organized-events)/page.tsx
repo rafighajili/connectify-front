@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react";
-import { useGetEventsOrganizedQuery, useUpdateEventMutation } from "#/services";
+import { useDeleteEventMutation, useGetEventsOrganizedQuery, useUpdateEventMutation } from "#/services";
 import { EventCard } from "#/components";
 import { EventType } from "#/entities";
 import { useForm } from "react-hook-form";
@@ -33,6 +33,7 @@ function MyEvent({ eventData }: { eventData: EventType }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const [updateEvent, { isLoading }] = useUpdateEventMutation();
+  const [deleteEvent, { isLoading: isDeleteLoading }] = useDeleteEventMutation();
 
   const { control, handleSubmit, reset } = useForm<UpdateEventRequestType>({
     defaultValues: eventData,
@@ -70,7 +71,14 @@ function MyEvent({ eventData }: { eventData: EventType }) {
             </ModalBody>
 
             <ModalFooter>
-              <Button variant="light" color="danger" size="lg" type="submit" isLoading={isLoading}>
+              <Button
+                variant="light"
+                color="danger"
+                size="lg"
+                type="button"
+                isLoading={isDeleteLoading}
+                onPress={() => deleteEvent(eventData.id)}
+              >
                 Delete this event
               </Button>
               <Button color="primary" size="lg" type="submit" isLoading={isLoading}>

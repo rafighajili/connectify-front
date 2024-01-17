@@ -15,17 +15,17 @@ export function objectToFormData(obj: any, formData?: FormData, namespace?: stri
   let formKey: string;
 
   for (const property in obj) {
-    if (obj[property]) {
-      if (obj.hasOwnProperty(property)) {
-        if (namespace) {
-          formKey = `${namespace}[${property}]`;
-        } else {
-          formKey = property;
-        }
+    if (obj.hasOwnProperty(property)) {
+      if (namespace) {
+        formKey = `${namespace}[${property}]`;
+      } else {
+        formKey = property;
+      }
 
-        if (typeof obj[property] === "object" && !(obj[property] instanceof File)) {
-          objectToFormData(obj[property], fd, formKey);
-        } else {
+      if (typeof obj[property] === "object" && !(obj[property] instanceof File)) {
+        objectToFormData(obj[property], fd, formKey);
+      } else {
+        if (obj[property]) {
           fd.append(formKey, obj[property]);
         }
       }

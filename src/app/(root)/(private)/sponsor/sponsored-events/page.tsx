@@ -1,8 +1,8 @@
 "use client";
 
 import { useGetEventsSponsoredQuery } from "#/services";
-import { EventCard } from "#/components";
-import { Chip, Skeleton } from "@nextui-org/react";
+import { EventCard, StatusChip } from "#/components";
+import { Skeleton } from "@nextui-org/react";
 import { twMerge } from "tailwind-merge";
 import { packageClassNameHelper } from "#/utils";
 
@@ -36,22 +36,7 @@ export default function SponsoredEventsPage() {
               <EventCard
                 key={eventSponsored.id}
                 eventData={eventSponsored.eventPackage.event}
-                endContent={
-                  <Chip
-                    variant="flat"
-                    color={
-                      eventSponsored.status === "APPROVED"
-                        ? "success"
-                        : eventSponsored.status === "REJECTED"
-                        ? "danger"
-                        : eventSponsored.status === "PENDING"
-                        ? "warning"
-                        : undefined
-                    }
-                  >
-                    {eventSponsored.status}
-                  </Chip>
-                }
+                endContent={<StatusChip status={eventSponsored.status} />}
                 footerContent={
                   eventSponsored.comments && (
                     <div className="space-y-1.5">

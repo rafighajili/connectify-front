@@ -89,11 +89,11 @@ export function MyNavbar({ items }: { items: Record<"title" | "link", string>[] 
                   <PopoverTrigger>
                     <User
                       as="button"
-                      className="flex-row-reverse transition-transform"
+                      classNames={{ base: "flex-row-reverse transition-transform", wrapper: "items-end" }}
                       name={`${user.firstName} ${user.lastName}`}
                       description={user.role}
                       avatarProps={{
-                        name: user.firstName.charAt(0) + user.lastName.charAt(0),
+                        name: `${user.firstName.charAt(0) + user.lastName.charAt(0)}`.toUpperCase(),
                         classNames: { name: "text-sm" },
                       }}
                     />

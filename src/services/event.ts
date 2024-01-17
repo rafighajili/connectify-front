@@ -27,7 +27,7 @@ export const eventService = apiSlice.injectEndpoints({
       transformResponse: (res: unknown) => EventEntity.parse(res),
     }),
     deleteEvent: builder.mutation<void, EventType["id"]>({
-      query: (id) => ({ url: `/event/${id}`, method: "get" }),
+      query: (id) => ({ url: `/event/${id}`, method: "delete" }),
     }),
 
     getEvents: builder.query<EventCompactType[], EventParamsType>({
@@ -41,6 +41,17 @@ export const eventService = apiSlice.injectEndpoints({
     getEventsSponsored: builder.query<EventSponsoredType[], EventParamsType>({
       query: (params) => ({ url: `/event/sponsored`, method: "get", params }),
       transformResponse: (res: unknown) => eventSponsoredSchema.array().parse(res),
+    }),
+    getEventsAdmin: builder.query<EventType[], EventParamsType>({
+      query: (params) => ({ url: `/event/admin`, method: "get", params }),
+      transformResponse: (res: unknown) => EventEntity.array().parse(res),
+    }),
+
+    approveEvent: builder.mutation<void, ItemType["id"]>({
+      query: (id) => ({ url: `/event/${id}/approve`, method: "post" }),
+    }),
+    rejectEvent: builder.mutation<void, ItemType["id"]>({
+      query: (id) => ({ url: `/event/${id}/reject`, method: "post" }),
     }),
 
     getEventTypes: builder.query<ItemType[], void>({
@@ -62,6 +73,9 @@ export const {
   useGetEventsQuery,
   useGetEventsOrganizedQuery,
   useGetEventsSponsoredQuery,
+  useGetEventsAdminQuery,
+  useApproveEventMutation,
+  useRejectEventMutation,
   useGetEventTypesQuery,
   useGetEventCategoriesQuery,
 } = eventService;

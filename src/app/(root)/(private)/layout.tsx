@@ -24,7 +24,28 @@ export default function PrivateLayout({ children }: Children) {
   }
 
   const items = {
-    ADMIN: [],
+    ADMIN: [
+      {
+        key: 1,
+        title: "Events",
+        link: "/admin",
+      },
+      {
+        key: 2,
+        title: "Requests",
+        link: "/admin/requests",
+      },
+      {
+        key: 3,
+        title: "Sponsors",
+        link: "/admin/sponsors",
+      },
+      {
+        key: 4,
+        title: "Contacts",
+        link: "/admin/contacts",
+      },
+    ],
     ORGANIZER: [
       {
         key: 1,

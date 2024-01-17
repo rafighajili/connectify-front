@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 
 export default function SponsorsPage() {
-  const [createContactSponsor, { isLoading, isSuccess }] = useCreateContactSponsorMutation();
+  const [createContactSponsor, { isLoading, isSuccess, isError }] = useCreateContactSponsorMutation();
 
   const { control, handleSubmit, reset } = useForm<ContactSponsorRequestType>({
     defaultValues: {
@@ -35,9 +35,11 @@ export default function SponsorsPage() {
           <CardHeader>
             <h3 className="text-2xl font-medium">Sponsor Contact details</h3>
             <p className="text-sm text-default-500">Please fill your information so we can get in touch with you.</p>
+
             {isSuccess && (
               <p className="text-success-500">Your request has been sent successfully, we will get back to you soon!</p>
             )}
+            {isError && <p className="text-danger-500">Occurred some error.</p>}
           </CardHeader>
           <CardBody>
             <form onSubmit={handleSubmit(createContactSponsor)} className="grid grid-cols-1 gap-3 sm:grid-cols-2">
