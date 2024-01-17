@@ -46,7 +46,7 @@ export function EventsSwiper({ isLoading, events }: ConditionalLoading<{ events:
               className="w-24 -rotate-45 border-black bg-white dark:border-white dark:bg-black"
               onPress={() => swiperRef.current.slidePrev()}
             >
-              <ArrowLongLeftIcon className="h-8 w-8" />
+              <ArrowLongLeftIcon className="h-6 w-6" />
             </Button>
             <Button
               variant="bordered"
@@ -56,7 +56,7 @@ export function EventsSwiper({ isLoading, events }: ConditionalLoading<{ events:
               className="w-24 rotate-45 bg-white dark:bg-black"
               onPress={() => swiperRef.current.slideNext()}
             >
-              <ArrowLongRightIcon className="h-8 w-8" />
+              <ArrowLongRightIcon className="h-6 w-6" />
             </Button>
           </div>
         </div>

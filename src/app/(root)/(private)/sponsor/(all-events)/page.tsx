@@ -28,7 +28,7 @@ export default function AllEventsPage() {
                     variant="light"
                     color="primary"
                     href={`/sponsor/${eventData.id}`}
-                    endContent={<ArrowLongRightIcon className="h-6 w-6" />}
+                    endContent={<ArrowLongRightIcon className="h-4 w-4" />}
                   >
                     Read more
                   </Button>
