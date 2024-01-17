@@ -4,9 +4,9 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "connectify-files.s3.amazonaws.com",
+        hostname: "https://s3-vsh.s3.eu-central-1.amazonaws.com",
         port: "",
-        pathname: "/events/**",
+        pathname: "/**",
       },
     ],
   },
