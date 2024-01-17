@@ -109,6 +109,7 @@ export default function EventPage({ params: { eventId } }: { params: { eventId: 
           src={eventData.imageUrl}
           height={1600}
           width={900}
+          priority
         />
       ) : (
         <Skeleton className="h-72 w-full rounded-xl" />

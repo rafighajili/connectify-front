@@ -33,10 +33,12 @@ function MyEvent({ eventData }: { eventData: EventType }) {
 
   const [updateEvent, { isLoading }] = useUpdateEventMutation();
 
-  const { control, handleSubmit } = useForm<UpdateEventRequestType>({
+  const { control, handleSubmit, watch } = useForm<UpdateEventRequestType>({
     defaultValues: eventData,
     resolver: zodResolver(updateEventRequestSchema),
   });
+
+  console.log("watch()", watch());
 
   return (
     <>

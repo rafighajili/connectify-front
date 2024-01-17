@@ -27,6 +27,7 @@ export function EventCard(
             src={eventData.imageUrl}
             height={800}
             width={450}
+            priority
           />
         )}
 

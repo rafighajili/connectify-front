@@ -32,7 +32,7 @@ const partners = [
 
 export function PartnersSection() {
   const partnersComponent = (
-    <div className="animate-dvijeniya flex gap-x-12">
+    <div className="flex animate-dvijeniya gap-x-12">
       {partners.map((partner) => (
         <NextLink
           key={partner.name}
@@ -40,7 +40,7 @@ export function PartnersSection() {
           target="_blank"
           className="h-36 w-36 overflow-hidden rounded-full"
         >
-          <Image src={partner.imgSrc} alt={partner.name} className="h-full w-full object-cover" />
+          <Image src={partner.imgSrc} alt={partner.name} className="h-full w-full object-cover" priority />
         </NextLink>
       ))}
     </div>

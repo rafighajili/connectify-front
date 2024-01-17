@@ -110,6 +110,7 @@ function Event(props: ConditionalLoading<EventCompactType>) {
             src={props.imageUrl}
             height={800}
             width={450}
+            priority
           />
         )}
       </CardBody>

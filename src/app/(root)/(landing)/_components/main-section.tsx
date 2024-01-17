@@ -10,7 +10,7 @@ export function MainSection({ children }: Children) {
           <div className="z-10">{children}</div>
 
           <div className="relative z-0 h-fit">
-            <Image src={people} alt="Networking" className="h-auto w-full" />
+            <Image src={people} alt="Networking" className="h-auto w-full" priority />
             <svg
               viewBox="0 0 200 200"
               xmlns="http://www.w3.org/2000/svg"

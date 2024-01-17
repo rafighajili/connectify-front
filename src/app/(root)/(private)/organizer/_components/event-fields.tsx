@@ -149,6 +149,7 @@ export function EventFields({ control }: ControlProp) {
               type="file"
               accept="image/*"
               placeholder="event image"
+              classNames={{ input: "file:hidden cursor-pointer" }}
               {...field}
               // @ts-ignore
               value={field.value?.fileName}
