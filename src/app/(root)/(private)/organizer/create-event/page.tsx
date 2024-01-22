@@ -38,21 +38,25 @@ export default function CreateEventPage() {
   }, [isSuccess]);
 
   return (
-    <Card classNames={{ base: "p-6" }}>
-      <CardHeader>
-        <h3 className="text-xl font-medium">Enter details of your event</h3>
-        {isSuccess && <p className="text-success-500">Your event was created successfully!</p>}
-      </CardHeader>
-      <form onSubmit={handleSubmit(createEvent)}>
-        <CardBody>
-          <EventFields control={control} />
-        </CardBody>
-        <CardFooter>
-          <Button color="primary" size="lg" className="w-full" type="submit" isLoading={isLoading}>
-            Create a new event
-          </Button>
-        </CardFooter>
-      </form>
-    </Card>
+    <div className="space-y-12">
+      <h1 className="text-4xl font-medium">Create an event</h1>
+
+      <Card className="p-6">
+        <CardHeader>
+          <h3 className="text-xl font-medium">Enter details of your event</h3>
+          {isSuccess && <p className="text-success-500">Your event was created successfully!</p>}
+        </CardHeader>
+        <form onSubmit={handleSubmit(createEvent)}>
+          <CardBody>
+            <EventFields control={control} />
+          </CardBody>
+          <CardFooter>
+            <Button color="primary" size="lg" className="w-full" type="submit" isLoading={isLoading}>
+              Create a new event
+            </Button>
+          </CardFooter>
+        </form>
+      </Card>
+    </div>
   );
 }

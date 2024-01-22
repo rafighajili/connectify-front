@@ -22,7 +22,7 @@ export default function AllEventsPage() {
               <EventCard
                 key={eventData.id}
                 eventData={eventData}
-                endContent={
+                bottomEndContent={
                   <Button
                     as={NextLink}
                     variant="light"

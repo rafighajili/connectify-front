@@ -105,14 +105,14 @@ export default function EventPage({ params: { eventId } }: { params: { eventId: 
       {eventData ? (
         <Image
           alt={eventData.name}
-          className="h-72 w-full rounded-xl object-cover "
+          className="aspect-[4/3] h-auto w-full rounded-xl object-cover "
           src={eventData.imageUrl}
           height={1600}
           width={900}
           priority
         />
       ) : (
-        <Skeleton className="h-72 w-full rounded-xl" />
+        <Skeleton className="aspect-[4/3] h-auto w-full rounded-xl" />
       )}
 
       {eventData ? (

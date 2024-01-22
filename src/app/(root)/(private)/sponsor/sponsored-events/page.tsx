@@ -2,9 +2,11 @@
 
 import { useGetEventsSponsoredQuery } from "#/services";
 import { EventCard, StatusChip } from "#/components";
-import { Skeleton } from "@nextui-org/react";
+import { Button, Skeleton } from "@nextui-org/react";
 import { twMerge } from "tailwind-merge";
 import { packageClassNameHelper } from "#/utils";
+import NextLink from "next/link";
+import { ArrowLongRightIcon } from "@heroicons/react/24/outline";
 
 export default function SponsoredEventsPage() {
   const { data: eventsSponsored, isLoading: isEventsLoading } = useGetEventsSponsoredQuery({});
@@ -22,7 +24,6 @@ export default function SponsoredEventsPage() {
                   key={key}
                   isLoading
                   className="border-2 border-default-300"
-                  endContent={<Skeleton className="h-7 w-24  rounded-full" />}
                   footerContent={
                     <div className="w-full space-y-1.5">
                       <Skeleton className="h-5 w-72 rounded-lg" />
@@ -36,7 +37,18 @@ export default function SponsoredEventsPage() {
               <EventCard
                 key={eventSponsored.id}
                 eventData={eventSponsored.eventPackage.event}
-                endContent={<StatusChip status={eventSponsored.status} />}
+                topEndContent={<StatusChip status={eventSponsored.status} />}
+                bottomEndContent={
+                  <Button
+                    as={NextLink}
+                    variant="light"
+                    color="primary"
+                    href={`/sponsor/${eventSponsored.eventPackage.event.id}`}
+                    endContent={<ArrowLongRightIcon className="h-4 w-4" />}
+                  >
+                    Go to this event
+                  </Button>
+                }
                 footerContent={
                   eventSponsored.comments && (
                     <div className="space-y-1.5">

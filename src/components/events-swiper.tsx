@@ -1,6 +1,6 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useMounted } from "#/utils";
-import { Button, Card, CardBody, CardFooter, CardHeader, Skeleton, Tooltip } from "@nextui-org/react";
+import { Button, Card, CardFooter, CardHeader, Chip, Skeleton } from "@nextui-org/react";
 import { useRef } from "react";
 import { ConditionalLoading } from "#/types";
 import Image from "next/image";
@@ -11,7 +11,6 @@ import {
   ClockIcon,
   MapPinIcon,
 } from "@heroicons/react/24/outline";
-import NextLink from "next/link";
 import { EventCompactType } from "#/schemas";
 
 export function EventsSwiper({ isLoading, events }: ConditionalLoading<{ events: EventCompactType[] }>) {
@@ -21,18 +20,18 @@ export function EventsSwiper({ isLoading, events }: ConditionalLoading<{ events:
   return (
     <div className="overflow-x-clip overflow-y-visible">
       {mounted && !isLoading ? (
-        <div className="relative max-sm:px-6">
+        <div className="relative">
           <Swiper
             onSwiper={(swiper) => (swiperRef.current = swiper)}
             slidesPerView={1}
-            breakpoints={{ 640: { slidesPerView: 2 }, 1280: { slidesPerView: 4 } }}
-            spaceBetween={24}
+            spaceBetween={-24}
+            breakpoints={{ 640: { slidesPerView: 2, spaceBetween: 24 }, 1280: { slidesPerView: 4, spaceBetween: 24 } }}
             centeredSlides
             loop
             className="!overflow-x-clip !overflow-y-visible"
           >
             {events.map((eventData) => (
-              <SwiperSlide key={eventData.id}>
+              <SwiperSlide key={eventData.id} className="max-sm:px-6">
                 <Event {...eventData} />
               </SwiperSlide>
             ))}
@@ -81,95 +80,63 @@ function Event(props: ConditionalLoading<EventCompactType>) {
   const { isLoading } = props;
 
   return (
-    <Card
-      classNames={{
-        header: "flex flex-col items-start gap-3 py-6 text-start",
-        footer: "flex flex-col gap-3",
-      }}
-    >
-      <CardHeader>
-        {isLoading ? (
-          <Skeleton className="h-7 w-10/12 rounded-lg" />
-        ) : (
-          <h3 className="line-clamp-1 text-lg font-medium">{props.name}</h3>
-        )}
-
+    <Card isFooterBlurred>
+      <CardHeader className="flex flex-col items-start gap-3 px-3 py-6 text-start">
         {isLoading ? (
           <Skeleton className="h-5 w-11/12 rounded-lg" />
         ) : (
           <p className="line-clamp-1 text-sm text-default-500">{props.description}</p>
         )}
-      </CardHeader>
-      <CardBody>
         {isLoading ? (
-          <Skeleton className="aspect-video w-full rounded-xl" />
+          <Skeleton className="h-7 w-10/12 rounded-lg" />
         ) : (
-          <Image
-            alt={props.name}
-            className="aspect-video h-auto w-full rounded-xl object-cover"
-            src={props.imageUrl}
-            height={800}
-            width={450}
-            priority
-          />
+          <h3 className="line-clamp-1 text-lg font-medium">{props.name}</h3>
         )}
-      </CardBody>
-      <CardFooter>
-        <div className="mr-auto flex flex-col justify-start gap-3 py-6 text-sm text-default-700 [&>div]:flex [&>div]:items-center [&>div]:gap-x-1.5 [&_svg]:h-6 [&_svg]:w-6">
+      </CardHeader>
+      {isLoading ? (
+        <Skeleton className="aspect-square w-full rounded-xl" />
+      ) : (
+        <Image
+          alt={props.name}
+          className="aspect-square h-auto w-full rounded-xl object-cover"
+          src={props.imageUrl}
+          height={800}
+          width={450}
+          priority
+        />
+      )}
+      <CardFooter className="absolute bottom-0 z-10 flex flex-col items-stretch gap-1.5 border-t border-neutral-300/25 bg-white/25 p-3 dark:bg-black/25 [&_svg]:h-6 [&_svg]:w-6">
+        <div className="flex justify-between">
           {isLoading ? (
-            <Skeleton className="h-6 w-48 rounded-lg" />
+            <Skeleton className="h-8 w-48 rounded-lg" />
           ) : (
-            <div>
-              <CalendarDaysIcon />
-              <p>
-                {new Date(props.date).toLocaleDateString("en-UK", {
-                  day: "numeric",
-                  weekday: "long",
-                  month: "long",
-                })}
-              </p>
-            </div>
+            <Chip variant="light" size="lg" startContent={<CalendarDaysIcon />}>
+              {new Date(props.date).toLocaleDateString("en-UK", {
+                day: "numeric",
+                weekday: "long",
+                month: "long",
+              })}
+            </Chip>
           )}
 
           {isLoading ? (
-            <Skeleton className="h-6 w-48 rounded-lg" />
+            <Skeleton className="h-8 w-24 rounded-lg" />
           ) : (
-            <div>
-              <ClockIcon />
-              <p>
-                {new Date(props.date).toLocaleTimeString("en-UK", {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
-              </p>
-            </div>
-          )}
-
-          {isLoading ? (
-            <Skeleton className="h-6 w-48 rounded-lg" />
-          ) : (
-            <div>
-              <MapPinIcon />
-              <p>{props.venue}</p>
-            </div>
+            <Chip variant="light" size="lg" startContent={<ClockIcon />}>
+              {new Date(props.date).toLocaleTimeString("en-UK", {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </Chip>
           )}
         </div>
 
         {isLoading ? (
-          <Skeleton className="ml-auto h-10 w-40 rounded-lg" />
+          <Skeleton className="h-8 w-full rounded-lg" />
         ) : (
-          <Tooltip content="Login as a sponsor to see this event" delay={0} closeDelay={200}>
-            <Button
-              as={NextLink}
-              href="/login"
-              color="danger"
-              variant="light"
-              className="ml-auto"
-              endContent={<ArrowLongRightIcon className="h-4 w-4" />}
-            >
-              Read more
-            </Button>
-          </Tooltip>
+          <Chip variant="light" size="lg" startContent={<MapPinIcon />}>
+            {props.venue}
+          </Chip>
         )}
       </CardFooter>
     </Card>

@@ -31,7 +31,7 @@ function MyEvent({ eventData }: { eventData: EventType }) {
     <EventCard
       key={eventData.id}
       eventData={eventData}
-      endContent={<StatusChip status={eventData.status} />}
+      bottomEndContent={<StatusChip status={eventData.status} />}
       footerContent={
         <div className="flex w-full justify-end gap-3">
           <Button variant="ghost" color="danger" isLoading={isRejectLoading} onPress={() => rejectEvent(eventData.id)}>

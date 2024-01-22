@@ -2,7 +2,7 @@
 
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react";
 import { useDeleteEventMutation, useGetEventsOrganizedQuery, useUpdateEventMutation } from "#/services";
-import { EventCard } from "#/components";
+import { EventCard, StatusChip } from "#/components";
 import { EventType } from "#/entities";
 import { useForm } from "react-hook-form";
 import { updateEventRequestSchema, UpdateEventRequestType } from "#/schemas";
@@ -48,7 +48,8 @@ function MyEvent({ eventData }: { eventData: EventType }) {
     <>
       <EventCard
         eventData={eventData}
-        endContent={
+        topEndContent={<StatusChip status={eventData.status} />}
+        bottomEndContent={
           <Button
             color="primary"
             variant="light"
