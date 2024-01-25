@@ -61,7 +61,7 @@ function MySponsorship({ sponsorshipData }: { sponsorshipData: SponsorshipType }
             >
               Sponsored to <span className="font-bold">{sponsorshipData.eventPackage.name}</span> Package
             </p>
-            <h4 className="text-xl font-medium">Sponsor's special request:</h4>
+            <h4 className="text-xl font-medium">Sponsor&apos;s special request:</h4>
             <p className="text-sm text-default-500">{sponsorshipData.comments}</p>
           </div>
         </div>
