@@ -2,18 +2,17 @@
 
 import {
   Button,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
   Link,
-  Listbox,
-  ListboxItem,
   Navbar,
   NavbarBrand,
   NavbarContent,
   NavbarItem,
   NavbarMenu,
   NavbarMenuToggle,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
   User,
 } from "@nextui-org/react";
 import { useEffect, useState } from "react";
@@ -23,7 +22,7 @@ import { usePathname } from "next/navigation";
 import { useLogoutMutation } from "#/services";
 import { useAppSelector } from "#/store";
 import { selectAuth } from "#/store/slices";
-import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
+import { ArrowTopRightOnSquareIcon, UserIcon } from "@heroicons/react/24/outline";
 
 export function MyNavbar({ items }: { items: Record<"title" | "link", string>[] }) {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
@@ -85,8 +84,8 @@ export function MyNavbar({ items }: { items: Record<"title" | "link", string>[] 
           ) : (
             <>
               <NavbarItem>
-                <Popover showArrow placement="bottom-end" crossOffset={-4} shouldBlockScroll className="min-w-[240px]">
-                  <PopoverTrigger>
+                <Dropdown showArrow placement="bottom-end" crossOffset={-4} className="min-w-[240px]">
+                  <DropdownTrigger>
                     <User
                       as="button"
                       classNames={{ base: "flex-row-reverse transition-transform", wrapper: "items-end" }}
@@ -97,27 +96,33 @@ export function MyNavbar({ items }: { items: Record<"title" | "link", string>[] 
                         classNames: { name: "text-sm" },
                       }}
                     />
-                  </PopoverTrigger>
-                  <PopoverContent>
-                    <Listbox
-                      aria-label="Account menu"
-                      variant="shadow"
-                      topContent={<p className="p-2 text-default-500">{user.email}</p>}
+                  </DropdownTrigger>
+                  <DropdownMenu
+                    aria-label="Account menu"
+                    variant="shadow"
+                    topContent={<p className="p-2 text-default-500">{user.email}</p>}
+                  >
+                    <DropdownItem
+                      key="dashboard"
+                      as={NextLink}
+                      href={`/${user.role.toLowerCase()}`}
+                      endContent={<ArrowTopRightOnSquareIcon className="h-4 w-4" />}
                     >
-                      <ListboxItem
-                        key="dashboard"
-                        as={NextLink}
-                        href={`/${user.role.toLowerCase()}`}
-                        endContent={<ArrowTopRightOnSquareIcon className="h-4 w-4" />}
-                      >
-                        Go to dashboard
-                      </ListboxItem>
-                      <ListboxItem key="logout" onPress={() => logout()}>
-                        Log out
-                      </ListboxItem>
-                    </Listbox>
-                  </PopoverContent>
-                </Popover>
+                      Go to dashboard
+                    </DropdownItem>
+                    <DropdownItem
+                      key="profile"
+                      as={NextLink}
+                      href="/profile"
+                      endContent={<UserIcon className="h-4 w-4" />}
+                    >
+                      Edit your account
+                    </DropdownItem>
+                    <DropdownItem key="logout" onPress={() => logout()}>
+                      Log out
+                    </DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
               </NavbarItem>
             </>
           ))}

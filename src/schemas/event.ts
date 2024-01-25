@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { EventEntity, ItemEntity, PackageEntity, StatusEntity } from "#/entities";
 
-export const eventCompactSchema = EventEntity.omit({ packages: true, organizer: true });
+export const eventCompactSchema = EventEntity.omit({ packages: true });
 
 export interface EventCompactType extends z.infer<typeof eventCompactSchema> {}
 
@@ -14,27 +14,27 @@ export const eventSponsoredSchema = ItemEntity.pick({ id: true })
 
 export type EventSponsoredType = z.infer<typeof eventSponsoredSchema>;
 
-export const createEventRequestSchema = EventEntity.omit({
-  id: true,
-  imageUrl: true,
-  organizer: true,
-  status: true,
-  createdAt: true,
-  updatedAt: true,
-  type: true,
-  categories: true,
-  packages: true,
-}).extend({
-  type: ItemEntity.pick({ id: true }),
-  categories: ItemEntity.pick({ id: true }).array().nonempty({ message: "Required" }),
-  packages: PackageEntity.omit({ id: true, features: true })
-    .extend({ features: ItemEntity.pick({ name: true }).array().nonempty({ message: "Required" }) })
-    .array()
-    .nonempty({ message: "Required" }),
-  file: z.custom<File>((v) => v instanceof File, {
-    message: "Required",
-  }),
-});
+export const createEventRequestSchema = eventCompactSchema
+  .omit({
+    id: true,
+    imageUrl: true,
+    status: true,
+    createdAt: true,
+    updatedAt: true,
+    type: true,
+    categories: true,
+  })
+  .extend({
+    type: ItemEntity.pick({ id: true }),
+    categories: ItemEntity.pick({ id: true }).array().nonempty({ message: "Required" }),
+    packages: PackageEntity.omit({ id: true, features: true })
+      .extend({ features: ItemEntity.pick({ name: true }).array().nonempty({ message: "Required" }) })
+      .array()
+      .nonempty({ message: "Required" }),
+    file: z.custom<File>((v) => v instanceof File, {
+      message: "Required",
+    }),
+  });
 
 export type CreateEventRequestType = z.infer<typeof createEventRequestSchema>;
 

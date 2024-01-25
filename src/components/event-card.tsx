@@ -1,20 +1,43 @@
-import { Card, CardBody, CardFooter, Chip, ScrollShadow, Skeleton, Tooltip } from "@nextui-org/react";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Chip,
+  ScrollShadow,
+  Skeleton,
+  Tooltip,
+} from "@nextui-org/react";
 import { ConditionalLoading, StyleProps } from "#/types";
 import Image from "next/image";
-import { CalendarDaysIcon, ClockIcon, MapPinIcon, UsersIcon } from "@heroicons/react/24/outline";
+import { ArrowLongRightIcon, CalendarDaysIcon, ClockIcon, MapPinIcon, UsersIcon } from "@heroicons/react/24/outline";
 import { ReactNode } from "react";
 import { EventCompactType } from "#/schemas";
 import { formatDistanceToNow } from "date-fns";
+import NextLink from "next/link";
+import { StatusType } from "#/entities";
+import { StatusChip } from "#/components/status-chip";
 
 export function EventCard(
-  props: ConditionalLoading<{ eventData: EventCompactType }> &
-    Partial<Record<"topEndContent" | "bottomEndContent" | "footerContent", ReactNode>> &
-    Pick<StyleProps, "className">,
+  props: ConditionalLoading<{ eventData: EventCompactType } & Partial<StatusType>> &
+    Partial<Record<"headerContent" | "footerContent", ReactNode>> & { hideStatus?: boolean } & StyleProps,
 ) {
-  const { isLoading, eventData, topEndContent, bottomEndContent, footerContent, className } = props;
+  const {
+    isLoading,
+    eventData,
+    status = eventData?.status,
+    hideStatus = false,
+    headerContent,
+    footerContent,
+    className,
+    style,
+  } = props;
 
   return (
-    <Card className={className}>
+    <Card className={className} style={style}>
+      {headerContent && <CardHeader className="block w-full p-6 pb-0">{headerContent}</CardHeader>}
+
       <CardBody className="flex flex-col gap-6 p-6 lg:flex-row">
         {isLoading ? (
           <Skeleton className="aspect-square h-auto w-full rounded-xl sm:aspect-video lg:aspect-[4/3] lg:h-[312px] lg:w-auto" />
@@ -30,7 +53,7 @@ export function EventCard(
         )}
 
         <div className="h-fit flex-1 space-y-3">
-          <div className="flex items-start gap-3 max-sm:flex-col-reverse sm:justify-between">
+          <div className="flex gap-3 max-sm:flex-col-reverse max-sm:items-start sm:justify-between">
             {isLoading ? (
               <Skeleton className="h-7 w-48 rounded-full" />
             ) : (
@@ -39,13 +62,14 @@ export function EventCard(
               </Chip>
             )}
 
-            {topEndContent}
+            {!hideStatus &&
+              (isLoading ? <Skeleton className="h-7 w-24 rounded-full" /> : status && <StatusChip status={status} />)}
           </div>
 
           <ScrollShadow
             hideScrollBar
             orientation="horizontal"
-            className="flex max-w-[240px] gap-3 sm:max-w-[480px] lg:max-w-[360px]"
+            className="flex w-[240px] gap-3 sm:w-[480px] lg:w-[360px]"
           >
             {isLoading
               ? Array(3)
@@ -123,21 +147,33 @@ export function EventCard(
             )}
           </div>
 
-          <div className="flex items-start justify-between gap-3">
+          <div className="flex items-center justify-between gap-3">
             {isLoading ? (
-              <Skeleton className="h-5 w-32 rounded-lg" />
+              <Skeleton className="h-5 w-24 rounded-lg" />
             ) : (
               <p className="text-sm text-default-500">
                 {formatDistanceToNow(new Date(eventData.createdAt), { addSuffix: true })}
               </p>
             )}
 
-            {bottomEndContent}
+            {isLoading ? (
+              <Skeleton className="h-10 w-32 rounded-lg" />
+            ) : (
+              <Button
+                as={NextLink}
+                variant="light"
+                color="primary"
+                href={`/event/${eventData.id}`}
+                endContent={<ArrowLongRightIcon className="h-4 w-4" />}
+              >
+                Read more
+              </Button>
+            )}
           </div>
         </div>
       </CardBody>
 
-      {footerContent && <CardFooter className="p-6 pt-0">{footerContent}</CardFooter>}
+      {footerContent && <CardFooter className="block w-full p-6 pt-0">{footerContent}</CardFooter>}
     </Card>
   );
 }

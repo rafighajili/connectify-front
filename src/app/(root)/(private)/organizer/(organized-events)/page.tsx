@@ -2,7 +2,7 @@
 
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react";
 import { useDeleteEventMutation, useGetEventsOrganizedQuery, useUpdateEventMutation } from "#/services";
-import { EventCard, StatusChip } from "#/components";
+import { EventCard } from "#/components";
 import { EventType } from "#/entities";
 import { useForm } from "react-hook-form";
 import { updateEventRequestSchema, UpdateEventRequestType } from "#/schemas";
@@ -48,16 +48,25 @@ function MyEvent({ eventData }: { eventData: EventType }) {
     <>
       <EventCard
         eventData={eventData}
-        topEndContent={<StatusChip status={eventData.status} />}
-        bottomEndContent={
-          <Button
-            color="primary"
-            variant="light"
-            onPress={onOpen}
-            endContent={<PencilSquareIcon className="h-4 w-4" />}
-          >
-            Edit
-          </Button>
+        footerContent={
+          <div className="flex justify-between">
+            <Button
+              color="danger"
+              variant="light"
+              isLoading={isDeleteLoading}
+              onPress={() => deleteEvent(eventData.id)}
+            >
+              Delete this event
+            </Button>
+            <Button
+              color="primary"
+              variant="ghost"
+              onPress={onOpen}
+              endContent={<PencilSquareIcon className="h-4 w-4" />}
+            >
+              Edit
+            </Button>
+          </div>
         }
       />
 
@@ -72,16 +81,6 @@ function MyEvent({ eventData }: { eventData: EventType }) {
             </ModalBody>
 
             <ModalFooter>
-              <Button
-                variant="light"
-                color="danger"
-                size="lg"
-                type="button"
-                isLoading={isDeleteLoading}
-                onPress={() => deleteEvent(eventData.id)}
-              >
-                Delete this event
-              </Button>
               <Button color="primary" size="lg" type="submit" isLoading={isLoading}>
                 Edit this event
               </Button>

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ItemEntity } from "#/entities";
+import { ItemEntity, TimeStampEntity } from "#/entities";
 
 const baseSchema = z.object({
   firstName: z.string().min(1, "Required"),
@@ -23,14 +23,14 @@ export const contactSponsorRequestSchema = baseSchema.extend({
 
 export type ContactSponsorRequestType = z.infer<typeof contactSponsorRequestSchema>;
 
-export const contactResponseSchema = ItemEntity.pick({ id: true }).merge(
-  contactRequestSchema.extend({ phoneNumber: z.string() }),
-);
+export const contactResponseSchema = ItemEntity.pick({ id: true })
+  .merge(contactRequestSchema.extend({ phoneNumber: z.string() }))
+  .merge(TimeStampEntity.pick({ createdAt: true }));
 
-export type ContactResponseType = z.infer<typeof contactResponseSchema>;
+export interface ContactResponseType extends z.infer<typeof contactResponseSchema> {}
 
-export const contactSponsorResponseSchema = ItemEntity.pick({ id: true }).merge(
-  contactSponsorRequestSchema.extend({ phoneNumber: z.string() }),
-);
+export const contactSponsorResponseSchema = ItemEntity.pick({ id: true })
+  .merge(contactSponsorRequestSchema.extend({ phoneNumber: z.string() }))
+  .merge(TimeStampEntity.pick({ createdAt: true }));
 
-export type ContactSponsorResponseType = z.infer<typeof contactSponsorResponseSchema>;
+export interface ContactSponsorResponseType extends z.infer<typeof contactSponsorResponseSchema> {}

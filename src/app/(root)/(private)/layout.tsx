@@ -11,7 +11,7 @@ export default function PrivateLayout({ children }: Children) {
   const { isLoading, user } = useAppSelector(selectAuth);
   const router = useRouter();
   const segment = useSelectedLayoutSegment();
-  const isCorrectSegment = user?.role.toLowerCase() === segment;
+  const isCorrectSegment = segment === user?.role.toLowerCase() || segment === "event" || segment === "profile";
 
   useEffect(() => {
     if (!isLoading && !(user && isCorrectSegment)) {

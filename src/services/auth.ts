@@ -1,6 +1,12 @@
 import { apiSlice } from "#/store/slices";
-import { LoginRequestType, RegisterRequestType } from "#/schemas";
+import {
+  LoginRequestType,
+  RegisterRequestType,
+  UpdateUserInfoRequestType,
+  UpdateUserPasswordRequestType,
+} from "#/schemas";
 import { UserEntity, UserType } from "#/entities";
+import { objectToFormData } from "#/utils";
 
 export const authService = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -27,6 +33,11 @@ export const authService = apiSlice.injectEndpoints({
       query: () => ({ url: `/auth/me`, method: "get" }),
       transformResponse: (res: unknown) => UserEntity.parse(res),
     }),
+
+    updateUser: builder.mutation<UserType, Partial<UpdateUserInfoRequestType & UpdateUserPasswordRequestType>>({
+      query: (body) => ({ url: `/auth/me`, method: "patch", body: objectToFormData(body) }),
+      transformResponse: (res: unknown) => UserEntity.parse(res),
+    }),
   }),
 });
 
@@ -36,4 +47,5 @@ export const {
   useLoginMutation,
   useLogoutMutation,
   useGetUserQuery,
+  useUpdateUserMutation,
 } = authService;

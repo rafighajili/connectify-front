@@ -6,6 +6,7 @@ import { registerRequestSchema, RegisterRequestType } from "#/schemas";
 import { useRegisterOrganizerMutation } from "#/services";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { DevicePhoneMobileIcon, EnvelopeIcon, KeyIcon } from "@heroicons/react/24/outline";
 
 export default function RegisterPage() {
   const [registerOrganizer, { isLoading }] = useRegisterOrganizerMutation();
@@ -41,7 +42,13 @@ export default function RegisterPage() {
         control={control}
         name="email"
         render={({ field, fieldState: { invalid, error } }) => (
-          <Input label="Your email" {...field} isInvalid={invalid} errorMessage={error?.message} />
+          <Input
+            label="Your email"
+            endContent={<EnvelopeIcon className="h-6 w-6 text-default-500" />}
+            {...field}
+            isInvalid={invalid}
+            errorMessage={error?.message}
+          />
         )}
       />
       <Controller
@@ -51,6 +58,7 @@ export default function RegisterPage() {
           <Input
             label="Your phone number"
             startContent={<span className="text-sm text-default-500">+944</span>}
+            endContent={<DevicePhoneMobileIcon className="h-6 w-6 text-default-500" />}
             {...field}
             isInvalid={invalid}
             errorMessage={error?.message}
@@ -61,7 +69,14 @@ export default function RegisterPage() {
         control={control}
         name="password"
         render={({ field, fieldState: { invalid, error } }) => (
-          <Input label="Your password" type="password" {...field} isInvalid={invalid} errorMessage={error?.message} />
+          <Input
+            label="Your password"
+            type="password"
+            endContent={<KeyIcon className="h-6 w-6 text-default-500" />}
+            {...field}
+            isInvalid={invalid}
+            errorMessage={error?.message}
+          />
         )}
       />
 

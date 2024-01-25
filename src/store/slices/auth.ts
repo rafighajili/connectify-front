@@ -38,6 +38,10 @@ const authSlice = createSlice({
     builder.addMatcher(authService.endpoints.getUser.matchRejected, (state) => {
       state.isLoading = false;
     });
+
+    builder.addMatcher(authService.endpoints.updateUser.matchFulfilled, (state, { payload }) => {
+      state.user = payload;
+    });
   },
 });
 

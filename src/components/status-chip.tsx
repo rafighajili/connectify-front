@@ -1,5 +1,5 @@
-import { StatusType } from "#/entities";
 import { Chip } from "@nextui-org/react";
+import { StatusType } from "#/entities";
 
 export function StatusChip({ status }: StatusType) {
   return (

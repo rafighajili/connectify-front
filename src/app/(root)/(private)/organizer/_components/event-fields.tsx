@@ -134,7 +134,7 @@ export function EventFields({ control }: ControlProp) {
               label="Estimated crowd size"
               type="number"
               step={20}
-              startContent={<UserGroupIcon className="h-6 w-6 text-default-500" />}
+              endContent={<UserGroupIcon className="h-6 w-6 text-default-500" />}
               {...field}
               isInvalid={invalid}
               errorMessage={error?.message}

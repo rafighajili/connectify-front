@@ -1,12 +1,10 @@
 "use client";
 
 import { useGetEventsSponsoredQuery } from "#/services";
-import { EventCard, StatusChip } from "#/components";
-import { Button, Skeleton } from "@nextui-org/react";
+import { EventCard } from "#/components";
+import { Skeleton } from "@nextui-org/react";
 import { twMerge } from "tailwind-merge";
 import { packageClassNameHelper } from "#/utils";
-import NextLink from "next/link";
-import { ArrowLongRightIcon } from "@heroicons/react/24/outline";
 
 export default function SponsoredEventsPage() {
   const { data: eventsSponsored, isLoading: isEventsLoading } = useGetEventsSponsoredQuery({});
@@ -37,18 +35,7 @@ export default function SponsoredEventsPage() {
               <EventCard
                 key={eventSponsored.id}
                 eventData={eventSponsored.eventPackage.event}
-                topEndContent={<StatusChip status={eventSponsored.status} />}
-                bottomEndContent={
-                  <Button
-                    as={NextLink}
-                    variant="light"
-                    color="primary"
-                    href={`/sponsor/${eventSponsored.eventPackage.event.id}`}
-                    endContent={<ArrowLongRightIcon className="h-4 w-4" />}
-                  >
-                    Go to this event
-                  </Button>
-                }
+                status={eventSponsored.status}
                 footerContent={
                   eventSponsored.comments && (
                     <div className="space-y-1.5">

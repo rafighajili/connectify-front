@@ -52,7 +52,7 @@ export default function AdminSponsorsPage() {
   return (
     <div className="space-y-12">
       <div className="flex items-start gap-6 max-sm:flex-col sm:items-center sm:justify-between">
-        <h1 className="text-4xl">Sponsors</h1>
+        <h1 className="text-4xl font-medium">Sponsors</h1>
         <Button variant="ghost" onPress={onOpen}>
           Register a sponsor
         </Button>
@@ -72,21 +72,21 @@ export default function AdminSponsorsPage() {
                   control={control}
                   name="firstName"
                   render={({ field, fieldState: { invalid, error } }) => (
-                    <Input label="Your name" {...field} isInvalid={invalid} errorMessage={error?.message} />
+                    <Input label="Sponsor name" {...field} isInvalid={invalid} errorMessage={error?.message} />
                   )}
                 />
                 <Controller
                   control={control}
                   name="lastName"
                   render={({ field, fieldState: { invalid, error } }) => (
-                    <Input label="Your surname" {...field} isInvalid={invalid} errorMessage={error?.message} />
+                    <Input label="Sponsor surname" {...field} isInvalid={invalid} errorMessage={error?.message} />
                   )}
                 />
                 <Controller
                   control={control}
                   name="email"
                   render={({ field, fieldState: { invalid, error } }) => (
-                    <Input label="Your email" {...field} isInvalid={invalid} errorMessage={error?.message} />
+                    <Input label="Sponsor email" {...field} isInvalid={invalid} errorMessage={error?.message} />
                   )}
                 />
                 <Controller
@@ -94,7 +94,7 @@ export default function AdminSponsorsPage() {
                   name="phoneNumber"
                   render={({ field, fieldState: { invalid, error } }) => (
                     <Input
-                      label="Your phone number"
+                      label="Sponsor phone number"
                       startContent={<span className="text-sm text-default-500">+944</span>}
                       {...field}
                       isInvalid={invalid}
@@ -107,7 +107,7 @@ export default function AdminSponsorsPage() {
                   name="password"
                   render={({ field, fieldState: { invalid, error } }) => (
                     <Input
-                      label="Your password"
+                      label="Sponsor password"
                       type="password"
                       {...field}
                       isInvalid={invalid}
@@ -134,16 +134,21 @@ export default function AdminSponsorsPage() {
           {contactsData.map((contactData) => (
             <Card key={contactData.id}>
               <CardHeader>
-                <p className="text-xl font-medium">{`${contactData.firstName} ${contactData.lastName}`}</p>
+                <p className="text-xl font-medium">{contactData.companyName}</p>
               </CardHeader>
               <Divider />
-              <CardBody>
-                <p className="text-3xl">{contactData.companyName}</p>
+              <CardBody className="grid grid-cols-2 gap-3">
+                <Input isReadOnly label="First name" defaultValue={contactData.firstName} />
+                <Input isReadOnly label="Last name" defaultValue={contactData.lastName} />
+                <Input isReadOnly label="Email" defaultValue={contactData.email} />
+                <Input isReadOnly label="Phone number" defaultValue={contactData.phoneNumber} />
               </CardBody>
               <Divider />
-              <CardFooter className="flex-col items-start">
-                <p className="text-sm text-default-500">{contactData.email}</p>
-                <p className="text-sm text-default-500">{contactData.phoneNumber}</p>
+              <CardFooter>
+                <p className="text-sm text-default-500">
+                  {new Date(contactData.createdAt).toLocaleDateString("en-UK")}{" "}
+                  {new Date(contactData.createdAt).toLocaleTimeString("en-UK")}
+                </p>
               </CardFooter>
             </Card>
           ))}

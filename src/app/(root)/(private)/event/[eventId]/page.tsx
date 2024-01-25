@@ -13,6 +13,7 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
+  ScrollShadow,
   Skeleton,
   Textarea,
   Tooltip,
@@ -27,6 +28,8 @@ import { Controller, useForm } from "react-hook-form";
 import { createSponsorshipRequestSchema, CreateSponsorshipRequestType } from "#/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
+import { useAppSelector } from "#/store";
+import { selectAuth } from "#/store/slices";
 
 export default function EventPage({ params: { eventId } }: { params: { eventId: string } }) {
   const { data: eventData } = useGetEventQuery(eventId);
@@ -39,16 +42,18 @@ export default function EventPage({ params: { eventId } }: { params: { eventId: 
         <Skeleton className="h-10 rounded-lg" />
       )}
 
-      <div className="flex gap-6 max-lg:flex-col lg:justify-between">
-        {eventData ? (
-          <Chip size="lg" color="primary" variant="faded">
-            {eventData.type.name}
-          </Chip>
-        ) : (
-          <Skeleton className="h-8 w-36 rounded-full" />
-        )}
+      <div className="grid gap-6 lg:grid-cols-[1fr,auto]">
+        <div className="max-lg:order-1">
+          {eventData ? (
+            <Chip size="lg" color="primary" variant="faded">
+              {eventData.type.name}
+            </Chip>
+          ) : (
+            <Skeleton className="h-8 w-36 rounded-full" />
+          )}
+        </div>
 
-        <div className="flex gap-3 max-sm:flex-col">
+        <div className="flex gap-3 max-lg:order-3 max-sm:flex-col">
           {eventData ? (
             <>
               <Chip size="lg" variant="bordered" startContent={<UsersIcon className="h-6 w-6" />}>
@@ -77,29 +82,28 @@ export default function EventPage({ params: { eventId } }: { params: { eventId: 
           ) : (
             <>
               <Skeleton className="h-8 w-24 rounded-full" />
-              <Skeleton className="h-8 w-24 rounded-full" />
-              <Skeleton className="h-8 w-24 rounded-full" />
+              <Skeleton className="h-8 w-48 rounded-full" />
+              <Skeleton className="h-8 w-32 rounded-full" />
               <Skeleton className="h-8 w-24 rounded-full" />
             </>
           )}
         </div>
-      </div>
 
-      <div className="!mt-6 flex flex-wrap gap-6">
-        {eventData ? (
-          eventData.categories.map((category) => (
-            <Chip key={category.id} color="secondary" variant="flat">
-              {category.name}
-            </Chip>
-          ))
-        ) : (
-          <>
-            <Skeleton className="h-7 w-24 rounded-full" />
-            <Skeleton className="h-7 w-24 rounded-full" />
-            <Skeleton className="h-7 w-24 rounded-full" />
-            <Skeleton className="h-7 w-24 rounded-full" />
-          </>
-        )}
+        <ScrollShadow
+          hideScrollBar
+          orientation="horizontal"
+          className="flex max-w-full gap-3 max-lg:order-2 lg:col-span-2"
+        >
+          {eventData
+            ? eventData.categories.map((category) => (
+                <Chip key={category.id} size="lg" color="secondary" variant="flat">
+                  {category.name}
+                </Chip>
+              ))
+            : Array(6)
+                .fill(0)
+                .map((_, key) => <Skeleton key={key} className="h-8 w-24 flex-1 rounded-full" />)}
+        </ScrollShadow>
       </div>
 
       {eventData ? (
@@ -145,6 +149,8 @@ export default function EventPage({ params: { eventId } }: { params: { eventId: 
 function PackageCard(props: { packageData: PackageType }) {
   const { packageData } = props;
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  const { user } = useAppSelector(selectAuth);
 
   const [createSponsorship, { isLoading, isSuccess, isError }] = useCreateSponsorshipMutation();
 
@@ -200,13 +206,15 @@ function PackageCard(props: { packageData: PackageType }) {
 
         <CardFooter className="flex-col items-stretch gap-3 pt-12">
           <p className="text-center text-4xl font-bold tracking-wider">{packageData.price} ₼</p>
-          <Button
-            size="lg"
-            className={twMerge("h-24 text-xl", packageClassNameHelper[packageData.name].bg)}
-            onPress={onOpen}
-          >
-            Unlock Benefits
-          </Button>
+          {user?.role === "SPONSOR" && (
+            <Button
+              size="lg"
+              className={twMerge("h-24 text-xl", packageClassNameHelper[packageData.name].bg)}
+              onPress={onOpen}
+            >
+              Unlock Benefits
+            </Button>
+          )}
         </CardFooter>
       </Card>
 

@@ -12,7 +12,7 @@ export const EventEntity = ItemEntity.extend({
   type: ItemEntity,
   categories: ItemEntity.array().nonempty({ message: "Required" }),
   packages: PackageEntity.array().nonempty({ message: "Required" }),
-  organizer: UserEntity,
+  organizer: UserEntity.optional(),
 }).merge(StatusEntity.merge(TimeStampEntity));
 
 export type EventType = z.infer<typeof EventEntity>;

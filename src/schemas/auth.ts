@@ -19,3 +19,17 @@ export const registerRequestSchema = z
   .merge(loginRequestSchema);
 
 export type RegisterRequestType = z.infer<typeof registerRequestSchema>;
+
+export const updateUserInfoRequestSchema = registerRequestSchema.omit({ password: true });
+//     .extend({
+//   file: z.custom<File>((v) => v instanceof File || {}),
+// });
+
+export type UpdateUserInfoRequestType = z.infer<typeof updateUserInfoRequestSchema>;
+
+export const updateUserPasswordRequestSchema = z.object({
+  oldPassword: registerRequestSchema.shape.password,
+  newPassword: registerRequestSchema.shape.password,
+});
+
+export type UpdateUserPasswordRequestType = z.infer<typeof updateUserPasswordRequestSchema>;

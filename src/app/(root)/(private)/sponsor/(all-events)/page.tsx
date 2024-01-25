@@ -2,9 +2,6 @@
 
 import { useGetEventsQuery } from "#/services";
 import { EventCard } from "#/components";
-import { Button } from "@nextui-org/react";
-import NextLink from "next/link";
-import { ArrowLongRightIcon } from "@heroicons/react/24/outline";
 
 export default function AllEventsPage() {
   const { data: events, isLoading: isEventsLoading } = useGetEventsQuery({});
@@ -17,24 +14,8 @@ export default function AllEventsPage() {
         {isEventsLoading || !events
           ? Array(3)
               .fill(0)
-              .map((_, key) => <EventCard key={key} isLoading />)
-          : events.map((eventData) => (
-              <EventCard
-                key={eventData.id}
-                eventData={eventData}
-                bottomEndContent={
-                  <Button
-                    as={NextLink}
-                    variant="light"
-                    color="primary"
-                    href={`/sponsor/${eventData.id}`}
-                    endContent={<ArrowLongRightIcon className="h-4 w-4" />}
-                  >
-                    Read more
-                  </Button>
-                }
-              />
-            ))}
+              .map((_, key) => <EventCard key={key} isLoading hideStatus />)
+          : events.map((eventData) => <EventCard key={eventData.id} eventData={eventData} hideStatus />)}
       </div>
     </div>
   );
