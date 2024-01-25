@@ -14,9 +14,8 @@ type EventParamsType = Partial<{ skip: number; take: number; typeId: ItemType["i
 
 export const eventService = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    createEvent: builder.mutation<EventType, CreateEventRequestType>({
+    createEvent: builder.mutation<void, CreateEventRequestType>({
       query: (body) => ({ url: `/event`, method: "post", body: objectToFormData(body) }),
-      transformResponse: (res: unknown) => EventEntity.parse(res),
       invalidatesTags: ["Event"],
     }),
     getEvent: builder.query<EventType, EventType["id"]>({
