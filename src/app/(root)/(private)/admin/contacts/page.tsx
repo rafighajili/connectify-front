@@ -4,17 +4,17 @@ import { useGetContactQuery } from "#/services";
 import { Card, CardBody, CardFooter, Divider, Input, Spinner, Textarea } from "@nextui-org/react";
 
 export default function AdminContactsPage() {
-  const { data: contactsData } = useGetContactQuery();
+  const { data } = useGetContactQuery({});
 
   return (
     <div className="space-y-12">
       <h1 className="text-4xl font-medium">Contacts</h1>
 
-      {!contactsData ? (
+      {!data ? (
         <Spinner />
       ) : (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {contactsData.map((contactData) => (
+          {data.data.map((contactData) => (
             <Card key={contactData.id}>
               <CardBody className="grid grid-cols-2 gap-3">
                 <Input isReadOnly label="First name" defaultValue={contactData.firstName} />

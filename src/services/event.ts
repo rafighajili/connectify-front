@@ -1,5 +1,5 @@
 import { apiSlice } from "#/store/slices";
-import { EventEntity, EventType, ItemEntity, ItemType } from "#/entities";
+import { DataMetaEntity, DataMetaType, EventEntity, EventType, ItemEntity, ItemType } from "#/entities";
 import {
   CreateEventRequestType,
   eventCompactSchema,
@@ -9,8 +9,7 @@ import {
   UpdateEventRequestType,
 } from "#/schemas";
 import { objectToFormData } from "#/utils";
-
-type EventParamsType = Partial<{ skip: number; take: number; typeId: ItemType["id"]; categories: ItemType["id"][] }>;
+import { EventParamsType } from "#/types";
 
 export const eventService = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -33,29 +32,31 @@ export const eventService = apiSlice.injectEndpoints({
       invalidatesTags: (result, error, arg) => [{ type: "Event", id: arg }],
     }),
 
-    getEvents: builder.query<EventCompactType[], EventParamsType>({
+    getEvents: builder.query<DataMetaType<EventCompactType[]>, EventParamsType>({
       query: (params) => ({ url: `/event`, method: "get", params }),
-      transformResponse: (res: unknown) => eventCompactSchema.array().parse(res),
+      transformResponse: (res: unknown) => DataMetaEntity(eventCompactSchema.array()).parse(res),
       providesTags: (result, error, arg) =>
-        result ? ["Event", ...result.map(({ id }) => ({ type: "Event" as const, id }))] : ["Event"],
+        result ? ["Event", ...result.data.map(({ id }) => ({ type: "Event" as const, id }))] : ["Event"],
     }),
-    getEventsOrganized: builder.query<EventType[], EventParamsType>({
+    getEventsOrganized: builder.query<DataMetaType<EventType[]>, EventParamsType>({
       query: (params) => ({ url: `/event/organized`, method: "get", params }),
-      transformResponse: (res: unknown) => EventEntity.array().parse(res),
+      transformResponse: (res: unknown) => DataMetaEntity(EventEntity.array()).parse(res),
       providesTags: (result, error, arg) =>
-        result ? ["Event", ...result.map(({ id }) => ({ type: "Event" as const, id }))] : ["Event"],
+        result ? ["Event", ...result.data.map(({ id }) => ({ type: "Event" as const, id }))] : ["Event"],
     }),
-    getEventsSponsored: builder.query<EventSponsoredType[], EventParamsType>({
+    getEventsSponsored: builder.query<DataMetaType<EventSponsoredType[]>, EventParamsType>({
       query: (params) => ({ url: `/event/sponsored`, method: "get", params }),
-      transformResponse: (res: unknown) => eventSponsoredSchema.array().parse(res),
+      transformResponse: (res: unknown) => DataMetaEntity(eventSponsoredSchema.array()).parse(res),
       providesTags: (result, error, arg) =>
-        result ? ["Sponsorship", ...result.map(({ id }) => ({ type: "Sponsorship" as const, id }))] : ["Sponsorship"],
+        result
+          ? ["Sponsorship", ...result.data.map(({ id }) => ({ type: "Sponsorship" as const, id }))]
+          : ["Sponsorship"],
     }),
-    getEventsAdmin: builder.query<EventType[], EventParamsType>({
+    getEventsAdmin: builder.query<DataMetaType<EventType[]>, EventParamsType>({
       query: (params) => ({ url: `/event/admin`, method: "get", params }),
-      transformResponse: (res: unknown) => EventEntity.array().parse(res),
+      transformResponse: (res: unknown) => DataMetaEntity(EventEntity.array()).parse(res),
       providesTags: (result, error, arg) =>
-        result ? ["Event", ...result.map(({ id }) => ({ type: "Event" as const, id }))] : ["Event"],
+        result ? ["Event", ...result.data.map(({ id }) => ({ type: "Event" as const, id }))] : ["Event"],
     }),
 
     approveEvent: builder.mutation<EventType, ItemType["id"]>({

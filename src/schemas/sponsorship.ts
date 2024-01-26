@@ -7,7 +7,7 @@ export const createSponsorshipRequestSchema = z.object({
   comments: z.string().min(1, { message: "Required" }),
 });
 
-export type CreateSponsorshipRequestType = z.infer<typeof createSponsorshipRequestSchema>;
+export interface CreateSponsorshipRequestType extends z.infer<typeof createSponsorshipRequestSchema> {}
 
 export const sponsorshipSchema = eventSponsoredSchema.extend({ sponsor: UserEntity });
 

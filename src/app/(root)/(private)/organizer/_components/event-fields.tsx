@@ -1,8 +1,8 @@
 import { Control, Controller, useFieldArray } from "react-hook-form";
-import { Card, CardBody, CardHeader, Input, Select, SelectItem, Textarea } from "@nextui-org/react";
+import { Button, Card, CardBody, CardHeader, Input, Select, SelectItem, Switch, Textarea } from "@nextui-org/react";
 import { useGetEventCategoriesQuery, useGetEventTypesQuery } from "#/services";
 import { CreateEventRequestType } from "#/schemas";
-import { BanknotesIcon, UserGroupIcon } from "@heroicons/react/24/outline";
+import { BanknotesIcon, UserGroupIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { twMerge } from "tailwind-merge";
 import { packageClassNameHelper } from "#/utils";
 import { capitalize } from "@nextui-org/shared-utils";
@@ -134,7 +134,7 @@ export function EventFields({ control }: ControlProp) {
               label="Estimated crowd size"
               type="number"
               step={20}
-              endContent={<UserGroupIcon className="h-6 w-6 text-default-500" />}
+              startContent={<UserGroupIcon className="h-6 w-6 text-default-500" />}
               {...field}
               isInvalid={invalid}
               errorMessage={error?.message}
@@ -187,15 +187,17 @@ function PackageCard({
 
   return (
     <Card className={twMerge("border-2", packageClassNameHelper[packageData.name].border)}>
-      <CardHeader>
+      <CardHeader className="justify-between">
         <p
           className={twMerge(
-            "w-full text-center text-lg font-medium",
+            "w-full text-lg font-medium",
             capitalize(packageClassNameHelper[packageData.name].text).toLowerCase(),
           )}
         >
           {packageData.name}
         </p>
+
+        <Switch aria-label="Package activator" size="sm" />
       </CardHeader>
 
       <CardBody className="gap-y-6">
@@ -245,6 +247,11 @@ function PackageCardFeature({
           label={`${index + 1}. feature`}
           variant="bordered"
           size="sm"
+          endContent={
+            <Button isIconOnly size="sm" variant="light" color="danger" radius="full" className="translate-x-2">
+              <XMarkIcon className="h-4 w-4" />
+            </Button>
+          }
           {...field}
           isInvalid={invalid}
           errorMessage={error?.message}

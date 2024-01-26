@@ -11,8 +11,19 @@ export const EventEntity = ItemEntity.extend({
   imageUrl: z.string().url(),
   type: ItemEntity,
   categories: ItemEntity.array().nonempty({ message: "Required" }),
-  packages: PackageEntity.array().nonempty({ message: "Required" }),
   organizer: UserEntity.optional(),
+  packages: PackageEntity.array()
+    .nonempty({ message: "Required" })
+    .transform((arr) => {
+      const order = {
+        BRONZE: 0,
+        SILVER: 1,
+        GOLD: 2,
+        DIAMOND: 3,
+      };
+
+      return arr.sort((a, b) => order[a.name] - order[b.name]);
+    }),
 }).merge(StatusEntity.merge(TimeStampEntity));
 
-export type EventType = z.infer<typeof EventEntity>;
+export interface EventType extends z.infer<typeof EventEntity> {}

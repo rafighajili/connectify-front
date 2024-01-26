@@ -5,16 +5,17 @@ import { EventCard } from "#/components";
 import { Skeleton } from "@nextui-org/react";
 import { twMerge } from "tailwind-merge";
 import { packageClassNameHelper } from "#/utils";
+import { formatDistanceToNow } from "date-fns";
 
 export default function SponsoredEventsPage() {
-  const { data: eventsSponsored, isLoading: isEventsLoading } = useGetEventsSponsoredQuery({});
+  const { data, isLoading } = useGetEventsSponsoredQuery({});
 
   return (
     <div className="space-y-12">
       <h1 className="text-4xl font-medium">My Sponsored Events</h1>
 
       <div className="space-y-6">
-        {isEventsLoading || !eventsSponsored
+        {isLoading || !data
           ? Array(3)
               .fill(0)
               .map((_, key) => (
@@ -31,7 +32,7 @@ export default function SponsoredEventsPage() {
                   }
                 />
               ))
-          : eventsSponsored.map((eventSponsored) => (
+          : data.data.map((eventSponsored) => (
               <EventCard
                 key={eventSponsored.id}
                 eventData={eventSponsored.eventPackage.event}
@@ -45,8 +46,14 @@ export default function SponsoredEventsPage() {
                           packageClassNameHelper[eventSponsored.eventPackage.name].text,
                         )}
                       >
-                        Sponsored to <span className="font-bold">{eventSponsored.eventPackage.name}</span> Package
+                        <span>Sponsored to </span>
+                        <span className="font-bold">{eventSponsored.eventPackage.name}</span>
+                        <span> Package </span>
+                        <span className="text-xs font-normal text-default-500">
+                          {formatDistanceToNow(new Date(eventSponsored.createdAt), { addSuffix: true })}
+                        </span>
                       </p>
+
                       <h4 className="text-xl font-medium">Your special request:</h4>
                       <p className="text-sm text-default-500">{eventSponsored.comments}</p>
                     </div>

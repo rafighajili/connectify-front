@@ -9,7 +9,7 @@ import { EventFields } from "../_components";
 import { useEffect } from "react";
 
 export default function CreateEventPage() {
-  const [createEvent, { isLoading, isSuccess }] = useCreateEventMutation();
+  const [createEvent, { isLoading, isSuccess, isError }] = useCreateEventMutation();
 
   const { control, handleSubmit, reset } = useForm<CreateEventRequestType>({
     defaultValues: {
@@ -22,10 +22,10 @@ export default function CreateEventPage() {
       file: {} as File,
       size: 0,
       packages: [
-        { name: "BRONZE", price: 0, features: [{ name: "" }, { name: "" }, { name: "" }] },
-        { name: "SILVER", price: 0, features: [{ name: "" }, { name: "" }, { name: "" }] },
-        { name: "GOLD", price: 0, features: [{ name: "" }, { name: "" }, { name: "" }] },
-        { name: "DIAMOND", price: 0, features: [{ name: "" }, { name: "" }, { name: "" }] },
+        { name: "BRONZE", price: 0, features: [{ name: "" }] },
+        { name: "SILVER", price: 0, features: [{ name: "" }] },
+        { name: "GOLD", price: 0, features: [{ name: "" }] },
+        { name: "DIAMOND", price: 0, features: [{ name: "" }] },
       ],
     },
     resolver: zodResolver(createEventRequestSchema),
@@ -42,9 +42,11 @@ export default function CreateEventPage() {
       <h1 className="text-4xl font-medium">Create an event</h1>
 
       <Card className="p-6">
-        <CardHeader>
-          <h3 className="text-xl font-medium">Enter details of your event</h3>
-          {isSuccess && <p className="text-success-500">Your event was created successfully!</p>}
+        <CardHeader className="flex-col items-start text-start">
+          <h3 className="text-lg font-medium">Enter details of your event</h3>
+
+          {isSuccess && <p className="text-sm text-success-500">Your event was created successfully!</p>}
+          {isError && <p className="text-sm text-danger-500">Occurred some error.</p>}
         </CardHeader>
         <form onSubmit={handleSubmit(createEvent)}>
           <CardBody>

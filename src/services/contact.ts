@@ -7,23 +7,25 @@ import {
   contactSponsorResponseSchema,
   ContactSponsorResponseType,
 } from "#/schemas";
+import { DataMetaEntity, DataMetaType } from "#/entities";
+import { PageParamsType } from "#/types";
 
 export const contactService = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     createContact: builder.mutation<void, ContactRequestType>({
       query: (body) => ({ url: `/contact`, method: "post", body }),
     }),
-    getContact: builder.query<ContactResponseType[], void>({
-      query: () => ({ url: `/contact`, method: "get" }),
-      transformResponse: (res: unknown) => contactResponseSchema.array().parse(res),
+    getContact: builder.query<DataMetaType<ContactResponseType[]>, PageParamsType>({
+      query: (params) => ({ url: `/contact`, method: "get", params: { ...params, take: 12 } }),
+      transformResponse: (res: unknown) => DataMetaEntity(contactResponseSchema.array()).parse(res),
     }),
 
     createContactSponsor: builder.mutation<void, ContactSponsorRequestType>({
       query: (body) => ({ url: `/sponsor-contact`, method: "post", body }),
     }),
-    getContactSponsor: builder.query<ContactSponsorResponseType[], void>({
-      query: () => ({ url: `/sponsor-contact`, method: "get" }),
-      transformResponse: (res: unknown) => contactSponsorResponseSchema.array().parse(res),
+    getContactSponsor: builder.query<DataMetaType<ContactSponsorResponseType[]>, PageParamsType>({
+      query: (params) => ({ url: `/sponsor-contact`, method: "get", params: { ...params, take: 12 } }),
+      transformResponse: (res: unknown) => DataMetaEntity(contactSponsorResponseSchema.array()).parse(res),
     }),
   }),
 });

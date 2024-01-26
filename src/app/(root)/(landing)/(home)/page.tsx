@@ -7,7 +7,7 @@ import { MainSection, PartnersSection } from "../_components";
 import { useGetEventsQuery } from "#/services";
 
 export default function HomePage() {
-  const { data: events, isLoading: isEventsLoading } = useGetEventsQuery({});
+  const { data, isLoading } = useGetEventsQuery({});
 
   return (
     <>
@@ -32,7 +32,7 @@ export default function HomePage() {
       <section className="space-y-12 py-24 text-center">
         <h1 className="text-5xl font-medium">Latest Events</h1>
 
-        {isEventsLoading || !events ? <EventsSwiper isLoading /> : <EventsSwiper events={events} />}
+        {isLoading || !data ? <EventsSwiper isLoading /> : <EventsSwiper events={data.data} />}
 
         <Button
           variant="faded"

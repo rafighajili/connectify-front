@@ -1,7 +1,13 @@
 "use client";
 
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react";
-import { useDeleteEventMutation, useGetEventsOrganizedQuery, useUpdateEventMutation } from "#/services";
+import {
+  useDeleteEventMutation,
+  useGetEventCategoriesQuery,
+  useGetEventsOrganizedQuery,
+  useGetEventTypesQuery,
+  useUpdateEventMutation,
+} from "#/services";
 import { EventCard } from "#/components";
 import { EventType } from "#/entities";
 import { useForm } from "react-hook-form";
@@ -12,18 +18,20 @@ import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import { useEffect } from "react";
 
 export default function OrganizedEventsPage() {
-  const { data: events, isLoading: isEventsLoading } = useGetEventsOrganizedQuery({});
+  const { data, isLoading } = useGetEventsOrganizedQuery({});
+  const { isLoading: isEventTypesLoading } = useGetEventTypesQuery();
+  const { isLoading: isEventCategoriesLoading } = useGetEventCategoriesQuery();
 
   return (
     <div className="space-y-12">
       <h1 className="text-4xl font-medium">My events</h1>
 
       <div className="space-y-6">
-        {isEventsLoading || !events
+        {isLoading || !data || isEventTypesLoading || isEventCategoriesLoading
           ? Array(3)
               .fill(0)
               .map((_, key) => <EventCard key={key} isLoading />)
-          : events.map((eventData) => <MyEvent key={eventData.id} eventData={eventData} />)}
+          : data.data.map((eventData) => <MyEvent key={eventData.id} eventData={eventData} />)}
       </div>
     </div>
   );
@@ -32,16 +40,17 @@ export default function OrganizedEventsPage() {
 function MyEvent({ eventData }: { eventData: EventType }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const [updateEvent, { isLoading }] = useUpdateEventMutation();
+  const [updateEvent, { isLoading, isSuccess, isError, reset: resetApi }] = useUpdateEventMutation();
   const [deleteEvent, { isLoading: isDeleteLoading }] = useDeleteEventMutation();
 
-  const { control, handleSubmit, reset } = useForm<UpdateEventRequestType>({
+  const { control, handleSubmit, reset, setValue } = useForm<UpdateEventRequestType>({
     defaultValues: eventData,
     resolver: zodResolver(updateEventRequestSchema),
   });
 
   useEffect(() => {
-    reset();
+    reset(eventData);
+    resetApi();
   }, [isOpen]);
 
   return (
@@ -72,7 +81,12 @@ function MyEvent({ eventData }: { eventData: EventType }) {
 
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="4xl" scrollBehavior="outside">
         <ModalContent>
-          <ModalHeader>Edit your event</ModalHeader>
+          <ModalHeader className="flex-col items-start text-start">
+            <h3 className="text-lg font-medium">Edit your event</h3>
+
+            {isSuccess && <p className="text-sm text-success-500">Your event was updated successfully!</p>}
+            {isError && <p className="text-sm text-danger-500">Occurred some error.</p>}
+          </ModalHeader>
 
           <form onSubmit={handleSubmit(updateEvent)}>
             <ModalBody>

@@ -23,7 +23,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 
 export default function AdminSponsorsPage() {
-  const { data: contactsData } = useGetContactSponsorQuery();
+  const { data } = useGetContactSponsorQuery({});
   const [registerSponsor, { isLoading, isSuccess, isError, reset: resetApi }] = useRegisterSponsorMutation();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
@@ -59,11 +59,11 @@ export default function AdminSponsorsPage() {
 
         <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
           <ModalContent>
-            <ModalHeader className="flex-col">
-              <h3>Register a sponsor</h3>
+            <ModalHeader className="flex-col items-start text-start">
+              <h3 className="text-lg font-medium">Register a sponsor</h3>
 
-              {isSuccess && <p className="text-sm font-normal text-success-500">Registered successfully!</p>}
-              {isError && <p className="text-sm font-normal text-danger-500">Occurred some error.</p>}
+              {isSuccess && <p className="text-sm text-success-500">Registered successfully!</p>}
+              {isError && <p className="text-sm text-danger-500">Occurred some error.</p>}
             </ModalHeader>
 
             <form onSubmit={handleSubmit(registerSponsor)}>
@@ -127,11 +127,11 @@ export default function AdminSponsorsPage() {
         </Modal>
       </div>
 
-      {!contactsData ? (
+      {!data ? (
         <Spinner />
       ) : (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {contactsData.map((contactData) => (
+          {data.data.map((contactData) => (
             <Card key={contactData.id}>
               <CardHeader>
                 <p className="text-xl font-medium">{contactData.companyName}</p>

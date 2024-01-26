@@ -6,20 +6,21 @@ import { twMerge } from "tailwind-merge";
 import { packageClassNameHelper } from "#/utils";
 import { Button, User } from "@nextui-org/react";
 import { SponsorshipType } from "#/schemas";
+import { formatDistanceToNow } from "date-fns";
 
 export default function AdminRequestsPage() {
-  const { data: sponsorshipsData, isLoading: isSponsorshipsLoading } = useGetSponsorshipsQuery();
+  const { data, isLoading } = useGetSponsorshipsQuery({});
 
   return (
     <div className="space-y-12">
       <h1 className="text-4xl font-medium">Requests</h1>
 
       <div className="space-y-6">
-        {isSponsorshipsLoading || !sponsorshipsData
+        {isLoading || !data
           ? Array(3)
               .fill(0)
               .map((_, key) => <EventCard key={key} isLoading className="border-2 border-default-300" />)
-          : sponsorshipsData.map((sponsorshipData) => (
+          : data.data.map((sponsorshipData) => (
               <MySponsorship key={sponsorshipData.id} sponsorshipData={sponsorshipData} />
             ))}
       </div>
@@ -59,8 +60,14 @@ function MySponsorship({ sponsorshipData }: { sponsorshipData: SponsorshipType }
             <p
               className={twMerge("text-sm font-medium", packageClassNameHelper[sponsorshipData.eventPackage.name].text)}
             >
-              Sponsored to <span className="font-bold">{sponsorshipData.eventPackage.name}</span> Package
+              <span>Sponsored to </span>
+              <span className="font-bold">{sponsorshipData.eventPackage.name}</span>
+              <span> Package </span>
+              <span className="text-xs font-normal text-default-500">
+                {formatDistanceToNow(new Date(sponsorshipData.createdAt), { addSuffix: true })}
+              </span>
             </p>
+
             <h4 className="text-xl font-medium">Sponsor&apos;s special request:</h4>
             <p className="text-sm text-default-500">{sponsorshipData.comments}</p>
           </div>

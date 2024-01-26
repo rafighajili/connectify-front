@@ -5,7 +5,7 @@ export const loginRequestSchema = z.object({
   password: z.string().min(6, "Password must contain at least 6 characters"),
 });
 
-export type LoginRequestType = z.infer<typeof loginRequestSchema>;
+export interface LoginRequestType extends z.infer<typeof loginRequestSchema> {}
 
 export const registerRequestSchema = z
   .object({
@@ -18,18 +18,15 @@ export const registerRequestSchema = z
   })
   .merge(loginRequestSchema);
 
-export type RegisterRequestType = z.infer<typeof registerRequestSchema>;
+export interface RegisterRequestType extends z.infer<typeof registerRequestSchema> {}
 
 export const updateUserInfoRequestSchema = registerRequestSchema.omit({ password: true });
-//     .extend({
-//   file: z.custom<File>((v) => v instanceof File || {}),
-// });
 
-export type UpdateUserInfoRequestType = z.infer<typeof updateUserInfoRequestSchema>;
+export interface UpdateUserInfoRequestType extends z.infer<typeof updateUserInfoRequestSchema> {}
 
 export const updateUserPasswordRequestSchema = z.object({
   oldPassword: registerRequestSchema.shape.password,
   newPassword: registerRequestSchema.shape.password,
 });
 
-export type UpdateUserPasswordRequestType = z.infer<typeof updateUserPasswordRequestSchema>;
+export interface UpdateUserPasswordRequestType extends z.infer<typeof updateUserPasswordRequestSchema> {}

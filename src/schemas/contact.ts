@@ -15,13 +15,13 @@ export const contactRequestSchema = baseSchema.extend({
   message: z.string().min(1, "Required"),
 });
 
-export type ContactRequestType = z.infer<typeof contactRequestSchema>;
+export interface ContactRequestType extends z.infer<typeof contactRequestSchema> {}
 
 export const contactSponsorRequestSchema = baseSchema.extend({
   companyName: z.string().min(1, "Required"),
 });
 
-export type ContactSponsorRequestType = z.infer<typeof contactSponsorRequestSchema>;
+export interface ContactSponsorRequestType extends z.infer<typeof contactSponsorRequestSchema> {}
 
 export const contactResponseSchema = ItemEntity.pick({ id: true })
   .merge(contactRequestSchema.extend({ phoneNumber: z.string() }))

@@ -7,6 +7,7 @@ export const UserEntity = z.object({
   lastName: z.string(),
   email: z.string().email(),
   phoneNumber: z.string(),
+  imageUrl: z.string().url().nullable(),
 });
 
-export type UserType = z.infer<typeof UserEntity>;
+export interface UserType extends z.infer<typeof UserEntity> {}

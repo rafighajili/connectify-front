@@ -1,6 +1,7 @@
 import { apiSlice } from "#/store/slices";
 import { CreateSponsorshipRequestType, sponsorshipSchema, SponsorshipType } from "#/schemas";
-import { ItemType } from "#/entities";
+import { DataMetaEntity, DataMetaType, ItemType } from "#/entities";
+import { EventParamsType } from "#/types";
 
 export const sponsorService = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -8,11 +9,13 @@ export const sponsorService = apiSlice.injectEndpoints({
       query: (body) => ({ url: `/sponsor`, method: "post", body }),
       invalidatesTags: ["Sponsorship"],
     }),
-    getSponsorships: builder.query<SponsorshipType[], void>({
+    getSponsorships: builder.query<DataMetaType<SponsorshipType[]>, EventParamsType>({
       query: () => ({ url: `/sponsor`, method: "get" }),
-      transformResponse: (res: unknown) => sponsorshipSchema.array().parse(res),
+      transformResponse: (res: unknown) => DataMetaEntity(sponsorshipSchema.array()).parse(res),
       providesTags: (result, error, arg) =>
-        result ? ["Sponsorship", ...result.map(({ id }) => ({ type: "Sponsorship" as const, id }))] : ["Sponsorship"],
+        result
+          ? ["Sponsorship", ...result.data.map(({ id }) => ({ type: "Sponsorship" as const, id }))]
+          : ["Sponsorship"],
     }),
     approveSponsorship: builder.mutation<void, ItemType["id"]>({
       query: (id) => ({ url: `/sponsor/${id}/approve`, method: "post" }),

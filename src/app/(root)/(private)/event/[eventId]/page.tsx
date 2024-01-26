@@ -32,21 +32,17 @@ import { useAppSelector } from "#/store";
 import { selectAuth } from "#/store/slices";
 
 export default function EventPage({ params: { eventId } }: { params: { eventId: string } }) {
-  const { data: eventData } = useGetEventQuery(eventId);
+  const { data } = useGetEventQuery(eventId);
 
   return (
     <div className="space-y-12">
-      {eventData ? (
-        <h1 className="text-4xl font-medium">{eventData.name}</h1>
-      ) : (
-        <Skeleton className="h-10 rounded-lg" />
-      )}
+      {data ? <h1 className="text-4xl font-medium">{data.name}</h1> : <Skeleton className="h-10 rounded-lg" />}
 
       <div className="grid gap-6 lg:grid-cols-[1fr,auto]">
         <div className="max-lg:order-1">
-          {eventData ? (
+          {data ? (
             <Chip size="lg" color="primary" variant="faded">
-              {eventData.type.name}
+              {data.type.name}
             </Chip>
           ) : (
             <Skeleton className="h-8 w-36 rounded-full" />
@@ -54,26 +50,26 @@ export default function EventPage({ params: { eventId } }: { params: { eventId: 
         </div>
 
         <div className="flex gap-3 max-lg:order-3 max-sm:flex-col">
-          {eventData ? (
+          {data ? (
             <>
               <Chip size="lg" variant="bordered" startContent={<UsersIcon className="h-6 w-6" />}>
-                {eventData.size}
+                {data.size}
               </Chip>
 
-              <Tooltip content={eventData.venue} delay={0} closeDelay={200}>
+              <Tooltip content={data.venue} delay={0} closeDelay={200}>
                 <Chip size="lg" variant="bordered" startContent={<MapPinIcon className="h-6 w-6" />}>
                   <p className="max-w-[144px] cursor-default overflow-hidden text-ellipsis whitespace-nowrap">
-                    {eventData.venue}
+                    {data.venue}
                   </p>
                 </Chip>
               </Tooltip>
 
               <Chip size="lg" variant="bordered" startContent={<CalendarDaysIcon className="h-6 w-6" />}>
-                {new Date(eventData.date).toLocaleDateString("en-UK")}
+                {new Date(data.date).toLocaleDateString("en-UK")}
               </Chip>
 
               <Chip size="lg" variant="bordered" startContent={<ClockIcon className="h-6 w-6" />}>
-                {new Date(eventData.date).toLocaleTimeString("en-UK", {
+                {new Date(data.date).toLocaleTimeString("en-UK", {
                   hour: "2-digit",
                   minute: "2-digit",
                 })}
@@ -94,8 +90,8 @@ export default function EventPage({ params: { eventId } }: { params: { eventId: 
           orientation="horizontal"
           className="flex max-w-full gap-3 max-lg:order-2 lg:col-span-2"
         >
-          {eventData
-            ? eventData.categories.map((category) => (
+          {data
+            ? data.categories.map((category) => (
                 <Chip key={category.id} size="lg" color="secondary" variant="flat">
                   {category.name}
                 </Chip>
@@ -106,11 +102,11 @@ export default function EventPage({ params: { eventId } }: { params: { eventId: 
         </ScrollShadow>
       </div>
 
-      {eventData ? (
+      {data ? (
         <Image
-          alt={eventData.name}
+          alt={data.name}
           className="aspect-[4/3] h-auto w-full rounded-xl object-cover "
-          src={eventData.imageUrl}
+          src={data.imageUrl}
           height={1600}
           width={900}
           priority
@@ -119,8 +115,8 @@ export default function EventPage({ params: { eventId } }: { params: { eventId: 
         <Skeleton className="aspect-[4/3] h-auto w-full rounded-xl" />
       )}
 
-      {eventData ? (
-        <p>{eventData.description}</p>
+      {data ? (
+        <p>{data.description}</p>
       ) : (
         <div className="space-y-2 py-1">
           <Skeleton className="h-4 w-full" />
@@ -131,16 +127,23 @@ export default function EventPage({ params: { eventId } }: { params: { eventId: 
         </div>
       )}
 
-      {eventData && (
+      {data && (
         <div className="space-y-6">
           <h3 className="text-xl">Sponsorship packages:</h3>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {eventData.packages.map((packageData) => (
+            {data.packages.map((packageData) => (
               <PackageCard key={packageData.id} packageData={packageData} />
             ))}
           </div>
           <div></div>
         </div>
+      )}
+
+      {data && (
+        <p className="text-sm text-default-500">
+          Published at:{" "}
+          {new Date(data.createdAt).toLocaleDateString("en-UK", { day: "numeric", month: "long", year: "numeric" })}
+        </p>
       )}
     </div>
   );
@@ -220,16 +223,16 @@ function PackageCard(props: { packageData: PackageType }) {
 
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="xl" placement="center">
         <ModalContent>
-          <ModalHeader className="flex-col font-medium">
-            <h3>
+          <ModalHeader className="flex-col items-start text-start">
+            <h3 className="text-lg font-medium">
               Requested Package:{" "}
               <span className={twMerge("font-bold", packageClassNameHelper[packageData.name].text)}>
                 {packageData.name}
               </span>
             </h3>
 
-            {isSuccess && <p className="text-sm font-normal text-success-500">Your request was sent successfully!</p>}
-            {isError && <p className="text-sm font-normal text-danger-500">You have already sent a sponsor request.</p>}
+            {isSuccess && <p className="text-sm text-success-500">Your request was sent successfully!</p>}
+            {isError && <p className="text-sm text-danger-500">You have already sent a sponsor request.</p>}
           </ModalHeader>
 
           <form onSubmit={handleSubmit(createSponsorship)}>

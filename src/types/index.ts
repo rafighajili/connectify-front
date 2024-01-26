@@ -1,4 +1,5 @@
 import { CSSProperties, ReactNode } from "react";
+import { ItemType } from "#/entities";
 
 export type Children = { children?: ReactNode };
 
@@ -13,3 +14,7 @@ export type ConditionalLoading<T extends {}> =
   | ({
       isLoading?: false;
     } & T);
+
+export type PageParamsType = Partial<{ page: number }>;
+
+export type EventParamsType = PageParamsType & Partial<{ type: ItemType["id"]; categories: ItemType["id"][] }>;

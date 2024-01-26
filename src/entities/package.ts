@@ -7,4 +7,4 @@ export const PackageEntity = ItemEntity.pick({ id: true }).extend({
   features: ItemEntity.array(),
 });
 
-export type PackageType = z.infer<typeof PackageEntity>;
+export interface PackageType extends z.infer<typeof PackageEntity> {}

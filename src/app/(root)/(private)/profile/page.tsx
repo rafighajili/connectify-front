@@ -46,8 +46,8 @@ function UserInfoForm() {
       <CardHeader className="flex-col items-start text-start">
         <h3 className="text-lg font-medium">Update Account Information</h3>
 
-        {isSuccess && <p className="text-success-500">Your account info was updated successfully!</p>}
-        {isError && <p className="text-danger-500">Occurred some error.</p>}
+        {isSuccess && <p className="text-sm text-success-500">Your account info was updated successfully!</p>}
+        {isError && <p className="text-sm text-danger-500">Occurred some error.</p>}
       </CardHeader>
       <form onSubmit={handleSubmit(updateUser)}>
         <CardBody className="flex flex-col gap-1.5">
@@ -142,8 +142,8 @@ function UserPasswordForm() {
       <CardHeader className="flex-col items-start text-start">
         <h3 className="text-lg font-medium">Update Account Password</h3>
 
-        {isSuccess && <p className="text-success-500">Your account password was updated successfully!</p>}
-        {isError && <p className="text-danger-500">Occurred some error.</p>}
+        {isSuccess && <p className="text-sm text-success-500">Your account password was updated successfully!</p>}
+        {isError && <p className="text-sm text-danger-500">Occurred some error.</p>}
       </CardHeader>
       <form onSubmit={handleSubmit(updateUser)}>
         <CardBody className="flex flex-col gap-1.5">

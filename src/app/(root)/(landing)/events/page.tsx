@@ -6,7 +6,7 @@ import { Chip } from "@nextui-org/react";
 import { PartnersSection } from "../_components";
 
 export default function EventsPage() {
-  const { data: events, isLoading: isEventsLoading } = useGetEventsQuery({});
+  const { data, isLoading } = useGetEventsQuery({});
 
   return (
     <div className="space-y-24 [&>*]:space-y-6">
@@ -14,7 +14,7 @@ export default function EventsPage() {
         <div className="container">
           <h1 className="text-4xl font-medium">Popular Events</h1>
         </div>
-        {isEventsLoading || !events ? <EventsSwiper isLoading /> : <EventsSwiper events={events} />}
+        {isLoading || !data ? <EventsSwiper isLoading /> : <EventsSwiper events={data.data} />}
       </main>
 
       <section>
@@ -23,7 +23,7 @@ export default function EventsPage() {
             Technology
           </Chip>
         </div>
-        {isEventsLoading || !events ? <EventsSwiper isLoading /> : <EventsSwiper events={events} />}
+        {isLoading || !data ? <EventsSwiper isLoading /> : <EventsSwiper events={data.data} />}
       </section>
 
       <section>
@@ -32,7 +32,7 @@ export default function EventsPage() {
             Business
           </Chip>
         </div>
-        {isEventsLoading || !events ? <EventsSwiper isLoading /> : <EventsSwiper events={events} />}
+        {isLoading || !data ? <EventsSwiper isLoading /> : <EventsSwiper events={data.data} />}
       </section>
 
       <PartnersSection />

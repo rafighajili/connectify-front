@@ -17,7 +17,7 @@ export default function AdminEventsPage() {
           ? Array(3)
               .fill(0)
               .map((_, key) => <EventCard key={key} isLoading />)
-          : data.map((eventData) => <MyEvent key={eventData.id} eventData={eventData} />)}
+          : data.data.map((eventData) => <MyEvent key={eventData.id} eventData={eventData} />)}
       </div>
     </div>
   );
