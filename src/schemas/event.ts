@@ -29,9 +29,10 @@ export const createEventRequestSchema = eventCompactSchema
     type: ItemEntity.pick({ id: true }),
     categories: ItemEntity.pick({ id: true }).array().nonempty({ message: "Required" }),
     packages: PackageEntity.omit({ id: true, features: true })
-      .extend({ features: ItemEntity.pick({ name: true }).array().nonempty({ message: "Required" }) })
+      .extend({ features: ItemEntity.pick({ name: true }).array() })
       .array()
-      .nonempty({ message: "Required" }),
+      .nonempty({ message: "Required" })
+      .transform((val) => val.filter((packageData) => packageData.features.length > 0)),
     file: z.custom<File>((v) => v instanceof File, {
       message: "Required",
     }),

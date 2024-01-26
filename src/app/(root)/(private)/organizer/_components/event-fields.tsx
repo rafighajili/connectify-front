@@ -1,11 +1,18 @@
-import { Control, Controller, useFieldArray } from "react-hook-form";
+import {
+  Control,
+  Controller,
+  useFieldArray,
+  UseFieldArrayRemove,
+  UseFieldArrayUpdate,
+  useWatch,
+} from "react-hook-form";
 import { Button, Card, CardBody, CardHeader, Input, Select, SelectItem, Switch, Textarea } from "@nextui-org/react";
 import { useGetEventCategoriesQuery, useGetEventTypesQuery } from "#/services";
 import { CreateEventRequestType } from "#/schemas";
 import { BanknotesIcon, UserGroupIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { twMerge } from "tailwind-merge";
 import { packageClassNameHelper } from "#/utils";
-import { capitalize } from "@nextui-org/shared-utils";
+import { useState } from "react";
 
 type ControlProp = { control: Control<CreateEventRequestType> };
 
@@ -18,7 +25,7 @@ export function EventFields({ control }: ControlProp) {
     control,
   });
 
-  const { fields: fieldsPackages } = useFieldArray({
+  const { fields: fieldsPackages, update } = useFieldArray({
     name: "packages",
     control,
   });
@@ -168,7 +175,7 @@ export function EventFields({ control }: ControlProp) {
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {fieldsPackages.map((field, index) => (
-          <PackageCard key={index} control={control} index={index} {...field} />
+          <PackageCard key={field.id} control={control} index={index} {...field} update={update} />
         ))}
       </div>
     </div>
@@ -177,55 +184,78 @@ export function EventFields({ control }: ControlProp) {
 
 function PackageCard({
   index,
+  update,
   control,
   ...packageData
-}: { index: number } & ControlProp & CreateEventRequestType["packages"][0]) {
-  const { fields } = useFieldArray({
+}: { index: number; update: UseFieldArrayUpdate<CreateEventRequestType, "packages"> } & ControlProp &
+  CreateEventRequestType["packages"][0]) {
+  const watchPackages = useWatch({ control, name: "packages" });
+
+  const { fields, append, remove } = useFieldArray({
     name: `packages.${index}.features`,
     control,
   });
 
+  const [isSelected, setIsSelected] = useState<boolean>(fields.length > 0);
+
+  console.log("fields", index, fields);
+
   return (
-    <Card className={twMerge("border-2", packageClassNameHelper[packageData.name].border)}>
+    <Card className={twMerge("h-fit border-2", packageClassNameHelper[packageData.name].border)}>
       <CardHeader className="justify-between">
-        <p
-          className={twMerge(
-            "w-full text-lg font-medium",
-            capitalize(packageClassNameHelper[packageData.name].text).toLowerCase(),
-          )}
-        >
+        <p className={twMerge("w-full text-lg font-medium", packageClassNameHelper[packageData.name].text)}>
           {packageData.name}
         </p>
 
-        <Switch aria-label="Package activator" size="sm" />
+        <Switch
+          aria-label="Package activator"
+          size="sm"
+          isSelected={isSelected}
+          onValueChange={(isSelected) => {
+            isSelected ? update(index, { name: packageData.name, price: 0, features: [{ name: "" }] }) : remove();
+            setIsSelected(isSelected);
+          }}
+          isDisabled={isSelected && watchPackages.filter((packageData) => packageData.features.length > 0).length === 1}
+        />
       </CardHeader>
 
-      <CardBody className="gap-y-6">
-        <Controller
-          control={control}
-          name={`packages.${index}.price`}
-          render={({ field, fieldState: { invalid, error } }) => (
-            // @ts-ignore
-            <Input
-              label="Price of the package"
-              variant="faded"
-              type="number"
-              step={50}
-              startContent={<BanknotesIcon className="h-6 w-6 text-default-500" />}
-              endContent={<span className="text-lg">₼</span>}
-              {...field}
-              isInvalid={invalid}
-              errorMessage={error?.message}
-            />
-          )}
-        />
+      {isSelected && (
+        <CardBody className="gap-y-6">
+          <Controller
+            control={control}
+            name={`packages.${index}.price`}
+            render={({ field, fieldState: { invalid, error } }) => (
+              // @ts-ignore
+              <Input
+                label="Price of the package"
+                variant="faded"
+                type="number"
+                step={50}
+                startContent={<BanknotesIcon className="h-6 w-6 text-default-500" />}
+                endContent={<span className="text-lg">₼</span>}
+                {...field}
+                isInvalid={invalid}
+                errorMessage={error?.message}
+              />
+            )}
+          />
 
-        <div className="flex flex-col gap-y-1.5">
-          {fields.map((field, featureIndex) => (
-            <PackageCardFeature key={featureIndex} control={control} packageIndex={index} index={featureIndex} />
-          ))}
-        </div>
-      </CardBody>
+          <div className="flex flex-col gap-y-1.5">
+            {fields.map((field, featureIndex) => (
+              <PackageCardFeature
+                key={field.id}
+                control={control}
+                packageIndex={index}
+                index={featureIndex}
+                remove={remove}
+              />
+            ))}
+            <Button color="primary" size="sm" variant="light" onPress={() => append({ name: "" })}>
+              New feature
+            </Button>
+          </div>
+        </CardBody>
+      )}
     </Card>
   );
 }
@@ -233,11 +263,15 @@ function PackageCard({
 function PackageCardFeature({
   packageIndex,
   index,
+  remove,
   control,
 }: {
   packageIndex: number;
   index: number;
+  remove: UseFieldArrayRemove;
 } & ControlProp) {
+  const watchFeatures = useWatch({ control, name: `packages.${packageIndex}.features` });
+
   return (
     <Controller
       control={control}
@@ -248,9 +282,20 @@ function PackageCardFeature({
           variant="bordered"
           size="sm"
           endContent={
-            <Button isIconOnly size="sm" variant="light" color="danger" radius="full" className="translate-x-2">
-              <XMarkIcon className="h-4 w-4" />
-            </Button>
+            watchFeatures &&
+            watchFeatures.length > 1 && (
+              <Button
+                isIconOnly
+                size="sm"
+                variant="light"
+                color="danger"
+                radius="full"
+                className="translate-x-2"
+                onPress={() => remove(index)}
+              >
+                <XMarkIcon className="h-4 w-4" />
+              </Button>
+            )
           }
           {...field}
           isInvalid={invalid}
