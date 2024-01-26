@@ -3,7 +3,7 @@ import {
   Controller,
   useFieldArray,
   UseFieldArrayRemove,
-  UseFieldArrayUpdate,
+  UseFieldArrayReturn,
   useWatch,
 } from "react-hook-form";
 import { Button, Card, CardBody, CardHeader, Input, Select, SelectItem, Switch, Textarea } from "@nextui-org/react";
@@ -13,6 +13,7 @@ import { BanknotesIcon, UserGroupIcon, XMarkIcon } from "@heroicons/react/24/out
 import { twMerge } from "tailwind-merge";
 import { packageClassNameHelper } from "#/utils";
 import { useState } from "react";
+import { PackageType } from "#/entities";
 
 type ControlProp = { control: Control<CreateEventRequestType> };
 
@@ -25,7 +26,7 @@ export function EventFields({ control }: ControlProp) {
     control,
   });
 
-  const { fields: fieldsPackages, update } = useFieldArray({
+  const fieldPackages = useFieldArray({
     name: "packages",
     control,
   });
@@ -174,48 +175,39 @@ export function EventFields({ control }: ControlProp) {
       </div>
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        {fieldsPackages.map((field, index) => (
-          <PackageCard key={field.id} control={control} index={index} {...field} update={update} />
-        ))}
+        <PackageCard name="BRONZE" control={control} fieldPackages={fieldPackages} />
+        <PackageCard name="SILVER" control={control} fieldPackages={fieldPackages} />
+        <PackageCard name="GOLD" control={control} fieldPackages={fieldPackages} />
+        <PackageCard name="DIAMOND" control={control} fieldPackages={fieldPackages} />
       </div>
     </div>
   );
 }
 
 function PackageCard({
-  index,
-  update,
+  name,
   control,
-  ...packageData
-}: { index: number; update: UseFieldArrayUpdate<CreateEventRequestType, "packages"> } & ControlProp &
-  CreateEventRequestType["packages"][0]) {
-  const watchPackages = useWatch({ control, name: "packages" });
+  fieldPackages,
+}: Pick<PackageType, "name"> &
+  ControlProp & { fieldPackages: UseFieldArrayReturn<CreateEventRequestType, "packages"> }) {
+  const index = fieldPackages.fields.findIndex((packageData) => packageData.name === name);
 
-  const { fields, append, remove } = useFieldArray({
-    name: `packages.${index}.features`,
-    control,
-  });
-
-  const [isSelected, setIsSelected] = useState<boolean>(fields.length > 0);
-
-  console.log("fields", index, fields);
+  const [isSelected, setIsSelected] = useState<boolean>(index !== -1);
 
   return (
-    <Card className={twMerge("h-fit border-2", packageClassNameHelper[packageData.name].border)}>
+    <Card className={twMerge("h-fit border-2", packageClassNameHelper[name].border)}>
       <CardHeader className="justify-between">
-        <p className={twMerge("w-full text-lg font-medium", packageClassNameHelper[packageData.name].text)}>
-          {packageData.name}
-        </p>
+        <p className={twMerge("w-full text-lg font-medium", packageClassNameHelper[name].text)}>{name}</p>
 
         <Switch
           aria-label="Package activator"
           size="sm"
           isSelected={isSelected}
-          onValueChange={(isSelected) => {
-            isSelected ? update(index, { name: packageData.name, price: 0, features: [{ name: "" }] }) : remove();
-            setIsSelected(isSelected);
+          onValueChange={(selected) => {
+            selected ? fieldPackages.append({ name, price: 0, features: [{ name: "" }] }) : fieldPackages.remove(index);
+            setIsSelected(selected);
           }}
-          isDisabled={isSelected && watchPackages.filter((packageData) => packageData.features.length > 0).length === 1}
+          isDisabled={isSelected && fieldPackages.fields.filter((val) => !!val.name).length === 1}
         />
       </CardHeader>
 
@@ -240,27 +232,32 @@ function PackageCard({
             )}
           />
 
-          <div className="flex flex-col gap-y-1.5">
-            {fields.map((field, featureIndex) => (
-              <PackageCardFeature
-                key={field.id}
-                control={control}
-                packageIndex={index}
-                index={featureIndex}
-                remove={remove}
-              />
-            ))}
-            <Button color="primary" size="sm" variant="light" onPress={() => append({ name: "" })}>
-              New feature
-            </Button>
-          </div>
+          <PackageFeatures index={index} control={control} />
         </CardBody>
       )}
     </Card>
   );
 }
 
-function PackageCardFeature({
+function PackageFeatures({ index, control }: { index: number } & ControlProp) {
+  const { fields, append, remove } = useFieldArray({
+    name: `packages.${index}.features`,
+    control,
+  });
+
+  return (
+    <div className="flex flex-col gap-y-1.5">
+      {fields.map((field, featureIndex) => (
+        <FeatureInput key={field.id} control={control} packageIndex={index} index={featureIndex} remove={remove} />
+      ))}
+      <Button color="primary" size="sm" variant="light" onPress={() => append({ name: "" })}>
+        New feature
+      </Button>
+    </div>
+  );
+}
+
+function FeatureInput({
   packageIndex,
   index,
   remove,

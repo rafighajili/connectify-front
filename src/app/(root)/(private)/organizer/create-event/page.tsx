@@ -11,13 +11,7 @@ import { useEffect } from "react";
 export default function CreateEventPage() {
   const [createEvent, { isLoading, isSuccess, isError }] = useCreateEventMutation();
 
-  const {
-    control,
-    handleSubmit,
-    reset,
-    watch,
-    formState: { errors },
-  } = useForm<CreateEventRequestType>({
+  const { control, handleSubmit, reset } = useForm<CreateEventRequestType>({
     defaultValues: {
       name: "",
       venue: "",
@@ -42,9 +36,6 @@ export default function CreateEventPage() {
       reset();
     }
   }, [isSuccess]);
-
-  console.log("watch()", watch("packages"));
-  console.log("errors", errors);
 
   return (
     <div className="space-y-12">

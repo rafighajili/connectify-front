@@ -31,8 +31,7 @@ export const createEventRequestSchema = eventCompactSchema
     packages: PackageEntity.omit({ id: true, features: true })
       .extend({ features: ItemEntity.pick({ name: true }).array() })
       .array()
-      .nonempty({ message: "Required" })
-      .transform((val) => val.filter((packageData) => packageData.features.length > 0)),
+      .nonempty({ message: "Required" }),
     file: z.custom<File>((v) => v instanceof File, {
       message: "Required",
     }),
