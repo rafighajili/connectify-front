@@ -130,7 +130,17 @@ export default function EventPage({ params: { eventId } }: { params: { eventId: 
       {data && (
         <div className="space-y-6">
           <h3 className="text-xl">Sponsorship packages:</h3>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <div
+            className={twMerge(
+              "grid gap-3 md:px-24 lg:px-0",
+              data.packages.length === 1 &&
+                "grid-cols-1 sm:col-span-2 sm:grid-cols-4 lg:col-span-1 lg:grid-cols-3 lg:px-36 sm:[&>div]:col-span-2 sm:[&>div]:col-start-2 lg:[&>div]:col-span-1 lg:[&>div]:col-start-2",
+              data.packages.length === 2 && "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 lg:first:[&>div]:col-start-2",
+              data.packages.length === 3 &&
+                "grid-cols-1 sm:col-span-2 sm:grid-cols-4 lg:col-span-1 lg:grid-cols-3 lg:px-36 sm:[&>div]:col-span-2 sm:last:[&>div]:col-start-2 lg:[&>div]:col-span-1 lg:last:[&>div]:col-start-auto",
+              data.packages.length === 4 && "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4",
+            )}
+          >
             {data.packages.map((packageData) => (
               <PackageCard key={packageData.id} packageData={packageData} />
             ))}
@@ -184,7 +194,7 @@ function PackageCard(props: { packageData: PackageType }) {
           packageClassNameHelper[packageData.name].bg,
         )}
       >
-        <CardHeader className="py-12">
+        <CardHeader className="py-6">
           <h4
             className={twMerge(
               "flex-1 text-center text-2xl font-medium",
@@ -197,7 +207,7 @@ function PackageCard(props: { packageData: PackageType }) {
           </h4>
         </CardHeader>
 
-        <CardBody>
+        <CardBody className="py-6">
           <ul className="flex list-disc flex-col gap-1.5 pl-9">
             {packageData.features.map((feature) => (
               <li key={feature.id} className="">
@@ -207,7 +217,7 @@ function PackageCard(props: { packageData: PackageType }) {
           </ul>
         </CardBody>
 
-        <CardFooter className="flex-col items-stretch gap-3 pt-12">
+        <CardFooter className="flex-col items-stretch gap-3 pt-6">
           <p className="text-center text-4xl font-bold tracking-wider">{packageData.price} ₼</p>
           {user?.role === "SPONSOR" && (
             <Button

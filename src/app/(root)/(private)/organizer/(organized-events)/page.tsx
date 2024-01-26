@@ -43,7 +43,7 @@ function MyEvent({ eventData }: { eventData: EventType }) {
   const [updateEvent, { isLoading, isSuccess, isError, reset: resetApi }] = useUpdateEventMutation();
   const [deleteEvent, { isLoading: isDeleteLoading }] = useDeleteEventMutation();
 
-  const { control, handleSubmit, reset, watch } = useForm<UpdateEventRequestType>({
+  const { control, handleSubmit, reset } = useForm<UpdateEventRequestType>({
     defaultValues: eventData,
     resolver: zodResolver(updateEventRequestSchema),
   });
@@ -52,8 +52,6 @@ function MyEvent({ eventData }: { eventData: EventType }) {
     reset(eventData);
     resetApi();
   }, [isOpen]);
-
-  console.log("watch()", watch("packages"));
 
   return (
     <>
