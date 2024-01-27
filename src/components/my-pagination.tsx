@@ -17,16 +17,18 @@ export function MyPagination({ meta }: MetaType) {
   }, [currentPage, meta]);
 
   return (
-    <Pagination
-      showControls
-      page={currentPage}
-      onChange={(inlinePage) => {
-        const params = new URLSearchParams(searchParams.toString());
-        params.set("page", inlinePage.toString());
-        router.push(inlinePage === 1 ? pathname : pathname + "?" + params.toString());
-      }}
-      classNames={{ wrapper: "mx-auto" }}
-      total={meta.pageCount}
-    />
+    meta.pageCount > 1 && (
+      <Pagination
+        showControls
+        page={currentPage}
+        onChange={(inlinePage) => {
+          const params = new URLSearchParams(searchParams.toString());
+          params.set("page", inlinePage.toString());
+          router.push(inlinePage === 1 ? pathname : pathname + "?" + params.toString());
+        }}
+        classNames={{ wrapper: "mx-auto" }}
+        total={meta.pageCount}
+      />
+    )
   );
 }
