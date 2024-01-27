@@ -8,7 +8,7 @@ import {
   useGetEventTypesQuery,
   useUpdateEventMutation,
 } from "#/services";
-import { EventCard } from "#/components";
+import { EventCard, MyPagination } from "#/components";
 import { EventType } from "#/entities";
 import { useForm } from "react-hook-form";
 import { updateEventRequestSchema, UpdateEventRequestType } from "#/schemas";
@@ -16,9 +16,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { EventFields } from "../_components";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import { useEffect } from "react";
+import { useCurrentPage } from "#/utils";
 
 export default function OrganizedEventsPage() {
-  const { data, isLoading } = useGetEventsOrganizedQuery({});
+  const { data, isFetching } = useGetEventsOrganizedQuery({ page: useCurrentPage() });
   const { isLoading: isEventTypesLoading } = useGetEventTypesQuery();
   const { isLoading: isEventCategoriesLoading } = useGetEventCategoriesQuery();
 
@@ -27,12 +28,14 @@ export default function OrganizedEventsPage() {
       <h1 className="text-4xl font-medium">My events</h1>
 
       <div className="space-y-6">
-        {isLoading || !data || isEventTypesLoading || isEventCategoriesLoading
+        {!data || isFetching || isEventTypesLoading || isEventCategoriesLoading
           ? Array(3)
               .fill(0)
               .map((_, key) => <EventCard key={key} isLoading />)
           : data.data.map((eventData) => <MyEvent key={eventData.id} eventData={eventData} />)}
       </div>
+
+      {data && <MyPagination meta={data.meta} />}
     </div>
   );
 }

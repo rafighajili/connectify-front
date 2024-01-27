@@ -116,7 +116,7 @@ export default function EventPage({ params: { eventId } }: { params: { eventId: 
       )}
 
       {data ? (
-        <p>{data.description}</p>
+        <p className="whitespace-pre-line">{data.description}</p>
       ) : (
         <div className="space-y-2 py-1">
           <Skeleton className="h-4 w-full" />
@@ -208,11 +208,9 @@ function PackageCard(props: { packageData: PackageType }) {
         </CardHeader>
 
         <CardBody className="py-6">
-          <ul className="flex list-disc flex-col gap-1.5 pl-9">
+          <ul className="flex list-disc flex-col gap-1.5 pl-9 pr-3">
             {packageData.features.map((feature) => (
-              <li key={feature.id} className="">
-                {feature.name}
-              </li>
+              <li key={feature.id}>{feature.name}</li>
             ))}
           </ul>
         </CardBody>

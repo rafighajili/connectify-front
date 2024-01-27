@@ -2,15 +2,17 @@
 
 import { useGetContactQuery } from "#/services";
 import { Card, CardBody, CardFooter, Divider, Input, Spinner, Textarea } from "@nextui-org/react";
+import { MyPagination } from "#/components";
+import { useCurrentPage } from "#/utils";
 
 export default function AdminContactsPage() {
-  const { data } = useGetContactQuery({});
+  const { data, isFetching } = useGetContactQuery({ page: useCurrentPage() });
 
   return (
     <div className="space-y-12">
       <h1 className="text-4xl font-medium">Contacts</h1>
 
-      {!data ? (
+      {!data || isFetching ? (
         <Spinner />
       ) : (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -34,6 +36,8 @@ export default function AdminContactsPage() {
           ))}
         </div>
       )}
+
+      {data && <MyPagination meta={data.meta} />}
     </div>
   );
 }

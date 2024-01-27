@@ -10,7 +10,7 @@ export const sponsorService = apiSlice.injectEndpoints({
       invalidatesTags: ["Sponsorship"],
     }),
     getSponsorships: builder.query<DataMetaType<SponsorshipType[]>, EventParamsType>({
-      query: () => ({ url: `/sponsor`, method: "get" }),
+      query: (params) => ({ url: `/sponsor`, method: "get", params }),
       transformResponse: (res: unknown) => DataMetaEntity(sponsorshipSchema.array()).parse(res),
       providesTags: (result, error, arg) =>
         result

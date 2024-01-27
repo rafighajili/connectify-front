@@ -1,21 +1,21 @@
 "use client";
 
 import { useGetEventsSponsoredQuery } from "#/services";
-import { EventCard } from "#/components";
+import { EventCard, MyPagination } from "#/components";
 import { Skeleton } from "@nextui-org/react";
 import { twMerge } from "tailwind-merge";
-import { packageClassNameHelper } from "#/utils";
+import { packageClassNameHelper, useCurrentPage } from "#/utils";
 import { formatDistanceToNow } from "date-fns";
 
 export default function SponsoredEventsPage() {
-  const { data, isLoading } = useGetEventsSponsoredQuery({});
+  const { data, isFetching } = useGetEventsSponsoredQuery({ page: useCurrentPage() });
 
   return (
     <div className="space-y-12">
       <h1 className="text-4xl font-medium">My Sponsored Events</h1>
 
       <div className="space-y-6">
-        {isLoading || !data
+        {!data || isFetching
           ? Array(3)
               .fill(0)
               .map((_, key) => (
@@ -67,6 +67,8 @@ export default function SponsoredEventsPage() {
               />
             ))}
       </div>
+
+      {data && <MyPagination meta={data.meta} />}
     </div>
   );
 }

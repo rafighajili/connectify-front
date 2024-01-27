@@ -14,7 +14,7 @@ export default function EventsPage() {
         <div className="container">
           <h1 className="text-4xl font-medium">Popular Events</h1>
         </div>
-        {isLoading || !data ? <EventsSwiper isLoading /> : <EventsSwiper events={data.data} />}
+        {!data || isLoading ? <EventsSwiper isLoading /> : <EventsSwiper events={data.data} />}
       </main>
 
       <section>
@@ -23,7 +23,7 @@ export default function EventsPage() {
             Technology
           </Chip>
         </div>
-        {isLoading || !data ? <EventsSwiper isLoading /> : <EventsSwiper events={data.data} />}
+        {!data || isLoading ? <EventsSwiper isLoading /> : <EventsSwiper events={data.data} />}
       </section>
 
       <section>
@@ -32,7 +32,7 @@ export default function EventsPage() {
             Business
           </Chip>
         </div>
-        {isLoading || !data ? <EventsSwiper isLoading /> : <EventsSwiper events={data.data} />}
+        {!data || isLoading ? <EventsSwiper isLoading /> : <EventsSwiper events={data.data} />}
       </section>
 
       <PartnersSection />

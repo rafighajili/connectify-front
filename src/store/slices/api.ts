@@ -6,6 +6,6 @@ export const apiSlice = createApi({
     baseUrl: "https://api.connectify.az",
     credentials: "include",
   }),
-  tagTypes: ["User", "Event", "Sponsorship"],
+  tagTypes: ["Event", "Sponsorship"],
   endpoints: () => ({}),
 });

@@ -20,7 +20,9 @@ export const registerRequestSchema = z
 
 export interface RegisterRequestType extends z.infer<typeof registerRequestSchema> {}
 
-export const updateUserInfoRequestSchema = registerRequestSchema.omit({ password: true });
+export const updateUserInfoRequestSchema = registerRequestSchema.omit({ password: true }).extend({
+  file: z.custom<File>((v) => v instanceof File || {}),
+});
 
 export interface UpdateUserInfoRequestType extends z.infer<typeof updateUserInfoRequestSchema> {}
 

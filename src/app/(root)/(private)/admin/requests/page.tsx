@@ -1,22 +1,22 @@
 "use client";
 
 import { useApproveSponsorshipMutation, useGetSponsorshipsQuery, useRejectSponsorshipMutation } from "#/services";
-import { EventCard } from "#/components";
+import { EventCard, MyPagination } from "#/components";
 import { twMerge } from "tailwind-merge";
-import { packageClassNameHelper } from "#/utils";
+import { packageClassNameHelper, useCurrentPage } from "#/utils";
 import { Button, User } from "@nextui-org/react";
 import { SponsorshipType } from "#/schemas";
 import { formatDistanceToNow } from "date-fns";
 
 export default function AdminRequestsPage() {
-  const { data, isLoading } = useGetSponsorshipsQuery({});
+  const { data, isFetching } = useGetSponsorshipsQuery({ page: useCurrentPage() });
 
   return (
     <div className="space-y-12">
       <h1 className="text-4xl font-medium">Requests</h1>
 
       <div className="space-y-6">
-        {isLoading || !data
+        {!data || isFetching
           ? Array(3)
               .fill(0)
               .map((_, key) => <EventCard key={key} isLoading className="border-2 border-default-300" />)
@@ -24,6 +24,8 @@ export default function AdminRequestsPage() {
               <MySponsorship key={sponsorshipData.id} sponsorshipData={sponsorshipData} />
             ))}
       </div>
+
+      {data && <MyPagination meta={data.meta} />}
     </div>
   );
 }

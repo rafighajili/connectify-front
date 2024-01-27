@@ -1,24 +1,27 @@
 "use client";
 
 import { useApproveEventMutation, useGetEventsAdminQuery, useRejectEventMutation } from "#/services";
-import { EventCard } from "#/components";
+import { EventCard, MyPagination } from "#/components";
 import { Button, User } from "@nextui-org/react";
 import { EventType } from "#/entities";
+import { useCurrentPage } from "#/utils";
 
 export default function AdminEventsPage() {
-  const { data, isLoading } = useGetEventsAdminQuery({});
+  const { data, isFetching } = useGetEventsAdminQuery({ page: useCurrentPage() });
 
   return (
     <div className="space-y-12">
       <h1 className="text-4xl font-medium">Events</h1>
 
       <div className="space-y-6">
-        {isLoading || !data
+        {!data || isFetching
           ? Array(3)
               .fill(0)
               .map((_, key) => <EventCard key={key} isLoading />)
           : data.data.map((eventData) => <MyEvent key={eventData.id} eventData={eventData} />)}
       </div>
+
+      {data && <MyPagination meta={data.meta} />}
     </div>
   );
 }

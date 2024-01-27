@@ -30,13 +30,17 @@ function UserInfoForm() {
   const { user } = useAppSelector(selectAuth);
   const [updateUser, { isLoading, isSuccess, isError }] = useUpdateUserMutation();
 
-  const { control, handleSubmit } = useForm<UpdateUserInfoRequestType>({
+  const {
+    control,
+    handleSubmit,
+    formState: { isDirty },
+  } = useForm<UpdateUserInfoRequestType>({
     defaultValues: {
       firstName: user?.firstName,
       lastName: user?.lastName,
       email: user?.email,
       phoneNumber: user?.phoneNumber.slice(4),
-      // file: {} as File,
+      file: {} as File,
     },
     resolver: zodResolver(updateUserInfoRequestSchema),
   });
@@ -97,10 +101,10 @@ function UserInfoForm() {
           {/*  name="file"*/}
           {/*  render={({ field, fieldState: { invalid, error } }) => (*/}
           {/*    <Input*/}
-          {/*      label="Your image"*/}
+          {/*      label="Your profile photo"*/}
           {/*      type="file"*/}
           {/*      accept="image/*"*/}
-          {/*      placeholder="event image"*/}
+          {/*      placeholder="profile photo"*/}
           {/*      classNames={{ input: "file:hidden cursor-pointer" }}*/}
           {/*      {...field}*/}
           {/*      // @ts-ignore*/}
@@ -117,7 +121,7 @@ function UserInfoForm() {
         </CardBody>
 
         <CardFooter className="justify-end">
-          <Button color="primary" type="submit" isLoading={isLoading}>
+          <Button color="primary" type="submit" isLoading={isLoading} isDisabled={!isDirty}>
             Update your info
           </Button>
         </CardFooter>
@@ -129,7 +133,11 @@ function UserInfoForm() {
 function UserPasswordForm() {
   const [updateUser, { isLoading, isSuccess, isError }] = useUpdateUserMutation();
 
-  const { control, handleSubmit } = useForm<UpdateUserPasswordRequestType>({
+  const {
+    control,
+    handleSubmit,
+    formState: { isDirty },
+  } = useForm<UpdateUserPasswordRequestType>({
     defaultValues: {
       oldPassword: "",
       newPassword: "",
@@ -179,7 +187,7 @@ function UserPasswordForm() {
         </CardBody>
 
         <CardFooter className="justify-end">
-          <Button color="primary" type="submit" isLoading={isLoading}>
+          <Button color="primary" type="submit" isLoading={isLoading} isDisabled={!isDirty}>
             Update your password
           </Button>
         </CardFooter>

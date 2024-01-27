@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 export function useMounted() {
   const [mounted, setMounted] = useState<boolean>(false);
@@ -33,6 +34,12 @@ export function objectToFormData(obj: any, formData?: FormData, namespace?: stri
   }
 
   return fd;
+}
+
+export function useCurrentPage() {
+  const searchParams = useSearchParams();
+  const pageParams = searchParams.get("page");
+  return pageParams ? parseInt(pageParams) : 1;
 }
 
 export const packageClassNameHelper = {

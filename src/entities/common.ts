@@ -20,22 +20,26 @@ export const ItemEntity = z.object({
 
 export interface ItemType extends z.infer<typeof ItemEntity> {}
 
-const meta = z.object({
-  page: z.number(),
-  pageCount: z.number(),
-  itemCount: z.number(),
-  take: z.number(),
-  hasPreviousPage: z.boolean(),
-  hasNextPage: z.boolean(),
+export const MetaEntity = z.object({
+  meta: z.object({
+    page: z.number(),
+    pageCount: z.number(),
+    itemCount: z.number(),
+    take: z.number(),
+    hasPreviousPage: z.boolean(),
+    hasNextPage: z.boolean(),
+  }),
 });
 
-export const DataMetaEntity = <T extends ZodType>(data: T) =>
-  z.object({
-    data,
-    meta,
-  });
+export interface MetaType extends z.infer<typeof MetaEntity> {}
 
-export interface DataMetaType<T> {
+export const DataMetaEntity = <T extends ZodType>(data: T) =>
+  z
+    .object({
+      data,
+    })
+    .merge(MetaEntity);
+
+export interface DataMetaType<T> extends MetaType {
   data: T;
-  meta: z.infer<typeof meta>;
 }

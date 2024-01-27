@@ -21,9 +21,11 @@ import { Controller, useForm } from "react-hook-form";
 import { registerRequestSchema, RegisterRequestType } from "#/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
+import { MyPagination } from "#/components";
+import { useCurrentPage } from "#/utils";
 
 export default function AdminSponsorsPage() {
-  const { data } = useGetContactSponsorQuery({});
+  const { data, isFetching } = useGetContactSponsorQuery({ page: useCurrentPage() });
   const [registerSponsor, { isLoading, isSuccess, isError, reset: resetApi }] = useRegisterSponsorMutation();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
@@ -127,7 +129,7 @@ export default function AdminSponsorsPage() {
         </Modal>
       </div>
 
-      {!data ? (
+      {!data || isFetching ? (
         <Spinner />
       ) : (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -154,6 +156,8 @@ export default function AdminSponsorsPage() {
           ))}
         </div>
       )}
+
+      {data && <MyPagination meta={data.meta} />}
     </div>
   );
 }
