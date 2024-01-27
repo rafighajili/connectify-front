@@ -13,6 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useAppSelector } from "#/store";
 import { selectAuth } from "#/store/slices";
 import { DevicePhoneMobileIcon, EnvelopeIcon, KeyIcon } from "@heroicons/react/24/outline";
+import { useEffect } from "react";
 
 export default function ProfilePage() {
   return (
@@ -33,6 +34,7 @@ function UserInfoForm() {
   const {
     control,
     handleSubmit,
+    reset,
     formState: { isDirty },
   } = useForm<UpdateUserInfoRequestType>({
     defaultValues: {
@@ -40,10 +42,21 @@ function UserInfoForm() {
       lastName: user?.lastName,
       email: user?.email,
       phoneNumber: user?.phoneNumber.slice(4),
-      file: {} as File,
+      // file: {} as File,
     },
     resolver: zodResolver(updateUserInfoRequestSchema),
   });
+
+  useEffect(() => {
+    if (isSuccess) {
+      reset({
+        firstName: user?.firstName,
+        lastName: user?.lastName,
+        email: user?.email,
+        phoneNumber: user?.phoneNumber.slice(4),
+      });
+    }
+  }, [isSuccess]);
 
   return (
     <Card>
@@ -136,6 +149,7 @@ function UserPasswordForm() {
   const {
     control,
     handleSubmit,
+    reset,
     formState: { isDirty },
   } = useForm<UpdateUserPasswordRequestType>({
     defaultValues: {
@@ -144,6 +158,12 @@ function UserPasswordForm() {
     },
     resolver: zodResolver(updateUserPasswordRequestSchema),
   });
+
+  useEffect(() => {
+    if (isSuccess) {
+      reset();
+    }
+  }, [isSuccess]);
 
   return (
     <Card>

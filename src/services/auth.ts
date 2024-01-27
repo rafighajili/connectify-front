@@ -35,7 +35,7 @@ export const authService = apiSlice.injectEndpoints({
     }),
 
     updateUser: builder.mutation<UserType, Partial<UpdateUserInfoRequestType & UpdateUserPasswordRequestType>>({
-      query: (body) => ({ url: `/auth/me`, method: "patch", body: objectToFormData(body) }),
+      query: (body) => ({ url: `/auth/me`, method: "put", body: objectToFormData(body) }),
       transformResponse: (res: unknown) => UserEntity.parse(res),
     }),
   }),
